@@ -476,10 +476,13 @@ build C2 in parallel; weigh the impossibility route (RED-3 *on a proof only*).
   `round17_audit.md` (DONE, ALL CORRECT, lean ~58–60/40) → **dichotomy COLLAPSED to ONE lemma; degenerating-
   margin R− route killed; minor branch discharged; the energy-to-cut lemma "carries all the original R+
   difficulty" — consolidation, not a decisive shift.**
-- **Round 18 (2026-06-22) — web GPT-5.5-Pro [SENT, owner-relayed]:** brief = root `BRIEF_FOR_PRO.md`
-  (pointer `round18_pro_request.md`). Target = **the energy-to-cut lemma (EC) ⟺ R+**, sharpest form
-  **(MM-cut): does minor-minimality + poly `𝔇` force a poly-visible cut/NR defect?** Crux = is cut-blindness
-  compatible with minor-minimality? (R+) a structural flat-witness theorem for minimal non-HPP matroids;
-  (R−) a full-dimensional minor-minimal cut-blind family. Awaiting Pro reply.
+- **Round 18 (2026-06-22) — web GPT-5.5-Pro [SENT, owner-relayed] — 🏁 FINAL ATTACK ROUND (owner decision
+  2026-06-22):** brief = root `BRIEF_FOR_PRO.md` (pointer `round18_pro_request.md`). Target = **the
+  energy-to-cut lemma (EC) ⟺ R+**, sharpest form **(MM-cut): does minor-minimality + poly `𝔇` force a
+  poly-visible cut/NR defect? (= is cut-blindness compatible with minor-minimality?)**. Asks Pro to EITHER
+  settle it (R+ tester / R− core) OR give the definitive writeup-ready summary (clean theorem statements +
+  the canonical open problem). **After this round + audit: STOP attacking; consolidate the deliverable**
+  (conditional/structural result, AI-disclosed, pending human verification). Owner weighing SODA vs an
+  arXiv preprint vs shelving. Awaiting Pro reply.
 - Literature scan (full, un-truncated): `lit/SCAN_REPORT.md`.
 - C0 sim: `derisk/` (+ `derisk/results/`).

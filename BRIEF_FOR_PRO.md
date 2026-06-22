@@ -66,11 +66,23 @@ obstruction inherit the sparse-paving pseudorandomness, that is the **R−** cor
 - **(A5) `PG(2,q)` cut-visible (r17):** `CutDef=Ω(d^{−3/2})`. **sparse-paving (r16):** cut-blind but not
   minor-minimal. **HPP lit:** Kummer–Sert; Wagner–Wei (≤6⟹HPP); González D'León (weak-HPP `PG(2,q)` minors).
 
-## 5. Deliverable
+## 5. Deliverable — this is the FINAL attack round; resolve it OR give us the definitive writeup
 
-Settle (MM-cut)/(EC). A proof (minor-minimality + poly `𝔇` ⟹ poly `NR`) ⟹ **R+** (`poly(n,1/ε)` tester +
-the best lower bound; try to tighten `Ω(√n/ε)` via the sparse-paving restricted-tester bound). A
-full-dimensional minor-minimal cut-blind family ⟹ **R−** core (+ what's still needed: an SR yes-ensemble +
-adaptive SUBCOND transcript indistinguishability). Or the furthest rigorous progress + the exact remaining
-gap. Mark proved vs assumed; flag assumptions; honest confidence. (Human-verified later — keep proofs
-explicit and checkable; we re-verify every construction numerically.)
+We are concluding the attack loop after this round, so please optimize for one of two outcomes:
+
+**(a) Settle (MM-cut)/(EC).** A proof (minor-minimality + poly `𝔇` ⟹ poly `NR`) ⟹ **R+** (`poly(n,1/ε)`
+tester + the best lower bound; try to tighten `Ω(√n/ε)` via the sparse-paving restricted-tester bound). A
+full-dimensional minor-minimal cut-blind family ⟹ **R−** core (+ an SR yes-ensemble + adaptive SUBCOND
+transcript indistinguishability). Either way, give the complete argument.
+
+**(b) If you cannot fully settle it, produce the DEFINITIVE WRITEUP-READY summary** — because this corpus
+will become a paper. Specifically: (i) the cleanest self-contained statements of the established theorems
+(noisy-rank characterization, exact two-block reduction, universal MEM, the multiscale decomposition + the
+automatic minor branch, `g_s=Θ(√I_i)`, the conditional `poly(n,1/ε)` tester, the sparse-paving `2^{−Ω(n)}`
+restricted-tester lower bound, `PG(2,q)` cut-visibility); (ii) the single open problem (EC/MM-cut) stated as
+cleanly and canonically as possible, with your honest assessment of its difficulty and which way it likely
+resolves; (iii) any additional structural result that strengthens the *conditional* paper (e.g. more
+obstruction families shown cut-visible, a partial energy-to-cut bound for a natural subclass, a tightened
+constant). Mark proved vs assumed; flag every assumption; honest confidence. (All of this will be
+human-verified before any submission and is disclosed as AI-assisted — keep proofs explicit and checkable;
+we re-verify every construction numerically.)
