@@ -2,16 +2,15 @@
 ### Snapshot 2026-06-22 (through round 14). Read this first to resume.
 
 > **如何冷启动（中文）：** 打开本文件 + `docs/ledger_sr_subcond.md`（详细记录）+ `guide.md`（只读宪法）。
-> 当前进度：与 web GPT-5.5-Pro 的攻击循环已到 **round 17（已写好简报、待中转发送）**。下一步动作 =
+> 当前进度：与 web GPT-5.5-Pro 的攻击循环已到 **round 18（已写好简报、待中转发送）**。下一步动作 =
 > 把根目录 **`BRIEF_FOR_PRO.md`** 整段发给 web GPT-5.5-Pro，把它的完整回复贴回来，然后由编排者
 > （Claude）派独立审计 + 复核 + 更新 ledger。
-> 🔑 **Round-16（两个审计全清、所有拟阵文献核实为真）**：基础全部严格化 + 两边都被精确重构。证明了 A6
-> （`I_i(g_s)=𝔇(g_s)`）；**精确两块约简** `d_TV(μ,SR)=d_TV(q,PB[a,b])` ⟹ `NR(g_s)=d_TV(g_s,SR)=Θ(√I_i)` 严格；
-> 🔴 **一个真正纠缠的 sparse-paving 族**：多项式远离 SR、`NR=2^{−Ω(n)}`（击败**每一个**全局信道）、所有 ≤6
-> 坐标条件都 SR——但**不是 R−**（固定的 8 坐标 excluded minor 在多项式比例后代上泄漏）。**问题现已收缩为两个
-> 对偶命题：R+ ⟺ cut-or-minor removal lemma；R− ⟺ 一个 margin 随维度退化的渐近 excluded-minor 族。** 置信度
-> ~55–60/40。🔴 **Round-15**：`g_s` 有利解决。🔴 **Round-14**："复根深度"路线被证伪。🔴 仍未闭合、未证明。
-> 🔴 "不披露 AI" 本编排者拒绝执行（违反 §15），披露义务保留，未与 owner 解决。
+> 🔑 **Round-17（已数值复核 MEM + PG(2,q)；审计进行中）**：**二分塌缩成一个引理。** 证明了**普适 MEM**
+> `½𝔇≤d_TV(μ,SR)≤√𝔇`（杀死"margin 退化"那条 R−）；**精确多尺度分解** `𝔇=𝓔_{>m}+𝓡_m` ⟹ **低维 minor
+> 分支是自动的**（随机 `O(log(d/𝔇))` 维后代以 `≥𝔇/4` 概率 `𝔇/8`-远离 SR）。🔑 **于是 R+ ⟺ 一条引理：
+> energy-to-cut**（高维相容能量 ⟹ 多项式可见的 cut 缺陷）。`PG(2,q)`（增长的障碍）是 cut-visible（R+ 证据）。
+> 置信度 ~58–62/40。🔴 **Round-16**：sparse-paving 全局信道失明族 + 精确两块约简。🔴 **Round-14/15**：复根
+> 路线被证伪、`g_s` 有利解决。🔴 仍未闭合、未证明。🔴 "不披露 AI" 本编排者拒绝执行（违反 §15），披露义务保留。
 
 ---
 
@@ -28,13 +27,14 @@ characterization (R+ tight tester) OR a **proven impossibility** (R−). See `gu
   via web GPT-5.5-Pro (human-relayed by the owner)**, each round independently audited (1–2 fresh agents)
   + referee-verified (symbolic/numeric) by the orchestrator.
 - **No theorem yet.** Bounds: **`Ω(max{√n/ε, 1/ε²}) ≤ Q_SR^SUBCOND(n,ε) ≤ O(2^n/ε²)`.**
-- **Current lean: R+, ≈55–60/40–45 — genuinely open; the problem is now SHARPLY posed as a dichotomy.**
-  Round-16 made the foundation fully rigorous (A6 closed; exact two-block reduction; `NR(g_s)=d_TV(g_s,SR)=
-  Θ(√I_i)`), but also built a **globally channel-blind sparse-paving family** that KILLS the global-σ_min
-  route (poly-far yet `NR=2^{−Ω(n)}`). Net: **R+ ⟺ the cut-or-minor removal lemma; R− ⟺ a degenerating
-  excluded-minor family** (the sparse-paving family is the near-miss — its excluded minor has CONSTANT margin
-  so it leaks on descendants). "The construction tightens the noose but does not close it" (both audits).
-- **Round 17 is written + sent (`BRIEF_FOR_PRO.md`), awaiting Pro's reply** — this is the resume point.
+- **Current lean: R+, ≈58–60/40 — genuinely open; the WHOLE problem is now ONE lemma.** Round-17 proved
+  universal MEM (`½𝔇≤d_TV(μ,SR)≤√𝔇`, kills the degenerating-margin R− route) + an exact multiscale
+  decomposition ⟹ **the low-dim minor branch is automatic** ⟹ **R+ ⟺ the energy-to-cut lemma** (high-dim
+  compatibility energy ⟹ a poly-visible cut defect). `PG(2,q)` is cut-visible (R+ evidence). The audit's
+  verdict: this is **consolidation, not a decisive shift — the energy-to-cut lemma is as hard as R+ ever was.**
+- **Round 18 is written + sent (`BRIEF_FOR_PRO.md`), awaiting Pro's reply** — this is the resume point.
+  ⚠️ **A genuine decision point has been reached (gate c): the problem has converged to one hard lemma; the
+  rich conditional result may itself be the deliverable. See §7.**
 
 ## 3. The research arc (how we got here)
 1. **The original headline idea** (mirror the Θ̃(n) monotonicity-in-SUBCOND tester via a directed-isoperimetric
