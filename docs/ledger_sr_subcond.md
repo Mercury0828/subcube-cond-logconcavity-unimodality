@@ -478,10 +478,13 @@ build C2 in parallel; weigh the impossibility route (RED-3 *on a proof only*).
   `round18_pro_response.md` (lemma not settled; random-code R+ evidence; binary/ternary MM-NR; paper stack
   A–I) · audit `round18_audit.md` (no FATAL, no hallucination, 3 human-verify items) → **attack loop CLOSED;
   deliverable consolidated in `DELIVERABLE.md`; lean ~52–55/45–48.**
-- 🏁 **ATTACK LOOP CLOSED (2026-06-22).** Deliverable = `DELIVERABLE.md`. Next steps are the owner's:
-  (i) decide AI-disclosure (precondition for any submission); (ii) decide human-verification effort (the
-  corpus is AI-produced, unverified); (iii) decide venue/scope (honest read: strong AI-disclosed arXiv
-  preprint, not a confident SODA paper, unless EC_NR is humanly cracked or the structural theory is judged
-  independently SODA-grade).
+- 🏁 **ATTACK LOOP CLOSED (2026-06-22).** Deliverable = `DELIVERABLE.md`. Owner decisions still outstanding:
+  (i) AI-disclosure (submission precondition); (ii) human-verification effort; (iii) venue/scope.
+- **Round 19 (2026-06-22) — FRESH context-clean GPT-5.5-Pro [owner reopened for ONE fresh-perspective try]:**
+  brief = root **`BRIEF_FOR_PRO_FRESH.md`** (NOT the old `BRIEF_FOR_PRO.md`). Deliberately minimal-constraint:
+  the ORIGINAL problem stated from scratch + full method freedom; prior results (Thms A–I, EC_NR) demoted to
+  an explicitly-optional appendix the agent is invited to discard. Goal: an INDEPENDENT line of attack that
+  may escape any local-minimum the round-8–18 Pro fell into. Owner-relayed; awaiting reply → audit + record.
+  *(If this yields a genuinely new angle, the loop reopens; otherwise the round-18 deliverable stands.)*
 - Literature scan (full, un-truncated): `lit/SCAN_REPORT.md`.
 - C0 sim: `derisk/` (+ `derisk/results/`).
