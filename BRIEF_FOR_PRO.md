@@ -1,77 +1,88 @@
-# Brief for web GPT-5.5-Pro — ROUND 16: the general compatibility-aware σ_min-localization (or an entangled R−)
+# Brief for web GPT-5.5-Pro — ROUND 17: the cut-or-minor removal lemma (R+) vs a degenerating excluded-minor family (R−)
 ### (copy everything below the line and send as-is)
 
 ---
 
-> Round-16, on your round-15 results. We **independently audited + numerically verified** the decisive
-> `g_s` computation: the centered Toeplitz eigenvalue formula `λ_j=2a_s(cosθ_s+cos(jπ/(L+1)))` is exact,
-> there is **exactly one negative eigenvalue** with `σ_min≥θ_s²/20`, and at `k*=⌊π/θ_s⌋` the determinant is
-> `e^{−Ω(s)}` (`−4e-8…−9e-122` for `s=4..64`) while `σ_min=Θ(s^{−2})` — so your **σ_min correction is
-> decisively right** and `NR(g_s)=Θ(√I_i(g_s))` with a fully interior channel. The hard core is **not**
-> bounded-channel-blind, and its product lifts are not R−. We accept the corrected certificate and target.
-> Two big shortcuts (root-depth, SCP-Hellinger) and one big candidate (`g_s`+lifts) are now closed. **Full
-> method freedom — settle it.**
+> Round-17, on your round-16 results. We ran **two independent audits** (algebraic + a literature audit with
+> web search). **Everything checks out and all your matroid literature is REAL** (Kummer–Sert: 32
+> minor-minimal non-HPP on ≤8 elements = 10 rank-3/7 incl. Fano + **22 rank-4/8 sparse-paving**; "every
+> ≤6-element matroid has HPP", smallest non-HPP = Fano `F_7` — Wagner–Wei/COSW). Your A6 closure, the
+> **exact two-block reduction** (`d_TV(μ,SR)=d_TV(q,PB[a,b])`, making `NR(g_s)=d_TV(g_s,SR)=Θ(√I_i)`
+> rigorous), and the **globally channel-blind sparse-paving family** (`NR=2^{−Ω(n)}`, poly-far, all ≤6-coord
+> conditionals SR) are all confirmed. You've reduced the entire problem to two dual statements. **This is
+> likely the decisive round. Full method freedom — settle one side.**
 
-## 1. The state in one line
+## 1. The problem is now exactly this dichotomy
 
-The R+ pipeline is complete **modulo one localization theorem**, now correctly normalized:
+Your two-block theorem killed the global-σ_min route (the sparse-paving family is global-channel-blind yet
+poly-far). What survives is:
 
-> **(36) compatibility-aware σ_min-localization.** `∃ C`: `I_i(h) ≥ η ⟹` w.p. `≥(η/d)^C` a poly-samplable
-> descendant `F` has EITHER (1) a positive Boolean conditional covariance `≥(η/d)^C` (→ R13 covariance→NR),
-> OR (2) a **bounded** monotone channel `K` whose noisy-rank law `q=π_K^{h|F}` has a **negative Toeplitz
-> section `T` with `σ_min(T) ≥ (η/d)^C`** (→ Lemma 1.1: `d_TV(q,PB)≥σ_min/2`).
+> **R+ ⟺ CUT-OR-MINOR REMOVAL LEMMA.** `∃ C`: if `𝔇(h) ≥ η` then EITHER
+> **(cut)** some block `A` has `d_TV(L_h(|X∩A|), PB) ≥ (η/d)^C` (an exact two-block-symmetrized SR shadow),
+> OR **(minor)** a sample-guided descendant of probability `≥(η/d)^C` has dimension `O(log(d/η))` and is
+> `≥(η/d)^C`-far from SR.
 
-Prove (36) ⟹ **R+**, tester `Õ(n^{2+2a+2b}/ε^{2+4a})` (T4 localizes `I_i≥ε²/2n`; estimate covariance / learn
-the rank law to `τ=(η/d)^C` and test the section's `σ_min`). Refute (36) ⟹ **R−** + a hard instance.
+> **R− ⟺ a DEGENERATING EXCLUDED-MINOR FAMILY.** an asymptotic sequence of minor-minimal non-HPP measures
+> `ν_d` with every proper minor SR, `𝔇(ν_d) ≥ d^{−O(1)}`, but **`NR(ν_d) = d^{−ω(1)}`** — equivalently (by
+> your §3) every two-block shadow is `d^{−ω(1)}`-close to PB AND no `O(log d)`-dim descendant is more than
+> `d^{−ω(1)}`-far from SR (+ adaptive SUBCOND transcript indistinguishability for the SR yes-ensemble).
 
-## 2. The two honest directions — please push BOTH
+The sparse-paving family is the near-miss: it nails `NR=2^{−Ω(n)}` and global blindness, but its excluded
+minor `M_0` is **fixed (8 elements, margin `V(ν_0)=Θ(1)`)**, so it leaks on `O(1)`-dim descendants — the
+minor branch fires. **The whole question is whether the excluded-minor margin can be forced to vanish.**
 
-### (R+) prove (36). The structure you built points here:
-- **(A) the affinity-optimal global comparator + a σ_min second-moment bound.** The variational formula
-  gives a global compatible pair `(r,s)` with `1−ρ(h,·)²≥I_i`; at least one child-vs-comparator Hellinger
-  is `≥poly(η)`. Flip-swap (Thm 5.1) localizes *that fixed* discrepancy — the open step is to convert a
-  localized Hellinger/covariance signal into a **negative Toeplitz section with poly σ_min** on a
-  poly-likely descendant (Lemma 1.1 is the bridge; `g_s` is the worked example where the bump
-  `(a, 2a cosθ, a)` becomes a poly-σ_min tridiagonal section). Does a localized incompatibility always
-  imprint a **near-singular-but-sign-flipped** consecutive Toeplitz window on some bounded-channel rank law?
-- **(B) a structure theorem for minor-minimal obstructions.** `g_s` is THE minor-minimal obstruction (all
-  proper conditionals SR). If every minor-minimal SR obstruction has, like `g_s`, a 3-term (or `O(1)`-band)
-  rank bump under some bounded channel — giving a banded Toeplitz section with `σ_min=poly` — then (36)
-  follows by reduction to the minor-minimal core. **Is the minor-minimal obstruction essentially unique /
-  `g_s`-like (a localized near-singular Toeplitz band), or is there a genuinely different one?**
+## 2. 🎯 The single sharpest sub-question (please target this)
 
-### (R−) the only surviving hope — a GENUINELY ENTANGLED obstruction:
-Build (or rule out) an `h` with `I_i=Ω(1/poly)`, every proper Boolean conditional SR, and the rank
-statistic **SUBCOND-hidden**: the obstruction core is *correlated* with the surrounding coordinates so that
-**no product channel** (and no poly-discoverable descendant) leaves a negative Toeplitz section with poly
-`σ_min`. Your §6 shows product lifts of `g_s` fail (a fixed product channel recovers `q_s`); the question is
-whether **entangling** the core with its environment can suppress every product-channel rank law to within
-`(η/d)^{ω(1)}` of PB while keeping all proper conditionals SR. The audit's sharpest framing: a *non-symmetric*
-core whose `|Y|`-statistic is blind to all coordinate-independent channels. **Does the all-channel +
-descendant machinery provably prevent this (⟹ R+), or is there an adaptivity/correlation gadget that defeats
-every fixed product channel (⟹ R−)?**
+> **(MEM, "minimal excluded-minor margin")** For a minor-minimal non-HPP measure `ν` on `d` coordinates with
+> compatibility defect `𝔇(ν) ≥ η`, must its **own** SR-distance (= its excluded-minor margin, since every
+> proper minor is SR) be `≥ poly(η, 1/d)`? Equivalently: can a minor-minimal non-HPP matroid measure be
+> **`d^{−ω(1)}`-close to SR while `𝔇 ≥ d^{−O(1)}`**?
 
-## 3. Audited assets (use freely)
+- If **MEM holds (margin ≥ poly)** ⟹ the **minor branch always fires** on the minimal excluded minor itself
+  (a descendant of inverse-poly probability and dimension = its support size) ⟹ **R+** (you still must bound
+  the minor's *dimension* — see §3 — but `g_s`/`M_0` both have small minimal excluded minors).
+- If **MEM fails** (a sequence of minor-minimal non-HPP measures with vanishing margin but poly `𝔇`) ⟹
+  **R−** candidate core.
 
-- **(A1) Lemma 1.1 (σ_min spectral PF separation, r15).** `det T<0 ∧ σ_min(T)≥τ ⟹ d_TV(q,PB)≥τ/2`;
-  dimension-independent, robust to `‖q̂−q‖_1<τ`. **This replaces the (mis-normalized) determinant clause.**
-- **(A2) `g_s` solved (r15).** `NR=Θ(s^{−2})`, `I_i=Θ(s^{−4})`, `NR=Θ(√I_i)`; interior channel margin
-  `Θ(s^{−3})`; the rank bump `(a_s, 2a_s cosθ_s, a_s)` → tridiagonal Toeplitz, one negative eigenvalue.
-- **(A3) Covariance→NR (r13).** positive covariance `κ ⟹ NR≥(κ/15)^{3/2}` — alternative (1) of (36).
-- **(A4) Localization T4 + flip-swap Thm 5.1** (Hermon–Salez SCP Poincaré `≥1/m`) localizes Hellinger — the
-  engine to upgrade into σ_min/covariance.
-- **(A5) product lifts of `g_s` are NOT R−** (r15 §6); the all-channel NR estimator's cost is `log`(channel net).
-- **(A6) one verification-debt item to nail rigorously:** the identity `I_i(g_s)=𝔇(g_s)=1−sup_{ν SR}ρ(g_s,ν)²`
-  for every `i` (the bridge from `NR`/`d_TV` to the affinity quantity, underlying the headline `NR=Θ(√I_i)`).
-  Our audit flagged this as the one load-bearing step not yet re-derived from first principles — please give
-  an explicit derivation (or correct it: if `I_i` only *bounds* `𝔇`, state the exact relation and how it
-  changes the exponent). The unconditional `NR(g_s)=Θ(s^{−2})` is not in question; only the `I_i` linkage.
+This is a clean matroid/real-stability question: **how does the SR-margin of a minor-minimal non-HPP
+obstruction scale with its dimension?** The Kummer–Sert classification is fixed-size (constant margin); the
+**asymptotic** margin is the unknown. The exact two-block constraint (your §3: the obstruction must survive
+EVERY two-block symmetrization) is the lever — does it force a poly margin, or can a growing excluded minor
+satisfy it with vanishing margin?
 
-## 4. Deliverable
+## 3. Both directions (signposts — invent your own)
 
-Settle (36): a proof ⟹ **R+** (tester complexity + the best lower bound, ideally tightening `Ω(√n/ε)`), or a
-genuinely entangled `η`-incompatible family with all proper conditionals SR and every bounded-channel rank
-law `(η/d)^{ω(1)}`-close to PB ⟹ **R−** + the hard instance + its query lower bound. Or the furthest rigorous
-progress + the exact remaining gap. If a cleaner invariant settles SR-SUBCOND testing, take it. Mark proved
-vs assumed; flag assumptions; honest confidence. (Human-verified later — keep proofs explicit and checkable;
-we re-verify every construction numerically.)
+- **(R+ / prove the removal lemma)** show: `𝔇(h)≥η ⟹` either a two-block shadow `≥poly` (cut), or a
+  poly-likely **low-dimensional** (`O(log(d/η))`) descendant that is poly-far from SR (minor). The minor
+  branch needs BOTH (i) MEM (the excluded minor has poly margin) AND (ii) a **dimension/discovery bound**
+  (the minimal excluded minor has support `O(log(d/η))` and is hit by a sample-guided descendant with
+  prob `(η/d)^C`). Is there a width/branchwidth-style bound on minimal non-HPP excluded minors? (Matroid
+  minor theory: are minimal excluded minors for HPP of bounded size, or can they grow?)
+- **(R− / build the degenerating family)** push the sparse-paving construction so the planted obstruction is
+  an excluded minor of GROWING size `ω(log d)` with margin `d^{−ω(1)}` (so no `O(log d)`-dim descendant
+  catches it), while keeping `𝔇 ≥ d^{−O(1)}` (some two-block shadow or affinity defect stays poly) and all
+  proper minors SR. The tension: growing the excluded minor while *shrinking* its margin but *keeping* `𝔇`
+  poly — does some inequality forbid this? If not, instantiate it (a pseudorandom non-HPP matroid sequence).
+- **(structural)** is `𝔇(ν) = Θ(`some power of the excluded-minor margin`)` for minor-minimal obstructions
+  (as for `g_s`, where `𝔇=Θ(margin²)`)? If `𝔇` and the margin are polynomially related for ALL
+  minor-minimal obstructions, MEM holds and R+ follows.
+
+## 4. Audited assets (use freely)
+
+- **(A1) Exact two-block reduction (r16 Thm 2.1).** `d_TV(μ,SR)=d_TV(q,PB[a,b])`; the obstruction must
+  survive every two-block symmetrization.
+- **(A2) A6 (r16).** if both `i`-conditionals SR then `I_i=𝔇`; for minor-minimal obstructions `I_i=𝔇` ∀i.
+- **(A3) `g_s` (r15–16).** `NR=d_TV(g_s,SR)=Θ(s^{−2})=Θ(√I_i)`; the cut-branch witness, small excluded minor.
+- **(A4) sparse-paving family (r16).** the global-channel-blind near-miss; the minor-branch witness, fixed
+  excluded minor `M_0` (margin `Θ(1)`).
+- **(A5) HPP literature.** Kummer–Sert 2111.09610 (minimal non-HPP ≤8 elts); Wagner–Wei 0709.1269 (≤6 ⟹ HPP);
+  COSW (Fano = smallest non-HPP). HPP minor- and dual-closed.
+
+## 5. Deliverable
+
+Settle the dichotomy — ideally via **MEM**. A proof that minor-minimal non-HPP obstructions have poly margin
++ bounded support ⟹ the removal lemma ⟹ **R+** (a `poly(n,1/ε)` tester + the best lower bound; try to
+tighten `Ω(√n/ε)` using the sparse-paving family as a restricted-tester bound). A degenerating excluded-minor
+family ⟹ **R−** + the hard instance + its query lower bound. Or the furthest rigorous progress + the exact
+remaining gap. Mark proved vs assumed; flag assumptions; honest confidence. (Human-verified later — keep
+proofs explicit and checkable; we re-verify every construction numerically.)

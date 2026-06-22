@@ -7,19 +7,19 @@
 
 ---
 
-## HEADLINE (current status — updated 2026-06-22 round 15; cold-start: read `RESEARCH_SUMMARY.md` first)
-**15 attack rounds done (codex 1–7, web GPT-5.5-Pro 8–15). NO theorem yet; lean R+ ~58–62/38–42 — genuinely
-open but the candidate hard core resolved FAVORABLY.** Bounds: `Ω(max{√n/ε,1/ε²}) ≤ Q ≤ O(2^n/ε²)`. Route =
-**noisy-rank** (SR ⟺ every monotone-channel rank is Poisson-binomial). 🔑 **Round 15: the candidate hard core
-`g_s` is SETTLED** — `NR(g_s)=Θ(s^{−2})`, `I_i(g_s)=Θ(s^{−4})` ⟹ **`NR(g_s)=Θ(√I_i)`**, caught by an explicit
-**fully INTERIOR** channel (referee-verified); `g_s` + ALL its tensor/padded/permuted lifts ruled out as R−.
-🔧 **Certificate CORRECTED again:** the round-14 `[−det]/k^{k/2+1}` normalization is WRONG (for `g_s` the
-negative determinant is `e^{−Ω(s)}` while `σ_min=Θ(s^{−2})`); the robust object is a **negative Toeplitz
-section with poly `σ_min`** (Lemma 1.1: `det T<0, σ_min(T)≥τ ⟹ d_TV(q,PB)≥τ/2`). **Corrected target (§7):**
-`I_i≥η ⟹` poly-discoverable descendant with covariance `≥(η/d)^C` OR a bounded-channel rank law with a
-negative Toeplitz section `σ_min≥(η/d)^C`. **The only remaining R− hope = a GENUINELY ENTANGLED obstruction**
-(core correlated with surrounding coords so no product channel + descendant exposes the violation).
-**Round 16 (the general compatibility-aware σ_min-localization) = resume point.** 🔴 AI-disclosure unresolved.
+## HEADLINE (current status — updated 2026-06-22 round 16; cold-start: read `RESEARCH_SUMMARY.md` first)
+**16 attack rounds done (codex 1–7, web GPT-5.5-Pro 8–16). NO theorem yet; lean R+ ~55–60/40–45 — genuinely
+open; the problem is now SHARPLY posed as two dual targets.** Bounds: `Ω(max{√n/ε,1/ε²}) ≤ Q ≤ O(2^n/ε²)`.
+Route = **noisy-rank** (SR ⟺ every monotone-channel rank is Poisson-binomial). **Round 16 (BOTH audits clean,
+ALL literature verified real): foundation now fully rigorous + both sides reframed crisply.** Proved: A6 closed
+(`I_i(g_s)=𝔇(g_s)`); **exact two-block reduction** `d_TV(μ,SR)=d_TV(q,PB[a,b])` ⟹ `NR(g_s)=d_TV(g_s,SR)=
+Θ(s^{−2})=Θ(√I_i)` rigorous; 🔴 **a genuinely entangled sparse-paving family defeating EVERY global channel**
+(`NR=2^{−Ω(n)}`) + all ≤6-coord conditionals SR, poly-far from SR (a real lower bound vs all non-adaptive
+bounded-arity testers) — but NOT R− (a fixed 8-coord excluded minor leaks on poly-fraction descendants).
+**The problem is now: R+ ⟺ the CUT-OR-MINOR REMOVAL LEMMA** (`𝔇(h)≥η ⟹` a block `A` with `d_TV(L(|X∩A|),
+PB)≥(η/d)^C`, OR a poly-likely `O(log(d/η))`-dim descendant inverse-poly-far from SR); **R− ⟺ an ASYMPTOTIC
+pseudorandom excluded-minor family whose conditioning modulus degenerates in `d`** (+ adaptive SUBCOND
+indistinguishability). **Round 17 (these two dual forks) = resume point.** 🔴 AI-disclosure unresolved.
 
 ### (historical) Phase 0 line
 **Phase 0 — setup + kill-scan + C0 lean DONE. NO theorem, NO convergence, NO GO issued. STOP at human gate.**
@@ -308,6 +308,7 @@ marginals. **Refined dichotomy (the real frontier):**
 |---|---|---|---|
 | 2026-06-20 | unset (pre-attack); **C0 leans the local-handle route is doubtful** | unset (pre-attack); C2 not yet attacked | Phase-0 setup; no attack round run. Seed only. C0 lean (no clean low-order local handle) is a routing signal to attack C1 *harder / non-locally* and weigh impossibility — **NOT** a confidence drop on a run thread, and NOT a downgrade (NO-RETREAT §15). A sustained drop *during the attack loop* ⇒ escalate / fresh-agent (attack harder), NEVER downgrade. |
 | 2026-06-21 (round 1) | **modestly UP vs C0 pessimism.** codex: OPEN, no tester (82% "frozen facts insufficient") — but the audit **refuted codex's blocker**: tilted pairwise covariances `Cov_{μ^λ}` ARE SUBCOND-estimable (Boolean conditioning + deterministic λ-reweighting; no rejection sampling). Estimation half reduces to Boolean conditioning; crux cleanly isolated = the **witness-localization theorem**. | not yet (codex round-1 C2 running) | Round 1 = GAP-level **progress**, not a stall. The global handle `V(μ)=0⇔SR` is referee-verified (corrected identity, F1). Route forward: sharpen upper bound (bounded-support λ witness theorem). NOT escalating yet (K_stall=2; this is round 1 with real progress). |
+| 2026-06-22 (round 16, web GPT-5.5-Pro) | **Foundation made RIGOROUS + both sides reframed (lean ~55–60/40, holds).** BOTH audits clean, **ALL matroid-HPP literature VERIFIED REAL** (Kummer–Sert "22 rank-4/8 non-HPP"; "≤6-element ⟹ HPP", smallest non-HPP=Fano F_7). Proved: A6 `I_i(g_s)=𝔇(g_s)`; **exact two-block reduction** `d_TV(μ,SR)=d_TV(q,PB[a,b])` (referee-verified backbone on n=4) ⟹ `NR(g_s)=d_TV(g_s,SR)=Θ(s^{−2})=Θ(√I_i)` rigorous. 🔴 **a genuinely entangled sparse-paving family**: poly-far from SR, `NR=2^{−Ω(n)}` (defeats EVERY global channel — global channel pseudorandomness is EASY, even in matroid measures), all ≤6-coord conditionals SR. | bounds unchanged; **+ a real lower bound vs all non-adaptive bounded-arity testers.** | 🔧 The σ_min/global-channel route is INSUFFICIENT (the sparse-paving family kills it). **R+ ⟺ CUT-OR-MINOR removal lemma** (cut: a block rank stat far from PB; OR minor: a poly-likely `O(log)`-dim far descendant) — fair target, **small-minor branch + exhaustiveness UNPROVEN**. **R− ⟺ a degenerating-margin asymptotic excluded-minor family** (fixed-size classifications can't supply it; "one conceptual step away"). Not closed. |
 | 2026-06-22 (round 15, web GPT-5.5-Pro) | 🔑 **The candidate hard core `g_s` is SETTLED FAVORABLY ⟹ lean UP to ~58–62/40.** `NR(g_s)=Θ(s^{−2})`, `I_i(g_s)=Θ(s^{−4})` ⟹ **`NR(g_s)=Θ(√I_i)`** (referee-verified: Toeplitz eigenvalue formula exact, exactly 1 negative eigenvalue, `σ_min≥θ²/20`). An explicit **fully interior** channel (margin `Θ(s^{−3})`) exposes it; `g_s` + all tensor/padded/permuted lifts ruled out as R−. | bounds unchanged. | 🔧 **Certificate CORRECTED:** `[−det]/k^{k/2+1}` is WRONG (`g_s` det `=e^{−Ω(s)}` but `σ_min=Θ(s^{−2})`, referee-verified `-4e-8…-9e-122`); robust object = **negative Toeplitz section with poly `σ_min`** (Lemma 1.1). **Corrected target (§7):** `I_i≥η ⟹` descendant with covariance `≥(η/d)^C` OR negative Toeplitz section `σ_min≥(η/d)^C`. **Only remaining R− hope = a GENUINELY ENTANGLED obstruction.** Not closed. |
 | 2026-06-22 (round 14, web GPT-5.5-Pro) | 🔴 **CORRECTION — the orchestrator's proposed R+ route is REFUTED ⟹ lean DOWN to ~55–60/40.** Pro proves a constant-depth complex root can be `2^{−Ω(d)}`-close to PB (Thm 2.1 + an explicit `Bin(d,½)`-perturbation family with root at `−1+i/2`), **even through a fixed bounded channel `(0.1,0.9)`** (referee-verified d=4,8,16). So "root depth ⟹ poly PB-distance" is FALSE; `μ_4` worked only at fixed degree 4. Also: PF-minor bound `d_TV(q,PB)≥v/k^{k/2+1}` (Thm 3.1); an Ω(1)-far family with `NR=2^{−Ω(d)}` (Thm 4.1, but NOT R− — 2-faces show positive covariance ⟹ localization catches it); flip-swap localizes Hellinger, not the compatibility gap `I_i` (Thm 5.1, §5). | bounds unchanged. | **Target CORRECTED (root → normalized PF minor):** `I_i≥η ⟹` a poly-discoverable descendant has covariance `≥(η/d)^C` OR a Toeplitz minor `[−det]_+/k^{k/2+1}≥(η/d)^C`. Needs a **compatibility-aware total-positivity localization** theorem (spectral independence alone insufficient). `g_s` (non-SR parent, SR proper conditionals) = the candidate hard core. **Honest:** my round-13 μ_4→R+ extrapolation was too optimistic. Still moderate R+. Not closed. |
 | 2026-06-21 (round 13, web GPT-5.5-Pro) | **Channel-degeneracy doubt SOLVED + class rates proven ⟹ stronger R+ lean.** Thm 1.1 (regularization): a defect-`τ` channel ⟹ a BOUNDED channel (params `Ω(τ/d)` from 0/1) keeps `Ω(τ)` defect — kills the audit's main doubt. Thm 2.1: sharp PB separation `d_TV(q,PB)≥(Φ/15)^{3/2}` (referee-verified). Thm 3.1: positive covariance `κ ⟹ NR≥(κ/15)^{3/2}`. **Thm 4.1: full NR-rate for PRODUCT children** (`NR≥I₀³/poly(d)`, α=1/3). Thm 5.1: homogeneous children — a SUBCOND-*search* witness (honestly downgraded). | bounds unchanged. residual = arbitrary nonproduct nonhomogeneous incompatibility. | **The precise residual (34):** `I_i≥η ⟹` EITHER a poly-likely descendant has positive covariance `poly(η/d)`, OR a bounded channel sees a **negative higher Toeplitz/PF minor** poly-large. (Thm 2.1 = the quadratic case; missing = higher-order.) 🔎 **REFEREE TEST:** `μ_4` (Rayleigh-not-SR) has worst cond. covariance `=0` (evades §3) **but IS caught by a BOUNDED channel** `(0.1,0.55)` (noisy-rank roots `−1.90±0.72j`, non-PB) — the higher-order (34) obstruction exposed with constant margin ⟹ **strong concrete evidence for R+.** **AUDIT DONE (`round13_audit.md`): ALL proofs CORRECT** (regularization, sharp PB sep, product/homogeneous rates); the audit's own "decisive test" = the μ_4 finding (it converged) ⟹ μ_4 NOT an R− instance. **Leans R+ ~70/30.** Residual = the GENERAL (34). Not closed. |
@@ -464,10 +465,14 @@ build C2 in parallel; weigh the impossibility route (RED-3 *on a proof only*).
   (DONE, ALL CORRECT, lean ~57/43; 2 flags: **I_i=𝔇 verification-debt** [folded into r16]; entangled R−
   open) → **`g_s` resolved FAVORABLY (`NR=Θ(√I_i)`, interior channel, product lifts not R−); certificate
   corrected determinant→σ_min (Lemma 1.1); lean ~57–62/40.**
-- **Round 16 (2026-06-22) — web GPT-5.5-Pro [SENT, owner-relayed]:** brief = root `BRIEF_FOR_PRO.md`
-  (pointer `round16_pro_request.md`). Target = **(36) general compatibility-aware σ_min-localization**
-  (`I_i≥η ⟹` descendant with covariance `≥(η/d)^C` OR negative Toeplitz section `σ_min≥(η/d)^C`). Pushes
-  both: (R+) localize the affinity defect into a poly-σ_min near-singular Toeplitz window / a minor-minimal
-  structure theorem; (R−) the only hope = a **genuinely entangled** obstruction. Awaiting Pro reply.
+- **Round 16 (2026-06-22) — web GPT-5.5-Pro:** brief `round16_pro_request.md` · reply
+  `round16_pro_response.md` (A6 closed; exact two-block reduction; entangled channel-blind sparse-paving
+  family) · audit `round16_audit.md` (TWO agents, ALL CORRECT, **all literature verified real**) →
+  **foundation rigorous; σ_min/global-channel route killed by the sparse-paving family; reframed to the
+  cut-or-minor removal lemma (R+) vs a degenerating excluded-minor family (R−); lean ~55–60/40.**
+- **Round 17 (2026-06-22) — web GPT-5.5-Pro [SENT, owner-relayed]:** brief = root `BRIEF_FOR_PRO.md`
+  (pointer `round17_pro_request.md`). Target = **the two dual forks**: (R+) prove the **cut-or-minor removal
+  lemma** (the small-minor branch + exhaustiveness — the exact open theorem); (R−) build the **asymptotic
+  pseudorandom excluded-minor family** whose conditioning modulus degenerates in `d`. Awaiting Pro reply.
 - Literature scan (full, un-truncated): `lit/SCAN_REPORT.md`.
 - C0 sim: `derisk/` (+ `derisk/results/`).
