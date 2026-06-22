@@ -1,16 +1,14 @@
 # RESEARCH SUMMARY & COLD-START — SR-SUBCOND
-### Snapshot 2026-06-22 (through round 14). Read this first to resume.
+### 🏁 Attack loop CLOSED 2026-06-22 (18 rounds). Read `DELIVERABLE.md` FIRST, then this.
 
-> **如何冷启动（中文）：** 打开本文件 + `docs/ledger_sr_subcond.md`（详细记录）+ `guide.md`（只读宪法）。
-> 当前进度：与 web GPT-5.5-Pro 的攻击循环已到 **round 18（已写好简报、待中转发送）**。下一步动作 =
-> 把根目录 **`BRIEF_FOR_PRO.md`** 整段发给 web GPT-5.5-Pro，把它的完整回复贴回来，然后由编排者
-> （Claude）派独立审计 + 复核 + 更新 ledger。
-> 🔑 **Round-17（已数值复核 MEM + PG(2,q)；审计进行中）**：**二分塌缩成一个引理。** 证明了**普适 MEM**
-> `½𝔇≤d_TV(μ,SR)≤√𝔇`（杀死"margin 退化"那条 R−）；**精确多尺度分解** `𝔇=𝓔_{>m}+𝓡_m` ⟹ **低维 minor
-> 分支是自动的**（随机 `O(log(d/𝔇))` 维后代以 `≥𝔇/4` 概率 `𝔇/8`-远离 SR）。🔑 **于是 R+ ⟺ 一条引理：
-> energy-to-cut**（高维相容能量 ⟹ 多项式可见的 cut 缺陷）。`PG(2,q)`（增长的障碍）是 cut-visible（R+ 证据）。
-> 置信度 ~58–62/40。🔴 **Round-16**：sparse-paving 全局信道失明族 + 精确两块约简。🔴 **Round-14/15**：复根
-> 路线被证伪、`g_s` 有利解决。🔴 仍未闭合、未证明。🔴 "不披露 AI" 本编排者拒绝执行（违反 §15），披露义务保留。
+> **如何冷启动（中文）：** **攻击循环已于 2026-06-22（round 18）按 owner 决定结束。** 先读
+> **`DELIVERABLE.md`**（论文级总结 + 人工验证清单 + 诚实定位），再读 `docs/ledger_sr_subcond.md`（全程记录）。
+> **结局**：头条问题（SR 是否有 poly SUBCOND tester）**仍开放**，置信度 **~52–55/45–48（真·五五开偏 R+）**。
+> 但产出了一套**论文级结构理论（定理 A–I）+ 一个条件型 poly tester + 把整个问题约简成一条开放引理 EC_NR**。
+> Round-18（最后一轮）：纠正了 MM-NR ⊊ EC_NR（二元/三元 MM-NR 不闭合 R+）；加了纠缠随机码 R+ 证据（全局
+> 失明被前缀哈希打穿）。**全部由 AI 产出、AI 审计、未经人类验证**（`DELIVERABLE.md` 有 3 项必验清单）。
+> 🔴 接下来全是 owner 的决定：①是否披露 AI（投稿前提）；②是否投入人工验证；③去向（诚实判断：诚实披露的
+> arXiv 预印本，不是稳的 SODA）。🔴 "不披露 AI" 本编排者拒绝执行（违反 §15），披露义务保留、未解决。
 
 ---
 

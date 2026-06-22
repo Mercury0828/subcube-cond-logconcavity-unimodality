@@ -7,19 +7,16 @@
 
 ---
 
-## HEADLINE (current status — updated 2026-06-22 round 17; cold-start: read `RESEARCH_SUMMARY.md` first)
-**17 attack rounds done (codex 1–7, web GPT-5.5-Pro 8–17). NO theorem yet; lean R+ ~58–62/38–42 — genuinely
-open; the WHOLE problem is now ONE precise lemma.** Bounds: `Ω(max{√n/ε,1/ε²}) ≤ Q ≤ O(2^n/ε²)`.
-**Round 17 (referee-verified MEM + PG(2,q); audit pending): the dichotomy COLLAPSED to a single open lemma.**
-Proved: **universal MEM** `½𝔇(μ)≤d_TV(μ,SR)≤√𝔇(μ)` (kills the degenerating-margin R− route — `𝔇≥poly` and
-`d_TV(·,SR)=d^{−ω(1)}` is impossible); **exact multiscale decomposition** `𝔇(h)=𝓔_{>m}(h)+𝓡_m(h)`; ⟹ the
-**low-dim minor branch is AUTOMATIC** (a random `O(log(d/𝔇))`-dim descendant is `𝔇/8`-far from SR w.p.
-`≥𝔇/4`, poly-discoverable). 🔑 **So R+ ⟺ ONE statement: the ENERGY-TO-CUT LEMMA** — `𝓔_{>m}(h)≥𝔇/2`
-(high-dim compatibility energy, `m=O(log(d/𝔇))`) ⟹ a poly-discoverable prefix face + block `A` with
-`d_TV(L(|X∩A|),PB)≥(𝔇/d)^{O(1)}`. `PG(2,q)` (a growing obstruction) IS cut-visible (`Ω(d^{−3/2})`, R+
-evidence). **R− ⟺ a minor-minimal non-HPP family poly-FAR from SR but with `NR=d^{−ω(1)}` (observable shadow
-degenerates)** + adaptive SUBCOND indistinguishability. **Round 18 (the energy-to-cut lemma) = resume point.**
-🔴 AI-disclosure unresolved. ⚠️ Decision point flagged to owner (problem reduced to one hard lemma).
+## HEADLINE (FINAL — attack loop CLOSED 2026-06-22 after 18 rounds; cold-start: read `DELIVERABLE.md` + `RESEARCH_SUMMARY.md`)
+**18 attack rounds done (codex 1–7, web GPT-5.5-Pro 8–18). Loop CLOSED by owner decision after round 18.
+NO theorem on the headline question; lean R+ ~52–55/45–48 — GENUINELY OPEN.** Bounds: `Ω(max{√n/ε,1/ε²}) ≤ Q
+≤ O(2^n/ε²)` (no matching upper bound; the tester is CONDITIONAL on EC_NR). **Outcome:** a paper-grade
+structural theory (Thms A–I in `DELIVERABLE.md`) + a conditional `poly(n,1/ε)` tester + the headline question
+reduced to **ONE open problem, EC_NR** (energy-to-NOISY-RANK removal). Round-18 (final) corrected the
+canonical statement (NR not cut; **MM-NR ⊊ EC_NR**, so binary/ternary MM-NR does NOT close R+), added the
+entangled random-code R+ evidence (global blindness broken by prefix hashing), and settled MM-NR for
+binary/ternary matroids. **All AI-produced, AI-audited, human-UNverified** (3-item verification checklist in
+`DELIVERABLE.md`). 🔴 AI-disclosure unresolved with owner. 🔴 "AI-verified ≠ proved."
 
 ### (historical) Phase 0 line
 **Phase 0 — setup + kill-scan + C0 lean DONE. NO theorem, NO convergence, NO GO issued. STOP at human gate.**
@@ -308,6 +305,7 @@ marginals. **Refined dichotomy (the real frontier):**
 |---|---|---|---|
 | 2026-06-20 | unset (pre-attack); **C0 leans the local-handle route is doubtful** | unset (pre-attack); C2 not yet attacked | Phase-0 setup; no attack round run. Seed only. C0 lean (no clean low-order local handle) is a routing signal to attack C1 *harder / non-locally* and weigh impossibility — **NOT** a confidence drop on a run thread, and NOT a downgrade (NO-RETREAT §15). A sustained drop *during the attack loop* ⇒ escalate / fresh-agent (attack harder), NEVER downgrade. |
 | 2026-06-21 (round 1) | **modestly UP vs C0 pessimism.** codex: OPEN, no tester (82% "frozen facts insufficient") — but the audit **refuted codex's blocker**: tilted pairwise covariances `Cov_{μ^λ}` ARE SUBCOND-estimable (Boolean conditioning + deterministic λ-reweighting; no rejection sampling). Estimation half reduces to Boolean conditioning; crux cleanly isolated = the **witness-localization theorem**. | not yet (codex round-1 C2 running) | Round 1 = GAP-level **progress**, not a stall. The global handle `V(μ)=0⇔SR` is referee-verified (corrected identity, F1). Route forward: sharpen upper bound (bounded-support λ witness theorem). NOT escalating yet (K_stall=2; this is round 1 with real progress). |
+| 2026-06-22 (round 18, web GPT-5.5-Pro — 🏁 FINAL) | **Lemma NOT settled; strong writeup-grade close. Lean ~52–55/45–48.** Corrected: **NR (not cut)** is the canonical statistic; **MM-NR ⊊ EC_NR** (binary/ternary MM-NR does NOT close R+ — the round-18 brief's MM-cut⟺EC was an over-claim, audit-caught). NEW: **entangled random-code family** (Ω(1)-far, `NR=2^{−Ω(n)}`, all `<n/4`-coord conditionals point masses, yet prefix-hashing exposes a constant cut — referee-verified Lemma 2.3 + Pr(Z=1); strong R+ evidence + a `2^{Ω(n)}` no-conditioning restricted LB). **MM-NR settled for binary (`F_7,F_7*`) & ternary (`F_7⁻,(F_7⁻)*,P_8`, ≤8 elts)** — literature audit-verified REAL. Delivered the **paper-ready stack A–I** + canonical open problem. | bounds unchanged. | 🏁 **Attack loop CLOSED.** Deliverable = `DELIVERABLE.md` (structural theory + conditional tester + EC_NR open). Audit: no FATAL, no hallucination; **3 human-verify items** (mesh-Lipschitz lemma; scope ternary list; purge CutDef⟺NR / MM⟺EC). prefix-hashing is **example-specific** (doesn't obviously reach EC_NR). |
 | 2026-06-22 (round 17, web GPT-5.5-Pro) | 🔑 **Dichotomy COLLAPSED to ONE lemma ⟹ lean ~58–62/40.** Proved (referee-verified): **universal MEM** `½𝔇≤d_TV(μ,SR)≤√𝔇` (kills the degenerating-margin R− route, but honestly NOT the bottleneck — the algo sees `CutDef`/`NR`, not `d_TV(·,SR)`); **exact multiscale** `𝔇=𝓔_{>m}+𝓡_m` ⟹ **low-dim minor branch AUTOMATIC** (random `O(log(d/𝔇))`-dim descendant `𝔇/8`-far w.p. `𝔇/4`); **`PG(2,q)` cut-visible** `Φ=3(q−1)²/(q²+q+1)²` ⟹ `CutDef=Ω(d^{−3/2})` (R+ evidence). | bounds unchanged. | **R+ ⟺ ONE open statement: the ENERGY-TO-CUT LEMMA** (`𝓔_{>m}(h)≥𝔇/2 ⟹` poly-visible cut defect). Minor-minimal obstructions = the pure high-energy case (`𝓡_m=0`). **R− ⟺ minor-minimal poly-FAR-but-`NR=d^{−ω(1)}` family** (HPP excluded-minor size may be unbounded — weak-HPP has `PG(2,q)` as excluded minors). Pro LOW-confidence on energy-to-cut. Not closed. |
 | 2026-06-22 (round 16, web GPT-5.5-Pro) | **Foundation made RIGOROUS + both sides reframed (lean ~55–60/40, holds).** BOTH audits clean, **ALL matroid-HPP literature VERIFIED REAL** (Kummer–Sert "22 rank-4/8 non-HPP"; "≤6-element ⟹ HPP", smallest non-HPP=Fano F_7). Proved: A6 `I_i(g_s)=𝔇(g_s)`; **exact two-block reduction** `d_TV(μ,SR)=d_TV(q,PB[a,b])` (referee-verified backbone on n=4) ⟹ `NR(g_s)=d_TV(g_s,SR)=Θ(s^{−2})=Θ(√I_i)` rigorous. 🔴 **a genuinely entangled sparse-paving family**: poly-far from SR, `NR=2^{−Ω(n)}` (defeats EVERY global channel — global channel pseudorandomness is EASY, even in matroid measures), all ≤6-coord conditionals SR. | bounds unchanged; **+ a real lower bound vs all non-adaptive bounded-arity testers.** | 🔧 The σ_min/global-channel route is INSUFFICIENT (the sparse-paving family kills it). **R+ ⟺ CUT-OR-MINOR removal lemma** (cut: a block rank stat far from PB; OR minor: a poly-likely `O(log)`-dim far descendant) — fair target, **small-minor branch + exhaustiveness UNPROVEN**. **R− ⟺ a degenerating-margin asymptotic excluded-minor family** (fixed-size classifications can't supply it; "one conceptual step away"). Not closed. |
 | 2026-06-22 (round 15, web GPT-5.5-Pro) | 🔑 **The candidate hard core `g_s` is SETTLED FAVORABLY ⟹ lean UP to ~58–62/40.** `NR(g_s)=Θ(s^{−2})`, `I_i(g_s)=Θ(s^{−4})` ⟹ **`NR(g_s)=Θ(√I_i)`** (referee-verified: Toeplitz eigenvalue formula exact, exactly 1 negative eigenvalue, `σ_min≥θ²/20`). An explicit **fully interior** channel (margin `Θ(s^{−3})`) exposes it; `g_s` + all tensor/padded/permuted lifts ruled out as R−. | bounds unchanged. | 🔧 **Certificate CORRECTED:** `[−det]/k^{k/2+1}` is WRONG (`g_s` det `=e^{−Ω(s)}` but `σ_min=Θ(s^{−2})`, referee-verified `-4e-8…-9e-122`); robust object = **negative Toeplitz section with poly `σ_min`** (Lemma 1.1). **Corrected target (§7):** `I_i≥η ⟹` descendant with covariance `≥(η/d)^C` OR negative Toeplitz section `σ_min≥(η/d)^C`. **Only remaining R− hope = a GENUINELY ENTANGLED obstruction.** Not closed. |
@@ -476,13 +474,14 @@ build C2 in parallel; weigh the impossibility route (RED-3 *on a proof only*).
   `round17_audit.md` (DONE, ALL CORRECT, lean ~58–60/40) → **dichotomy COLLAPSED to ONE lemma; degenerating-
   margin R− route killed; minor branch discharged; the energy-to-cut lemma "carries all the original R+
   difficulty" — consolidation, not a decisive shift.**
-- **Round 18 (2026-06-22) — web GPT-5.5-Pro [SENT, owner-relayed] — 🏁 FINAL ATTACK ROUND (owner decision
-  2026-06-22):** brief = root `BRIEF_FOR_PRO.md` (pointer `round18_pro_request.md`). Target = **the
-  energy-to-cut lemma (EC) ⟺ R+**, sharpest form **(MM-cut): does minor-minimality + poly `𝔇` force a
-  poly-visible cut/NR defect? (= is cut-blindness compatible with minor-minimality?)**. Asks Pro to EITHER
-  settle it (R+ tester / R− core) OR give the definitive writeup-ready summary (clean theorem statements +
-  the canonical open problem). **After this round + audit: STOP attacking; consolidate the deliverable**
-  (conditional/structural result, AI-disclosed, pending human verification). Owner weighing SODA vs an
-  arXiv preprint vs shelving. Awaiting Pro reply.
+- **Round 18 (2026-06-22) — web GPT-5.5-Pro — 🏁 FINAL:** brief `round18_pro_request.md` · reply
+  `round18_pro_response.md` (lemma not settled; random-code R+ evidence; binary/ternary MM-NR; paper stack
+  A–I) · audit `round18_audit.md` (no FATAL, no hallucination, 3 human-verify items) → **attack loop CLOSED;
+  deliverable consolidated in `DELIVERABLE.md`; lean ~52–55/45–48.**
+- 🏁 **ATTACK LOOP CLOSED (2026-06-22).** Deliverable = `DELIVERABLE.md`. Next steps are the owner's:
+  (i) decide AI-disclosure (precondition for any submission); (ii) decide human-verification effort (the
+  corpus is AI-produced, unverified); (iii) decide venue/scope (honest read: strong AI-disclosed arXiv
+  preprint, not a confident SODA paper, unless EC_NR is humanly cracked or the structural theory is judged
+  independently SODA-grade).
 - Literature scan (full, un-truncated): `lit/SCAN_REPORT.md`.
 - C0 sim: `derisk/` (+ `derisk/results/`).
