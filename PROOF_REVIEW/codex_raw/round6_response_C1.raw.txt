@@ -1,0 +1,54 @@
+Reading additional input from stdin...
+OpenAI Codex v0.141.0
+--------
+workdir: E:\Project-git\subcube-cond-logconcavity-unimodality
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: high
+reasoning summaries: none
+session id: 019eeb57-fcf8-77d0-ada0-923b8122b12c
+--------
+user
+PURE MATH, concise, no tools (read-only sandbox). The crux of testing strongly Rayleigh (SR) in subcube-conditioning, distilled: SR(mu) <=> g_mu(z)=E[prod_{i in S} z_i] is real stable <=> Rayleigh-difference Delta_ij(g)(x)>=0 for ALL real x in R^n (including NEGATIVE/large entries). A SUBCOND tester can estimate g_mu(x)=E_mu[prod_{i in S} x_i] only with variance ~ (max|x_i|)^{2n}: cheap for x in [-1,1]^n (Boolean conditioning / bounded), EXPONENTIAL for off-orthant x with |x_i|>1. Known: (i) covariance/positive-field statistics test only the WEAKER Rayleigh (orthant) property [witness mu_4]; (ii) bounded conditional marginals are incomplete [symmetric spread example]; (iii) symmetric measures ARE testable via the rank polynomial (estimate P(|S|=k) by sampling). QUESTION: for GENERAL (non-symmetric) mu, is real-stability of g_mu determined by some poly(n)-query-SUBCOND-estimable functional? Route A: give such a functional/tester (how to certify the off-orthant Delta_ij>=0 without exp-variance estimation). Route B: argue the off-orthant estimability barrier yields a planted-vs-far SUBCOND lower bound (sketch the two ensembles + why poly queries cannot separate). Give your verdict (A or B more likely + why), the single key idea, confidence %.
+codex
+I’ll keep this at the mathematical/model level, as requested.
+codex
+Verdict: **B is more likely**. Confidence: **70%**.
+
+Key idea: **off-orthant SR is an exponentially ill-conditioned analytic-continuation problem**. SUBCOND gives access to Boolean-face conditionals, hence bounded statistics of the coefficient array. But a Rayleigh difference
+\[
+\Delta_{ij}g(x)=\partial_i g(x)\partial_j g(x)-g(x)\partial_{ij}g(x)
+\]
+at \(x\notin[-1,1]^n\) is a linear/quadratic functional with weights growing like \(\prod |x_k|\). Tiny high-degree coefficient perturbations, invisible to polynomially many bounded-face queries, can be amplified into a negative off-orthant certificate.
+
+A plausible lower-bound sketch:
+
+- **YES ensemble:** start from a robust SR law, then add random low-visible perturbations projected so all queried Boolean-face conditionals remain statistically typical of SR behavior.
+
+- **NO ensemble:** use the same visible Boolean statistics, but plant a random high-degree signed perturbation in the coefficient tensor. With constant total variation mass, it creates some \((i,j,x)\) with \(|x_k|>1\) where \(\Delta_{ij}g(x)<0\), hence the law is far from SR.
+
+- **Why SUBCOND cannot separate:** each polynomial-query transcript only probes polynomially many subcubes. Against a random high-degree planting, those face restrictions look contiguous to the YES ensemble; detecting the violation requires estimating an exponentially weighted off-orthant functional, whose variance is exponential.
+
+So I would not expect a general poly-query SUBCOND-estimable functional for SR unless it uses a genuinely new structural theorem collapsing general stability to bounded Boolean data. Symmetry gives exactly such a collapse via the rank polynomial; non-symmetric measures appear to have no comparable compression.
+tokens used
+25,943
+Verdict: **B is more likely**. Confidence: **70%**.
+
+Key idea: **off-orthant SR is an exponentially ill-conditioned analytic-continuation problem**. SUBCOND gives access to Boolean-face conditionals, hence bounded statistics of the coefficient array. But a Rayleigh difference
+\[
+\Delta_{ij}g(x)=\partial_i g(x)\partial_j g(x)-g(x)\partial_{ij}g(x)
+\]
+at \(x\notin[-1,1]^n\) is a linear/quadratic functional with weights growing like \(\prod |x_k|\). Tiny high-degree coefficient perturbations, invisible to polynomially many bounded-face queries, can be amplified into a negative off-orthant certificate.
+
+A plausible lower-bound sketch:
+
+- **YES ensemble:** start from a robust SR law, then add random low-visible perturbations projected so all queried Boolean-face conditionals remain statistically typical of SR behavior.
+
+- **NO ensemble:** use the same visible Boolean statistics, but plant a random high-degree signed perturbation in the coefficient tensor. With constant total variation mass, it creates some \((i,j,x)\) with \(|x_k|>1\) where \(\Delta_{ij}g(x)<0\), hence the law is far from SR.
+
+- **Why SUBCOND cannot separate:** each polynomial-query transcript only probes polynomially many subcubes. Against a random high-degree planting, those face restrictions look contiguous to the YES ensemble; detecting the violation requires estimating an exponentially weighted off-orthant functional, whose variance is exponential.
+
+So I would not expect a general poly-query SUBCOND-estimable functional for SR unless it uses a genuinely new structural theorem collapsing general stability to bounded Boolean data. Symmetry gives exactly such a collapse via the rank polynomial; non-symmetric measures appear to have no comparable compression.
+EXIT=0

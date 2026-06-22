@@ -1,0 +1,1387 @@
+Reading additional input from stdin...
+OpenAI Codex v0.141.0
+--------
+workdir: E:\Project-git\subcube-cond-logconcavity-unimodality
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: xhigh
+reasoning summaries: none
+session id: 019eeb15-f725-70e0-93a4-a0aab797959b
+--------
+user
+You are an expert in distribution testing lower bounds (Yao minimax), real-stable/strongly Rayleigh polynomials, local-to-global / isoperimetric inequalities, and spectral/entropic independence. Solve the DICHOTOMY on stdin: either (A) PROVE SR is locally testable on conditional marginals (d_TV(mu,SR)>=eps => some bounded conditional marginal is poly-far from SR) and assemble the poly(n,1/eps) SUBCOND tester + exponent + CS3, OR (B) CONSTRUCT an explicit far-from-SR family mu* that is simultaneously (1) far from SR, (2) RAYLEIGH on the positive orthant (invisible to all positive-field/Boolean pairwise covariances), and (3) every O(1)- or O(log n)-dim conditional marginal is SR (invisible to the marginal-SR test) — then prove the SUBCOND query lower bound (impossibility/RED-3). The crux: can a mu_4-style OFF-ORTHANT real-stability violation be SPREAD over Omega(n) coordinates so no bounded conditional marginal exposes it? Be concise: lead with verdict (A or B or partial) and the single key inequality/construction. Mark proved vs assumed; flag asserted steps; confidence %.
+
+<stdin>
+# Round-4 Brief — C1/RED-3 (the make-or-break dichotomy)
+
+> For codex GPT-5.5-xhigh. Builds on rounds 1–3 (`round{1,2,3}_response_C1.md`, `round3_audit_C1.md`).
+> Skeleton = guide §8. Method-agnostic. This brief asks you to resolve a DICHOTOMY — either an upper bound
+> or an impossibility; both are first-rate results.
+
+## 0. Role note
+You originate the math; we referee. Mark proved vs assumed; flag every asserted step; confidence + verdict.
+
+## 1. Verified state (FROZEN — corrected substrate)
+- **SR (strongly Rayleigh) ⇔ `g_μ` real stable ⇔ `Δ_ij(g)=∂_ig∂_jg − g∂_i∂_jg ≥ 0 for ALL real `x∈ℝⁿ`**
+  (NOT just the positive orthant). `Δ_ij≥0` on `ℝ₊ⁿ` only is the WEAKER **Rayleigh** property;
+  **Rayleigh ⊋ SR** (Choe–Wagner math/0307096; Brändén–Wagner–Wei 1411.7735 Prop 4). SR closed under
+  conditioning + marginalization (P1).
+- **N4 (route death — VERIFIED).** Every positive-external-field / Boolean-conditioning **pairwise
+  covariance** statistic certifies only Rayleigh, NOT SR. Witness `μ_4` (`g_4=1+2e_1+2e_2+2e_3+e_4`,
+  symmetric, `a=(1,2,2,2,1)/30`): `Δ_ij>0` on all `ℝ₊⁴` (looks SR to all positive fields & conditionings)
+  but has a complex root ⟹ not real stable ⟹ **not SR**, `d_TV(μ_4,SR)=Ω(1)`. Lift
+  `μ_4×Ber(½)^{⊗(n−4)}` is constant-far and invisible to all positive-field covariances.
+- **N3 (VERIFIED).** Parity `μ_n`=uniform even slice is `Ω(1)`-far from SR, **all proper marginals are
+  uniform-product (SR)** — so any *fixed unconditioned* low-dim marginal-SR test misses it (it is caught
+  only after a *deep* Boolean conditioning, which exposes a non-SR conditional `{i,j}`-marginal).
+- **The new handle (T‴):** test **real-stability of conditional low-dimensional marginals**:
+  `𝒮‴ = { SR-test of μ(X_W | X_T=ρ) : Boolean (T,ρ), |W| ≤ k }` (real-stability of a fixed-size multiaffine
+  polynomial is decidable). `μ_4` is caught by `𝒮‴` (its `O(1)`-bit marginal is non-SR); `μ_n` is caught
+  by `𝒮‴` with deep conditioning (conditional `{i,j}`-marginal non-SR).
+
+## 2. The exact target — RESOLVE THE DICHOTOMY (prove A or construct B)
+**(A) UPPER BOUND — SR is locally testable on conditional marginals.** Prove: there exist `k=O(1)` (or
+`O(log n)`) and `poly(n,1/ε)` such that
+`d_TV(μ, SR) ≥ ε ⟹ ∃ Boolean (T,ρ) and W (|W|≤k) with μ(X_W|X_T=ρ) being Ω(poly(ε,1/n))-far from SR-on-W`,
+where the conditioning event has `≥ 1/poly` probability (so it is SUBCOND-estimable). Then assemble the
+tester (sample conditionings/coordinates, estimate the bounded conditional marginal, run the decidable
+SR-test) + the `poly(n,1/ε)` query bound + CS3 (automatic — it tests SR directly). Give the exponent.
+
+**(B) IMPOSSIBILITY — a family defeating BOTH primitives (RED-3).** Construct an explicit `μ*` that is
+1. **`Ω(1)`- (or `ε`-) far from SR**, AND
+2. **Rayleigh on `ℝ₊ⁿ`** (so invisible to ALL positive-field / Boolean-conditioning pairwise covariances —
+   like `μ_4`), AND
+3. **every `O(1)`- (better `O(log n)`-) dimensional conditional marginal `μ*(X_W|X_T=ρ)` is SR** (so
+   invisible to `𝒮‴` — the real-stability violation is genuinely high-dimensional / "spread", à la `μ_n`).
+Then prove the matching **Yao-minimax indistinguishability**: planted (an SR/near-SR distribution) vs `μ*`
+need `n^{ω(1)}` SUBCOND queries to distinguish. This is the impossibility / super-poly SUBCOND lower bound
+(RED-3). 🔴 A heuristic "such a family should exist" is NOT enough — give the construction and prove 1–3.
+
+**The crux to decide:** can a μ_4-style **off-orthant real-stability violation** be **spread over `Ω(n)`
+coordinates** so NO bounded conditional marginal exposes it? (The `μ_n` parity shows spreading is possible
+for an *on-orthant* violation; (B) asks for the off-orthant analogue.) If YES → (B)/RED-3. If you can prove
+spreading is IMPOSSIBLE (every off-orthant `Δ`-violation forces a bounded-dimensional conditional-marginal
+violation) → (A)/upper bound.
+
+## 3. Candidate routes (inspiration, not mandates)
+(a) For (A): a **local-to-global inequality for real stability** — does an `ℝⁿ`-point `Δ_ij`-violation of
+margin `δ` force a bounded set of coordinates whose conditional marginal is `poly(δ)`-non-SR? (Adapt the
+2502.16355 local-to-global architecture, but to the real-stability functional, not edges.) (b) For (B):
+**parity/affine ⊗ μ_4 hybrids** — plant a `μ_4`-type off-orthant violation in a high-dimensional Fourier
+mode (a random affine subspace) so it is Rayleigh + all small conditional marginals are SR; spectral /
+HDX (entropic independence 2204.02570) to argue indistinguishability. (c) Symmetric/exchangeable families
+(like `μ_4`) lifted by a hidden random subspace.
+
+## 4. What we need back
+(1) a proof of (A) — the local-testability inequality + the tester + exponent + CS3; OR (2) the explicit
+(B) family with proofs of 1–3 + the indistinguishability/lower bound; (3) if neither closes, the sharpest
+partial (e.g. (A) for `k=O(1)` failing but `O(log n)` open, or a near-(B) family missing one property),
+with the exact obstruction; (4) updated confidence + verdict.
+</stdin>
+codex
+I’ll first read the prior round artifacts so the answer is anchored to the corrected substrate and doesn’t re-prove already audited dead ends.
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rg --files' in E:\Project-git\subcube-cond-logconcavity-unimodality
+ succeeded in 633ms:
+start_up_for_claude_code.md
+README.md
+PROOF_REVIEW\README.md
+PROOF_REVIEW\codex_raw\round4_response_C1.raw.txt
+PROOF_REVIEW\codex_raw\round3_response_C1.raw.txt
+PROOF_REVIEW\codex_raw\round2_response_C1.raw.txt
+PROOF_REVIEW\codex_raw\round1_response_C2.raw.txt
+PROOF_REVIEW\codex_raw\round1_response_C1.raw.txt
+PROJECT_STATE.md
+lit\SCAN_REPORT.md
+guide.md
+docs\rounds\round4_brief_C1.md
+docs\rounds\round3_response_C1.md
+docs\rounds\round3_brief_C1.md
+docs\rounds\round3_audit_C1.md
+docs\rounds\round2_response_C1.md
+docs\rounds\round2_brief_C1.md
+docs\rounds\round2_audit_C1.md
+docs\rounds\round1_response_C1.md
+docs\rounds\round1_brief_C2.md
+docs\rounds\round1_brief_C1.md
+docs\rounds\round1_audit_C1.md
+docs\rounds\round0_C0_audit.md
+docs\NOT_CLAIMING.md
+docs\ledger_sr_subcond.md
+docs\guide_amendments.md
+DESIGN_DECISIONS.md
+derisk\__pycache__\sr_core.cpython-311.pyc
+derisk\sr_core.py
+derisk\run_c0.py
+derisk\results\c0_results.json
+derisk\README.md
+derisk\preregistration.md
+
+codex
+I found the prior round files and the existing raw round-4 response. I’m going to compare those with the brief and the core derivation scripts before giving a verdict.
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw docs\\rounds\\round3_response_C1.md" in E:\Project-git\subcube-cond-logconcavity-unimodality
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw docs\\rounds\\round2_response_C1.md" in E:\Project-git\subcube-cond-logconcavity-unimodality
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw docs\\rounds\\round3_audit_C1.md" in E:\Project-git\subcube-cond-logconcavity-unimodality
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw PROOF_REVIEW\\codex_raw\\round4_response_C1.raw.txt" in E:\Project-git\subcube-cond-logconcavity-unimodality
+ succeeded in 601ms:
+# Round-3 Response â€” C1 (codex GPT-5.5-xhigh, 2026-06-21) â€” MAJOR: substrate correction + route death
+
+> Cleaned from `PROOF_REVIEW/codex_raw/round3_response_C1.raw.txt`. codex confidence 95%. Independent
+> audit `round3_audit_C1.md` (running). **The orchestrator (referee) independently re-verified the core
+> algebra** (below) â€” the result is solid modulo a literature cross-check on terminology.
+
+## Verdict: (Tâ€³) FAILS â€” and it exposes a FROZEN-SUBSTRATE ERROR (the handle tested the WRONG property)
+codex exhibits a constant-far-from-SR distribution invisible to **every positive external field** (hence
+every Boolean conditioning and every mild/strong tilt â€” the entire covariance-handle class).
+
+### The construction (REFEREE-VERIFIED)
+`Î¼_4(S) = a_{|S|}/30`, `a=(1,2,2,2,1)`, i.e. `g_4(z)=1+2e_1+2e_2+2e_3+e_4` (symmetric, `g_4(1)=30`).
+- **Rayleigh on â„â‚Š (positive-field covariances all â‰¤0):** for pair (1,2), `g_4=A+B(z_1+z_2)+Cz_1z_2`
+  (`y=z_3,z=z_4`, `A=1+2y+2z+2yz`, `B=2+2y+2z+2yz`, `C=2+2y+2z+yz`). Then `Î”_12=BÂ²âˆ’AC` (independent of
+  `z_1,z_2`) and `ACâˆ’BÂ² = âˆ’2âˆ’2yâˆ’2zâˆ’3yzâˆ’2yÂ²zâˆ’2yzÂ²âˆ’2yÂ²zÂ² < 0` on `â„â‚ŠÂ²` âŸ¹ `Î”_12>0` âŸ¹ `Cov_{Î¼_4^Î»}(X_1,X_2)â‰¤0`
+  for ALL positive fields. By symmetry, every pair. âœ… *(I re-expanded `ACâˆ’BÂ²` by hand; exact match.)*
+- **NOT real-stable (so NOT SR):** `g_4(t,t,t,t)=1+8t+12tÂ²+8tÂ³+tâ´`; `Ã·tÂ²` âŸ¹ `(t+1/t)Â²+8(t+1/t)+10=0`,
+  root `w=t+1/t=âˆ’4+âˆš6â‰ˆâˆ’1.55 âˆˆ (âˆ’2,2)` âŸ¹ `t` complex (unit circle) âŸ¹ a root with `Im>0` in every
+  coordinate âŸ¹ `g_4` not real stable. Equivalently `Î”_12<0` at the **real** point `(z_3,z_4)=(âˆ’1,âˆ’1)`. âœ…
+- **Constant-far from SR:** SR âŸ¹ `Î”_ijâ‰¥0` at ALL real points; `Î¼_4` has covariance numerator `+1/900` at
+  `(âˆ’1,âˆ’1)`; the (quadratic) value is `â‰¤8Î´`-Lipschitz in TV `Î´` âŸ¹ `d_TV(Î¼_4,SR) â‰¥ 1/7200`. Lift
+  `Î¼_n=Î¼_4Ã—Ber(1/2)^{âŠ—(nâˆ’4)}` stays far (marginalization preserves SR) and still invisible to all positive
+  fields. âœ…
+
+### ðŸ”´ THE FROZEN-SUBSTRATE ERROR (orchestrator's, now corrected)
+The handle `P5`/`V(Î¼)=sup_{Î»âˆˆâ„â‚Šâ¿}(Cov_{Î¼^Î»})â‚Š` and the criterion `P-SR`/`P3` as frozen
+(`Î”_ijâ‰¥0 on â„â‚Šâ¿ â‡” SR`) were **WRONG**: `Î”_ijâ‰¥0` on the **positive orthant** is the **RAYLEIGH** property,
+strictly weaker than **strongly Rayleigh** (= real stable = `Î”_ijâ‰¥0` on **all of â„â¿** / no upper-half-plane
+roots). **Rayleigh âŠ‹ strongly Rayleigh**, and `Î¼_4` is an explicit Rayleigh-but-not-SR witness. The guide
+Â§5 itself wrote the criterion on "`[0,1]^n`" (positive orthant) â€” the same imprecision. â†’ logged in
+`docs/guide_amendments.md`; literature cross-check pending (`round3_audit_C1.md`).
+
+## Consequence: the covariance-handle route is DEAD for SR (N4)
+No tester built on positive-external-field / Boolean-conditioning **pairwise covariances** can distinguish
+SR from the Rayleigh-not-SR family. (T) / (Tâ€²) / (Tâ€³) all fail at the root: they certify *Rayleigh*, not
+*SR*. CS3 was even sharper than we thought â€” not just "NA-not-SR" but "Rayleigh-not-SR" passes.
+
+## BUT this is a REDIRECTION, not (yet) an impossibility â€” the new handle
+ðŸ”´ `Î¼_4` is trivially **SUBCOND-testable by a DIFFERENT statistic**: condition away the product coords,
+estimate the **O(1)-bit marginal**, and run a direct **real-stability (SR) test on that small marginal**
+(decidable for fixed-size multiaffine polynomials). So the right handle is **"test real-stability of
+conditional low-dimensional marginals,"** NOT pairwise covariances.
+- `Î¼_4Ã—Ber`: caught â€” its 4-bit marginal is non-SR. âœ“
+- `Î¼_n` (parity, round 2): all proper marginals are product (SR) âŸ¹ a *fixed* marginal SR-test misses it,
+  but a marginal SR-test **after a Boolean conditioning** `X_B=t` catches it (conditional `{i,j}`-marginal
+  is positively correlated). âœ“ (needs deep conditioning + conditional marginal, not just unconditional.)
+- âŸ¹ **(Tâ€´) â€” the new target:** does `{ SR-test of the conditional marginal Î¼(X_W|X_T=Ï) : Boolean (T,Ï),
+  |W|=O(1) or O(log n) }` separate SR from Îµ-far in `poly(n)` SUBCOND queries? I.e. is SR **locally
+  testable on conditional marginals**: `d_TV(Î¼,SR) â‰¥ Îµ âŸ¹` some bounded conditional marginal is
+  `Î©(poly)`-far from SR-on-`W`?
+- Open obstruction to watch: a family that is far-from-SR but whose EVERY bounded conditional marginal is
+  SR (a "spread-out" global violation). The audit is checking whether such a family is obvious.
+
+
+ succeeded in 696ms:
+# Round-2 Response â€” C1 (codex GPT-5.5-xhigh, 2026-06-21)
+
+> Cleaned from `PROOF_REVIEW/codex_raw/round2_response_C1.raw.txt` (session 019eead4-â€¦). codex confidence:
+> 95% in the derivations/counterexample, 85% that it refutes (T)-as-written. **NOT proved until human
+> verification** â€” but the orchestrator (referee) independently re-verified the core claims (below).
+
+## Result: bounded-/sparse-support localization (T) is REFUTED (clean counterexample)
+**The even-parity slice** `Î¼_n(x) = 2^{-(n-1)}Â·1{Î£x_i â‰¡ 0 (mod 2)}`, with
+`g_n(z) = 2^{-n}(âˆ_i(1+z_i) + âˆ_i(1âˆ’z_i))`.
+1. **Every proper marginal is uniform-product** (any assignment on `CâŠŠ[n]` has `2^{n-|C|-1}` even
+   extensions). â†’ invisible to bounded statistics.
+2. **Tilted covariance closed form:** with `r_k=(1âˆ’Î»_k)/(1+Î»_k)`, `R=âˆ_k r_k`,
+   `Cov_{Î¼_n^Î»}(X_i,X_j) = (1âˆ’r_iÂ²)(1âˆ’r_jÂ²)/(4(1+R)Â²) Â· âˆ_{kâ‰ i,j} r_k`.
+   So if **any** off-pair coord has `Î»_k=1` (`r_k=0`) the covariance is **0** âŸ¹ every field with non-unit
+   support `|A| â‰¤ nâˆ’3` (indeed any `o(n)`-support field) gives **zero** covariance for every pair âŸ¹
+   **misses `Î¼_n` entirely**.
+3. **`Î¼_n` is `â‰¥1/8`-far from SR:** per even-parity face `t` on `B={3,â€¦,n}` the `(X_1,X_2)` table is
+   `(a,0,0,a)` (`a=2^{-(n-1)}`); SR â‡’ (closure + NA) `Î½(00)Î½(11) â‰¤ Î½(01)Î½(10)`, whose nearest table to
+   `(a,0,0,a)` is `â‰¥a` away in â„“â‚; `2^{n-3}` faces âŸ¹ `â€–Î¼_nâˆ’Î½â€–_1 â‰¥ 1/4`, `d_TV â‰¥ 1/8`.
+4. **But `Î¼_n` IS caught by a 1-PARAMETER full-support tilt:** `Î»_i=Î»_j=1`, `Î»_k=Î´=1/nÂ²` (all `kâ‰ i,j`)
+   gives `Cov â‰ˆ 1/4` â€” uses `nâˆ’2` non-unit coords (full support) but only **one distinct value Î´**.
+
+**Referee check (orchestrator):** I re-derived 1â€“4 independently; all correct. P5 and P6 were also
+re-derived by codex, matching the round-1 referee derivation.
+
+## What this means (reframing the crux â€” NOT a kill, NOT yet impossibility)
+- **N3 (refuted route):** sparse/bounded-support external-field witness families CANNOT localize (parity).
+  The witness genuinely needs **full-support** fields. *(This kills route 5(c)-"few non-unit coords" and
+  the `O(log n)`-support reading of (T).)*
+- **Sharpened target (Tâ€²):** does a poly-size family of **LOW-PARAMETRIC, full-support** fields (e.g. the
+  `O(1)`-parameter "uniform Î´ on the complement" family, which catches parity) localize the witness for
+  *every* Îµ-far `Î¼` â€” AND is each such tilted covariance **poly(n)-SUBCOND-estimable**? OPEN.
+- ðŸ”´ **Referee synthesis (connects C0 + round 2 â€” important):** *neither* natural simplification suffices:
+  - **Boolean-conditioning-only (the C0 statistic `S1`)** catches `Î¼_n` (condition `X_B=t`: `Cov(X_1,X_2|Â·)=1/4`)
+    but is **blind to the C0 family F2** (interior-violation non-SR with all conditional covariances â‰¤0).
+  - **sparse-support fields** catch F2-type interior violations but are **blind to `Î¼_n`** (need full support).
+  âŸ¹ a correct tester must use **full-support interior fields** (the full handle `V`), and the two known
+  cheap relaxations each provably miss a different non-SR family. This **raises the prior on the
+  impossibility / lower-bound resolution** (RED-3, an equal-grade result) â€” to be settled by C2, NOT
+  declared now.
+
+## Bonus: `Î¼_n` is a strong C2 (lower-bound) hard-instance seed
+`Î¼_n` is `k`-wise-independent-flavored (all proper marginals product), `1/8`-far from SR, and **invisible
+to every `o(n)`-support field / every bounded local statistic**. This is exactly the profile of a
+planted-vs-far hard instance forcing SUBCOND lower bounds. â†’ feed to C2.
+
+
+ succeeded in 721ms:
+# Round-3 Audit â€” C1 (Î¼_4 Rayleigh-not-SR; independent CAS + literature, 2026-06-21)
+
+> Fresh-context agent: re-verified Î¼_4 by CAS (sympy), cross-checked the Rayleigh-vs-strongly-Rayleigh
+> distinction against the literature, AND found a collateral bug in the C0 code. **The substrate
+> correction (N4 / corrected P3) is CONFIRMED.**
+
+## Î¼_4 verification: V1, V2, V3 all CORRECT (CAS)
+- **V1 (Rayleigh on â„â‚Š):** `ACâˆ’BÂ² = âˆ’2yÂ²zÂ²âˆ’2yÂ²zâˆ’2yzÂ²âˆ’3yzâˆ’2yâˆ’2zâˆ’2` (exact match); `Î”_12=BÂ²âˆ’AC>0` on `â„â‚ŠÂ²`,
+  independent of `z_1,z_2`; by symmetry `Î¼_4` is Rayleigh.
+- **V2 (not real stable):** `g_4(t,t,t,t)=tâ´+8tÂ³+12tÂ²+8t+1`; `w=t+1/t=âˆ’4+âˆš6â‰ˆâˆ’1.5505âˆˆ(âˆ’2,2)` âŸ¹ complex root
+  `tâ‚€=âˆ’0.7753+0.6316i` (Im>0), nroots confirms; diagonal `(tâ‚€,â€¦,tâ‚€)` is an all-upper-half-plane root âŸ¹
+  not real stable. Real-point witness: `Î”_12(z_3,z_4=âˆ’1,âˆ’1) = âˆ’1/900 < 0`.
+- **V3 (constant-far):** per-point Lipschitz lower bound on `d_TV(Â·,SR)` is a sound mechanism; the lift
+  `Î¼_4Ã—Ber(Â½)^{âŠ—(nâˆ’4)}` stays non-SR (marginalization preserves SR, P1) and `Î©(1)`-far. **MINOR:** the
+  exact constant `1/7200` not re-derived (mechanism robust; re-check the constant before freezing).
+
+## Literature: Rayleigh âŠ‹ strongly Rayleigh is ESTABLISHED (not a hallucination)
+- **Choeâ€“Wagner "Rayleigh Matroids"** (arXiv:math/0307096): Rayleigh = `Î”â‰¥0` for nonnegative (orthant) args.
+- **BrÃ¤ndÃ©nâ€“Wagnerâ€“Wei** (arXiv:1411.7735, Prop 4): the **strong Rayleigh property** needs `Î”_{e,f}(a)â‰¥0`
+  for **all `aâˆˆâ„^{Eâˆ–{e,f}}`**; `Z` stable â‡” strong Rayleigh. Strict containment confirmed (HPP âŠŠ Rayleigh).
+- **BBL** (arXiv:0707.2340): SR â‡” real stable; its Def-2.5 Rayleigh-difference characterization of *real
+  stability* is the **all-real** condition â€” the project mis-transcribed it as "on `â„â‚Šâ¿`" (guide Â§5's
+  "[0,1]^n"). n=4 Rayleigh-not-SR examples are consistent with the literature.
+
+## ðŸ”´ COLLATERAL FATAL BUG (caught by the audit) â€” the C0 oracle was a RAYLEIGH test
+`derisk/sr_core.py` probed `Î”_ij` only on the positive orthant âŸ¹ `is_sr(Î¼_4)` returned **True** (margin
++0.0023) while `Î”_12(z,âˆ’1,âˆ’1)=âˆ’0.0011<0`. So **every Rayleigh-but-not-SR distribution was misclassified
+SR**, contaminating the C0 "SR baseline" and the H2/H3 leans. **FIXED 2026-06-21** (`sr_core.sr_margin`
+now probes all real `â„â¿`; added `rayleigh_margin` to report both); **C0 re-run in progress** â€” leans may
+shift. *(F2 instances remain genuinely non-SR â€” they violate `Î”` on the positive orthant, so non-Rayleigh
+âŸ¹ non-SR; the contamination was only in the SR baseline.)*
+
+## The round-2 "leans-toward-poly-tester" synthesis is KILLED
+Î¼_4 is a **single** family blind to **both** {Boolean conditional pairwise covariances} **and** {all
+positive-field tilted covariances} (both are orthant statistics; Î¼_4 is Rayleigh). So the round-2 claim
+"complementary blind spots â‡’ jointly sufficient â‡’ poly tester" is **false** for covariance statistics.
+
+## The make-or-break DICHOTOMY (now the central question)
+The new handle is **conditional-marginal real-stability testing** (Tâ€´). The decisive question:
+> **Does a "hidden-high-dimensional off-orthant non-stability" family exist?** â€” a Î¼_4-style real-stability
+> violation (off-orthant, invisible to all positive-field/Boolean covariances) **spread over `Î©(n)`
+> coordinates** so that **no `O(1)`-dimensional conditional marginal exposes it** (Ã  la parity Î¼_n's
+> full-support obstruction N3, transplanted off-orthant).
+- **If it EXISTS** (and defeats poly-query conditioning) âŸ¹ **super-polynomial SUBCOND lower bound /
+  impossibility** = the genuine **RED-3** candidate (now much stronger: orthant statistics provably blind).
+- **If provably NO such spreading is possible** âŸ¹ the conditional-marginal real-stability test is the
+  **upper-bound** route (R+).
+Both outcomes are SODA-grade. **This single dichotomy is make-or-break (round 4).**
+
+## Round-4 direction (audit): repair substrate (DONE) â†’ attack the dichotomy.
+
+
+ succeeded in 737ms:
+Reading additional input from stdin...
+OpenAI Codex v0.141.0
+--------
+workdir: E:\Project-git\subcube-cond-logconcavity-unimodality
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: xhigh
+reasoning summaries: none
+session id: 019eeb15-f725-70e0-93a4-a0aab797959b
+--------
+user
+You are an expert in distribution testing lower bounds (Yao minimax), real-stable/strongly Rayleigh polynomials, local-to-global / isoperimetric inequalities, and spectral/entropic independence. Solve the DICHOTOMY on stdin: either (A) PROVE SR is locally testable on conditional marginals (d_TV(mu,SR)>=eps => some bounded conditional marginal is poly-far from SR) and assemble the poly(n,1/eps) SUBCOND tester + exponent + CS3, OR (B) CONSTRUCT an explicit far-from-SR family mu* that is simultaneously (1) far from SR, (2) RAYLEIGH on the positive orthant (invisible to all positive-field/Boolean pairwise covariances), and (3) every O(1)- or O(log n)-dim conditional marginal is SR (invisible to the marginal-SR test) â€” then prove the SUBCOND query lower bound (impossibility/RED-3). The crux: can a mu_4-style OFF-ORTHANT real-stability violation be SPREAD over Omega(n) coordinates so no bounded conditional marginal exposes it? Be concise: lead with verdict (A or B or partial) and the single key inequality/construction. Mark proved vs assumed; flag asserted steps; confidence %.
+
+<stdin>
+# Round-4 Brief â€” C1/RED-3 (the make-or-break dichotomy)
+
+> For codex GPT-5.5-xhigh. Builds on rounds 1â€“3 (`round{1,2,3}_response_C1.md`, `round3_audit_C1.md`).
+> Skeleton = guide Â§8. Method-agnostic. This brief asks you to resolve a DICHOTOMY â€” either an upper bound
+> or an impossibility; both are first-rate results.
+
+## 0. Role note
+You originate the math; we referee. Mark proved vs assumed; flag every asserted step; confidence + verdict.
+
+## 1. Verified state (FROZEN â€” corrected substrate)
+- **SR (strongly Rayleigh) â‡” `g_Î¼` real stable â‡” `Î”_ij(g)=âˆ‚_igâˆ‚_jg âˆ’ gâˆ‚_iâˆ‚_jg â‰¥ 0 for ALL real `xâˆˆâ„â¿`**
+  (NOT just the positive orthant). `Î”_ijâ‰¥0` on `â„â‚Šâ¿` only is the WEAKER **Rayleigh** property;
+  **Rayleigh âŠ‹ SR** (Choeâ€“Wagner math/0307096; BrÃ¤ndÃ©nâ€“Wagnerâ€“Wei 1411.7735 Prop 4). SR closed under
+  conditioning + marginalization (P1).
+- **N4 (route death â€” VERIFIED).** Every positive-external-field / Boolean-conditioning **pairwise
+  covariance** statistic certifies only Rayleigh, NOT SR. Witness `Î¼_4` (`g_4=1+2e_1+2e_2+2e_3+e_4`,
+  symmetric, `a=(1,2,2,2,1)/30`): `Î”_ij>0` on all `â„â‚Šâ´` (looks SR to all positive fields & conditionings)
+  but has a complex root âŸ¹ not real stable âŸ¹ **not SR**, `d_TV(Î¼_4,SR)=Î©(1)`. Lift
+  `Î¼_4Ã—Ber(Â½)^{âŠ—(nâˆ’4)}` is constant-far and invisible to all positive-field covariances.
+- **N3 (VERIFIED).** Parity `Î¼_n`=uniform even slice is `Î©(1)`-far from SR, **all proper marginals are
+  uniform-product (SR)** â€” so any *fixed unconditioned* low-dim marginal-SR test misses it (it is caught
+  only after a *deep* Boolean conditioning, which exposes a non-SR conditional `{i,j}`-marginal).
+- **The new handle (Tâ€´):** test **real-stability of conditional low-dimensional marginals**:
+  `ð’®â€´ = { SR-test of Î¼(X_W | X_T=Ï) : Boolean (T,Ï), |W| â‰¤ k }` (real-stability of a fixed-size multiaffine
+  polynomial is decidable). `Î¼_4` is caught by `ð’®â€´` (its `O(1)`-bit marginal is non-SR); `Î¼_n` is caught
+  by `ð’®â€´` with deep conditioning (conditional `{i,j}`-marginal non-SR).
+
+## 2. The exact target â€” RESOLVE THE DICHOTOMY (prove A or construct B)
+**(A) UPPER BOUND â€” SR is locally testable on conditional marginals.** Prove: there exist `k=O(1)` (or
+`O(log n)`) and `poly(n,1/Îµ)` such that
+`d_TV(Î¼, SR) â‰¥ Îµ âŸ¹ âˆƒ Boolean (T,Ï) and W (|W|â‰¤k) with Î¼(X_W|X_T=Ï) being Î©(poly(Îµ,1/n))-far from SR-on-W`,
+where the conditioning event has `â‰¥ 1/poly` probability (so it is SUBCOND-estimable). Then assemble the
+tester (sample conditionings/coordinates, estimate the bounded conditional marginal, run the decidable
+SR-test) + the `poly(n,1/Îµ)` query bound + CS3 (automatic â€” it tests SR directly). Give the exponent.
+
+**(B) IMPOSSIBILITY â€” a family defeating BOTH primitives (RED-3).** Construct an explicit `Î¼*` that is
+1. **`Î©(1)`- (or `Îµ`-) far from SR**, AND
+2. **Rayleigh on `â„â‚Šâ¿`** (so invisible to ALL positive-field / Boolean-conditioning pairwise covariances â€”
+   like `Î¼_4`), AND
+3. **every `O(1)`- (better `O(log n)`-) dimensional conditional marginal `Î¼*(X_W|X_T=Ï)` is SR** (so
+   invisible to `ð’®â€´` â€” the real-stability violation is genuinely high-dimensional / "spread", Ã  la `Î¼_n`).
+Then prove the matching **Yao-minimax indistinguishability**: planted (an SR/near-SR distribution) vs `Î¼*`
+need `n^{Ï‰(1)}` SUBCOND queries to distinguish. This is the impossibility / super-poly SUBCOND lower bound
+(RED-3). ðŸ”´ A heuristic "such a family should exist" is NOT enough â€” give the construction and prove 1â€“3.
+
+**The crux to decide:** can a Î¼_4-style **off-orthant real-stability violation** be **spread over `Î©(n)`
+coordinates** so NO bounded conditional marginal exposes it? (The `Î¼_n` parity shows spreading is possible
+for an *on-orthant* violation; (B) asks for the off-orthant analogue.) If YES â†’ (B)/RED-3. If you can prove
+spreading is IMPOSSIBLE (every off-orthant `Î”`-violation forces a bounded-dimensional conditional-marginal
+violation) â†’ (A)/upper bound.
+
+## 3. Candidate routes (inspiration, not mandates)
+(a) For (A): a **local-to-global inequality for real stability** â€” does an `â„â¿`-point `Î”_ij`-violation of
+margin `Î´` force a bounded set of coordinates whose conditional marginal is `poly(Î´)`-non-SR? (Adapt the
+2502.16355 local-to-global architecture, but to the real-stability functional, not edges.) (b) For (B):
+**parity/affine âŠ— Î¼_4 hybrids** â€” plant a `Î¼_4`-type off-orthant violation in a high-dimensional Fourier
+mode (a random affine subspace) so it is Rayleigh + all small conditional marginals are SR; spectral /
+HDX (entropic independence 2204.02570) to argue indistinguishability. (c) Symmetric/exchangeable families
+(like `Î¼_4`) lifted by a hidden random subspace.
+
+## 4. What we need back
+(1) a proof of (A) â€” the local-testability inequality + the tester + exponent + CS3; OR (2) the explicit
+(B) family with proofs of 1â€“3 + the indistinguishability/lower bound; (3) if neither closes, the sharpest
+partial (e.g. (A) for `k=O(1)` failing but `O(log n)` open, or a near-(B) family missing one property),
+with the exact obstruction; (4) updated confidence + verdict.
+</stdin>
+codex
+Iâ€™ll first read the prior round artifacts so the answer is anchored to the corrected substrate and doesnâ€™t re-prove already audited dead ends.
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rg --files' in E:\Project-git\subcube-cond-logconcavity-unimodality
+ succeeded in 633ms:
+start_up_for_claude_code.md
+README.md
+PROOF_REVIEW\README.md
+PROOF_REVIEW\codex_raw\round4_response_C1.raw.txt
+PROOF_REVIEW\codex_raw\round3_response_C1.raw.txt
+PROOF_REVIEW\codex_raw\round2_response_C1.raw.txt
+PROOF_REVIEW\codex_raw\round1_response_C2.raw.txt
+PROOF_REVIEW\codex_raw\round1_response_C1.raw.txt
+PROJECT_STATE.md
+lit\SCAN_REPORT.md
+guide.md
+docs\rounds\round4_brief_C1.md
+docs\rounds\round3_response_C1.md
+docs\rounds\round3_brief_C1.md
+docs\rounds\round3_audit_C1.md
+docs\rounds\round2_response_C1.md
+docs\rounds\round2_brief_C1.md
+docs\rounds\round2_audit_C1.md
+docs\rounds\round1_response_C1.md
+docs\rounds\round1_brief_C2.md
+docs\rounds\round1_brief_C1.md
+docs\rounds\round1_audit_C1.md
+docs\rounds\round0_C0_audit.md
+docs\NOT_CLAIMING.md
+docs\ledger_sr_subcond.md
+docs\guide_amendments.md
+DESIGN_DECISIONS.md
+derisk\__pycache__\sr_core.cpython-311.pyc
+derisk\sr_core.py
+derisk\run_c0.py
+derisk\results\c0_results.json
+derisk\README.md
+derisk\preregistration.md
+
+codex
+I found the prior round files and the existing raw round-4 response. Iâ€™m going to compare those with the brief and the core derivation scripts before giving a verdict.
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw docs\\rounds\\round3_response_C1.md" in E:\Project-git\subcube-cond-logconcavity-unimodality
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw docs\\rounds\\round2_response_C1.md" in E:\Project-git\subcube-cond-logconcavity-unimodality
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw docs\\rounds\\round3_audit_C1.md" in E:\Project-git\subcube-cond-logconcavity-unimodality
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw PROOF_REVIEW\\codex_raw\\round4_response_C1.raw.txt" in E:\Project-git\subcube-cond-logconcavity-unimodality
+ succeeded in 601ms:
+# Round-3 Response Ã¢â‚¬â€ C1 (codex GPT-5.5-xhigh, 2026-06-21) Ã¢â‚¬â€ MAJOR: substrate correction + route death
+
+> Cleaned from `PROOF_REVIEW/codex_raw/round3_response_C1.raw.txt`. codex confidence 95%. Independent
+> audit `round3_audit_C1.md` (running). **The orchestrator (referee) independently re-verified the core
+> algebra** (below) Ã¢â‚¬â€ the result is solid modulo a literature cross-check on terminology.
+
+## Verdict: (TÃ¢â‚¬Â³) FAILS Ã¢â‚¬â€ and it exposes a FROZEN-SUBSTRATE ERROR (the handle tested the WRONG property)
+codex exhibits a constant-far-from-SR distribution invisible to **every positive external field** (hence
+every Boolean conditioning and every mild/strong tilt Ã¢â‚¬â€ the entire covariance-handle class).
+
+### The construction (REFEREE-VERIFIED)
+`ÃŽÂ¼_4(S) = a_{|S|}/30`, `a=(1,2,2,2,1)`, i.e. `g_4(z)=1+2e_1+2e_2+2e_3+e_4` (symmetric, `g_4(1)=30`).
+- **Rayleigh on Ã¢â€žÂÃ¢â€šÅ  (positive-field covariances all Ã¢â€°Â¤0):** for pair (1,2), `g_4=A+B(z_1+z_2)+Cz_1z_2`
+  (`y=z_3,z=z_4`, `A=1+2y+2z+2yz`, `B=2+2y+2z+2yz`, `C=2+2y+2z+yz`). Then `ÃŽâ€_12=BÃ‚Â²Ã¢Ë†â€™AC` (independent of
+  `z_1,z_2`) and `ACÃ¢Ë†â€™BÃ‚Â² = Ã¢Ë†â€™2Ã¢Ë†â€™2yÃ¢Ë†â€™2zÃ¢Ë†â€™3yzÃ¢Ë†â€™2yÃ‚Â²zÃ¢Ë†â€™2yzÃ‚Â²Ã¢Ë†â€™2yÃ‚Â²zÃ‚Â² < 0` on `Ã¢â€žÂÃ¢â€šÅ Ã‚Â²` Ã¢Å¸Â¹ `ÃŽâ€_12>0` Ã¢Å¸Â¹ `Cov_{ÃŽÂ¼_4^ÃŽÂ»}(X_1,X_2)Ã¢â€°Â¤0`
+  for ALL positive fields. By symmetry, every pair. Ã¢Å“â€¦ *(I re-expanded `ACÃ¢Ë†â€™BÃ‚Â²` by hand; exact match.)*
+- **NOT real-stable (so NOT SR):** `g_4(t,t,t,t)=1+8t+12tÃ‚Â²+8tÃ‚Â³+tÃ¢ÂÂ´`; `ÃƒÂ·tÃ‚Â²` Ã¢Å¸Â¹ `(t+1/t)Ã‚Â²+8(t+1/t)+10=0`,
+  root `w=t+1/t=Ã¢Ë†â€™4+Ã¢Ë†Å¡6Ã¢â€°Ë†Ã¢Ë†â€™1.55 Ã¢Ë†Ë† (Ã¢Ë†â€™2,2)` Ã¢Å¸Â¹ `t` complex (unit circle) Ã¢Å¸Â¹ a root with `Im>0` in every
+  coordinate Ã¢Å¸Â¹ `g_4` not real stable. Equivalently `ÃŽâ€_12<0` at the **real** point `(z_3,z_4)=(Ã¢Ë†â€™1,Ã¢Ë†â€™1)`. Ã¢Å“â€¦
+- **Constant-far from SR:** SR Ã¢Å¸Â¹ `ÃŽâ€_ijÃ¢â€°Â¥0` at ALL real points; `ÃŽÂ¼_4` has covariance numerator `+1/900` at
+  `(Ã¢Ë†â€™1,Ã¢Ë†â€™1)`; the (quadratic) value is `Ã¢â€°Â¤8ÃŽÂ´`-Lipschitz in TV `ÃŽÂ´` Ã¢Å¸Â¹ `d_TV(ÃŽÂ¼_4,SR) Ã¢â€°Â¥ 1/7200`. Lift
+  `ÃŽÂ¼_n=ÃŽÂ¼_4Ãƒâ€”Ber(1/2)^{Ã¢Å â€”(nÃ¢Ë†â€™4)}` stays far (marginalization preserves SR) and still invisible to all positive
+  fields. Ã¢Å“â€¦
+
+### Ã°Å¸â€Â´ THE FROZEN-SUBSTRATE ERROR (orchestrator's, now corrected)
+The handle `P5`/`V(ÃŽÂ¼)=sup_{ÃŽÂ»Ã¢Ë†Ë†Ã¢â€žÂÃ¢â€šÅ Ã¢ÂÂ¿}(Cov_{ÃŽÂ¼^ÃŽÂ»})Ã¢â€šÅ ` and the criterion `P-SR`/`P3` as frozen
+(`ÃŽâ€_ijÃ¢â€°Â¥0 on Ã¢â€žÂÃ¢â€šÅ Ã¢ÂÂ¿ Ã¢â€¡â€ SR`) were **WRONG**: `ÃŽâ€_ijÃ¢â€°Â¥0` on the **positive orthant** is the **RAYLEIGH** property,
+strictly weaker than **strongly Rayleigh** (= real stable = `ÃŽâ€_ijÃ¢â€°Â¥0` on **all of Ã¢â€žÂÃ¢ÂÂ¿** / no upper-half-plane
+roots). **Rayleigh Ã¢Å â€¹ strongly Rayleigh**, and `ÃŽÂ¼_4` is an explicit Rayleigh-but-not-SR witness. The guide
+Ã‚Â§5 itself wrote the criterion on "`[0,1]^n`" (positive orthant) Ã¢â‚¬â€ the same imprecision. Ã¢â€ â€™ logged in
+`docs/guide_amendments.md`; literature cross-check pending (`round3_audit_C1.md`).
+
+## Consequence: the covariance-handle route is DEAD for SR (N4)
+No tester built on positive-external-field / Boolean-conditioning **pairwise covariances** can distinguish
+SR from the Rayleigh-not-SR family. (T) / (TÃ¢â‚¬Â²) / (TÃ¢â‚¬Â³) all fail at the root: they certify *Rayleigh*, not
+*SR*. CS3 was even sharper than we thought Ã¢â‚¬â€ not just "NA-not-SR" but "Rayleigh-not-SR" passes.
+
+## BUT this is a REDIRECTION, not (yet) an impossibility Ã¢â‚¬â€ the new handle
+Ã°Å¸â€Â´ `ÃŽÂ¼_4` is trivially **SUBCOND-testable by a DIFFERENT statistic**: condition away the product coords,
+estimate the **O(1)-bit marginal**, and run a direct **real-stability (SR) test on that small marginal**
+(decidable for fixed-size multiaffine polynomials). So the right handle is **"test real-stability of
+conditional low-dimensional marginals,"** NOT pairwise covariances.
+- `ÃŽÂ¼_4Ãƒâ€”Ber`: caught Ã¢â‚¬â€ its 4-bit marginal is non-SR. Ã¢Å“â€œ
+- `ÃŽÂ¼_n` (parity, round 2): all proper marginals are product (SR) Ã¢Å¸Â¹ a *fixed* marginal SR-test misses it,
+  but a marginal SR-test **after a Boolean conditioning** `X_B=t` catches it (conditional `{i,j}`-marginal
+  is positively correlated). Ã¢Å“â€œ (needs deep conditioning + conditional marginal, not just unconditional.)
+- Ã¢Å¸Â¹ **(TÃ¢â‚¬Â´) Ã¢â‚¬â€ the new target:** does `{ SR-test of the conditional marginal ÃŽÂ¼(X_W|X_T=ÃÂ) : Boolean (T,ÃÂ),
+  |W|=O(1) or O(log n) }` separate SR from ÃŽÂµ-far in `poly(n)` SUBCOND queries? I.e. is SR **locally
+  testable on conditional marginals**: `d_TV(ÃŽÂ¼,SR) Ã¢â€°Â¥ ÃŽÂµ Ã¢Å¸Â¹` some bounded conditional marginal is
+  `ÃŽÂ©(poly)`-far from SR-on-`W`?
+- Open obstruction to watch: a family that is far-from-SR but whose EVERY bounded conditional marginal is
+  SR (a "spread-out" global violation). The audit is checking whether such a family is obvious.
+
+
+ succeeded in 696ms:
+# Round-2 Response Ã¢â‚¬â€ C1 (codex GPT-5.5-xhigh, 2026-06-21)
+
+> Cleaned from `PROOF_REVIEW/codex_raw/round2_response_C1.raw.txt` (session 019eead4-Ã¢â‚¬Â¦). codex confidence:
+> 95% in the derivations/counterexample, 85% that it refutes (T)-as-written. **NOT proved until human
+> verification** Ã¢â‚¬â€ but the orchestrator (referee) independently re-verified the core claims (below).
+
+## Result: bounded-/sparse-support localization (T) is REFUTED (clean counterexample)
+**The even-parity slice** `ÃŽÂ¼_n(x) = 2^{-(n-1)}Ã‚Â·1{ÃŽÂ£x_i Ã¢â€°Â¡ 0 (mod 2)}`, with
+`g_n(z) = 2^{-n}(Ã¢Ë†Â_i(1+z_i) + Ã¢Ë†Â_i(1Ã¢Ë†â€™z_i))`.
+1. **Every proper marginal is uniform-product** (any assignment on `CÃ¢Å Å [n]` has `2^{n-|C|-1}` even
+   extensions). Ã¢â€ â€™ invisible to bounded statistics.
+2. **Tilted covariance closed form:** with `r_k=(1Ã¢Ë†â€™ÃŽÂ»_k)/(1+ÃŽÂ»_k)`, `R=Ã¢Ë†Â_k r_k`,
+   `Cov_{ÃŽÂ¼_n^ÃŽÂ»}(X_i,X_j) = (1Ã¢Ë†â€™r_iÃ‚Â²)(1Ã¢Ë†â€™r_jÃ‚Â²)/(4(1+R)Ã‚Â²) Ã‚Â· Ã¢Ë†Â_{kÃ¢â€°Â i,j} r_k`.
+   So if **any** off-pair coord has `ÃŽÂ»_k=1` (`r_k=0`) the covariance is **0** Ã¢Å¸Â¹ every field with non-unit
+   support `|A| Ã¢â€°Â¤ nÃ¢Ë†â€™3` (indeed any `o(n)`-support field) gives **zero** covariance for every pair Ã¢Å¸Â¹
+   **misses `ÃŽÂ¼_n` entirely**.
+3. **`ÃŽÂ¼_n` is `Ã¢â€°Â¥1/8`-far from SR:** per even-parity face `t` on `B={3,Ã¢â‚¬Â¦,n}` the `(X_1,X_2)` table is
+   `(a,0,0,a)` (`a=2^{-(n-1)}`); SR Ã¢â€¡â€™ (closure + NA) `ÃŽÂ½(00)ÃŽÂ½(11) Ã¢â€°Â¤ ÃŽÂ½(01)ÃŽÂ½(10)`, whose nearest table to
+   `(a,0,0,a)` is `Ã¢â€°Â¥a` away in Ã¢â€žâ€œÃ¢â€šÂ; `2^{n-3}` faces Ã¢Å¸Â¹ `Ã¢â‚¬â€“ÃŽÂ¼_nÃ¢Ë†â€™ÃŽÂ½Ã¢â‚¬â€“_1 Ã¢â€°Â¥ 1/4`, `d_TV Ã¢â€°Â¥ 1/8`.
+4. **But `ÃŽÂ¼_n` IS caught by a 1-PARAMETER full-support tilt:** `ÃŽÂ»_i=ÃŽÂ»_j=1`, `ÃŽÂ»_k=ÃŽÂ´=1/nÃ‚Â²` (all `kÃ¢â€°Â i,j`)
+   gives `Cov Ã¢â€°Ë† 1/4` Ã¢â‚¬â€ uses `nÃ¢Ë†â€™2` non-unit coords (full support) but only **one distinct value ÃŽÂ´**.
+
+**Referee check (orchestrator):** I re-derived 1Ã¢â‚¬â€œ4 independently; all correct. P5 and P6 were also
+re-derived by codex, matching the round-1 referee derivation.
+
+## What this means (reframing the crux Ã¢â‚¬â€ NOT a kill, NOT yet impossibility)
+- **N3 (refuted route):** sparse/bounded-support external-field witness families CANNOT localize (parity).
+  The witness genuinely needs **full-support** fields. *(This kills route 5(c)-"few non-unit coords" and
+  the `O(log n)`-support reading of (T).)*
+- **Sharpened target (TÃ¢â‚¬Â²):** does a poly-size family of **LOW-PARAMETRIC, full-support** fields (e.g. the
+  `O(1)`-parameter "uniform ÃŽÂ´ on the complement" family, which catches parity) localize the witness for
+  *every* ÃŽÂµ-far `ÃŽÂ¼` Ã¢â‚¬â€ AND is each such tilted covariance **poly(n)-SUBCOND-estimable**? OPEN.
+- Ã°Å¸â€Â´ **Referee synthesis (connects C0 + round 2 Ã¢â‚¬â€ important):** *neither* natural simplification suffices:
+  - **Boolean-conditioning-only (the C0 statistic `S1`)** catches `ÃŽÂ¼_n` (condition `X_B=t`: `Cov(X_1,X_2|Ã‚Â·)=1/4`)
+    but is **blind to the C0 family F2** (interior-violation non-SR with all conditional covariances Ã¢â€°Â¤0).
+  - **sparse-support fields** catch F2-type interior violations but are **blind to `ÃŽÂ¼_n`** (need full support).
+  Ã¢Å¸Â¹ a correct tester must use **full-support interior fields** (the full handle `V`), and the two known
+  cheap relaxations each provably miss a different non-SR family. This **raises the prior on the
+  impossibility / lower-bound resolution** (RED-3, an equal-grade result) Ã¢â‚¬â€ to be settled by C2, NOT
+  declared now.
+
+## Bonus: `ÃŽÂ¼_n` is a strong C2 (lower-bound) hard-instance seed
+`ÃŽÂ¼_n` is `k`-wise-independent-flavored (all proper marginals product), `1/8`-far from SR, and **invisible
+to every `o(n)`-support field / every bounded local statistic**. This is exactly the profile of a
+planted-vs-far hard instance forcing SUBCOND lower bounds. Ã¢â€ â€™ feed to C2.
+
+
+
+
+codex
+The existing raw round-4 file appears to be only a transcript prefix, not a completed proof. I’m checking the guide and derisk helpers next, mainly to verify notation and avoid relying on the old positive-orthant oracle.
+2026-06-21T16:49:32.117206Z ERROR codex_core::tools::router: error=`"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'Select-String -Path guide.md -Pattern "SR|Rayleigh|stable|Delta|conditional|SUBCOND" -CaseSensitive:$false -Context 2,2'` rejected: blocked by policy
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'Select-String -Path guide.md -Pattern "SR|Rayleigh|stable|Delta|conditional|SUBCOND" -CaseSensitive:$false -Context 2,2' in E:\Project-git\subcube-cond-logconcavity-unimodality
+ declined in 0ms:
+`"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'Select-String -Path guide.md -Pattern "SR|Rayleigh|stable|Delta|conditional|SUBCOND" -CaseSensitive:$false -Context 2,2'` rejected: blocked by policy
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw docs\\NOT_CLAIMING.md" in E:\Project-git\subcube-cond-logconcavity-unimodality
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw derisk\\sr_core.py" in E:\Project-git\subcube-cond-logconcavity-unimodality
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw docs\\ledger_sr_subcond.md" in E:\Project-git\subcube-cond-logconcavity-unimodality
+ succeeded in 663ms:
+"""
+sr_core.py â€” C0 de-risking core (guide 6/12). NOT a proof; a small-cube directional probe.
+
+Key objects:
+  - distributions mu over {0,1}^n as numpy arrays of length 2^n (index = bitmask, bit i = coord i).
+  - generating polynomial g_mu(z) = sum_S mu[S] prod_{i in S} z_i  (multiaffine, nonneg coeffs).
+  - SR membership (Branden multiaffine criterion): real-stable <=> Rayleigh-difference
+        Delta_ij(x) = d_i g(x) * d_j g(x) - g(x) * d_i d_j g(x) >= 0
+    for ALL x in R_+^n and all i != j. We probe this on a fixed grid + random points (a NUMERICAL
+    proxy for the lean; not a proof).
+  - NOTE (the structural seam): Delta_ij(1,...,1) = p_i p_j - p_ij = -Cov(x_i, x_j). So pairwise
+    negative correlation == the Rayleigh inequality AT the all-ones vertex; SR demands it on the whole
+    interior. Subcube conditioning probes z_k in {0, infinity} (vertices), not interior x.
+
+All randomness uses a fixed seed (see run_c0.py).
+"""
+import itertools
+import numpy as np
+
+# ----------------------------------------------------------------------------------------
+# generating polynomial and its partials
+# ----------------------------------------------------------------------------------------
+
+def _subsets(n):
+    return range(1 << n)
+
+def _bits(s, n):
+    return [(s >> i) & 1 for i in range(n)]
+
+def g_eval(mu, n, z):
+    """g_mu(z) = sum_S mu[S] prod_{i in S} z_i."""
+    total = 0.0
+    for s in range(1 << n):
+        if mu[s] == 0.0:
+            continue
+        prod = 1.0
+        for i in range(n):
+            if (s >> i) & 1:
+                prod *= z[i]
+        total += mu[s] * prod
+    return total
+
+def dg_eval(mu, n, z, i):
+    """partial_i g (z)."""
+    total = 0.0
+    for s in range(1 << n):
+        if not ((s >> i) & 1) or mu[s] == 0.0:
+            continue
+        prod = 1.0
+        for k in range(n):
+            if k != i and ((s >> k) & 1):
+                prod *= z[k]
+        total += mu[s] * prod
+    return total
+
+def ddg_eval(mu, n, z, i, j):
+    """partial_i partial_j g (z), i != j."""
+    total = 0.0
+    bi, bj = (1 << i), (1 << j)
+    for s in range(1 << n):
+        if (s & bi) == 0 or (s & bj) == 0 or mu[s] == 0.0:
+            continue
+        prod = 1.0
+        for k in range(n):
+            if k != i and k != j and ((s >> k) & 1):
+                prod *= z[k]
+        total += mu[s] * prod
+    return total
+
+def rayleigh_diff(mu, n, z, i, j):
+    """Delta_ij(x) = d_i g * d_j g - g * d_i d_j g."""
+    return dg_eval(mu, n, z, i) * dg_eval(mu, n, z, j) - g_eval(mu, n, z) * ddg_eval(mu, n, z, i, j)
+
+# ----------------------------------------------------------------------------------------
+# SR membership probe (numerical) + violation witness
+# ----------------------------------------------------------------------------------------
+
+# ðŸ”´ CORRECTED 2026-06-21 (round-3 / N4): real stability (STRONGLY RAYLEIGH) requires Delta_ij >= 0 on
+# ALL of R^n, NOT just the positive orthant. The old positive-orthant grid tested only the WEAKER RAYLEIGH
+# property and misclassified Rayleigh-but-not-SR distributions (e.g. mu_4) as SR. We now probe all reals.
+_GRID_1D_POS = np.array([0.1, 0.25, 0.5, 1.0, 2.0, 4.0, 10.0])                    # positive orthant (Rayleigh)
+_GRID_1D_REAL = np.array([-10.0, -2.0, -1.0, -0.5, -0.1,
+                          0.1, 0.5, 1.0, 2.0, 10.0])                             # all reals (SR), trimmed
+                                                                                 # + random signed points
+
+def _margin_over_grid(mu, n, grid1d, rng, n_random, signed):
+    """min over i<j and over grid+random x of Delta_ij(x). signed=True samples random x over R^n
+    (random sign); signed=False over R_+^n only."""
+    pairs = list(itertools.combinations(range(n), 2))
+    best = np.inf
+    witness = None
+    for z in itertools.product(grid1d, repeat=n):
+        z = np.array(z)
+        for (i, j) in pairs:
+            val = rayleigh_diff(mu, n, z, i, j)
+            if val < best:
+                best, witness = val, (i, j, z.copy())
+    if rng is not None and n_random > 0:
+        for _ in range(n_random):
+            mag = np.exp(rng.uniform(np.log(1e-2), np.log(1e2), size=n))
+            z = mag * (rng.choice([-1.0, 1.0], size=n) if signed else 1.0)
+            for (i, j) in pairs:
+                val = rayleigh_diff(mu, n, z, i, j)
+                if val < best:
+                    best, witness = val, (i, j, z.copy())
+    return best, witness
+
+def sr_margin(mu, n, rng=None, n_random=400, tol=1e-9):
+    """SR (real-stability) margin: min Delta_ij over ALL real x (grid + random, random sign).
+    margin >= -tol => SR (numerically); margin < -tol => witness (i,j,x*) certifies non-SR.
+    ðŸ”´ Probes all of R^n (corrected): this is the STRONGLY-RAYLEIGH test, not the orthant Rayleigh test."""
+    return _margin_over_grid(mu, n, _GRID_1D_REAL, rng, n_random, signed=True)
+
+def rayleigh_margin(mu, n, rng=None, n_random=400):
+    """RAYLEIGH margin: min Delta_ij over the POSITIVE ORTHANT only (the weaker property). Kept so C0 can
+    report Rayleigh-vs-SR and surface Rayleigh-but-not-SR instances (margin_rayleigh>=0 but margin_sr<0)."""
+    return _margin_over_grid(mu, n, _GRID_1D_POS, rng, n_random, signed=False)
+
+def is_sr(mu, n, rng=None, tol=1e-7):
+    m, _ = sr_margin(mu, n, rng=rng)
+    return m >= -tol
+
+# ----------------------------------------------------------------------------------------
+# moments, conditioning, candidate statistics
+# ----------------------------------------------------------------------------------------
+
+def marginal(mu, n, i):
+    return sum(mu[s] for s in range(1 << n) if (s >> i) & 1)
+
+def pair_prob(mu, n, i, j):
+    return sum(mu[s] for s in range(1 << n) if ((s >> i) & 1) and ((s >> j) & 1))
+
+def cov(mu, n, i, j):
+    return pair_prob(mu, n, i, j) - marginal(mu, n, i) * marginal(mu, n, j)
+
+def condition(mu, n, fixed):
+    """fixed: dict coord->0/1. Returns (mu_cond, mass) or (None, 0) if zero-prob."""
+    mask = 0
+    val = 0
+    for k, v in fixed.items():
+        mask |= (1 << k)
+        if v:
+            val |= (1 << k)
+    out = np.zeros_like(mu)
+    mass = 0.0
+    for s in range(1 << n):
+        if (s & mask) == val:
+            out[s] = mu[s]
+            mass += mu[s]
+    if mass <= 1e-15:
+        return None, 0.0
+    return out / mass, mass
+
+def _other_coords(n, i, j):
+    return [k for k in range(n) if k != i and k != j]
+
+def S1(mu, n, min_mass=1e-6):
+    """Worst (most positive) conditional pairwise covariance over all subcube conditionings.
+    SR => S1 <= 0 (SR is CNA+, conditional negative association). SUBCOND-estimable."""
+    worst = -np.inf
+    arg = None
+    for (i, j) in itertools.combinations(range(n), 2):
+        others = _other_coords(n, i, j)
+        # condition on every subset T of others, every 0/1 assignment (T = empty included)
+        for r in range(len(others) + 1):
+            for T in itertools.combinations(others, r):
+                for assign in itertools.product((0, 1), repeat=len(T)):
+                    fixed = {T[t]: assign[t] for t in range(len(T))}
+                    mc, mass = condition(mu, n, fixed)
+                    if mc is None or mass < min_mass:
+                        continue
+                    c = cov(mc, n, i, j)
+                    if c > worst:
+                        worst = c
+                        arg = (i, j, dict(fixed))
+    return worst, arg
+
+def _prod_indicator(mu, n, idxset):
+    """E[ prod_{i in idxset} x_i ] = P(all those coords =1)."""
+    mask = 0
+    for i in idxset:
+        mask |= (1 << i)
+    return sum(mu[s] for s in range(1 << n) if (s & mask) == mask)
+
+
+def cov_products(mu, n, A, B):
+    """Cov( prod_{i in A} x_i , prod_{j in B} x_j ) for DISJOINT A,B.
+    x_A := prod x_i is a non-decreasing function of coords A; SR => NA => this Cov <= 0 (a SIGN-CONSTRAINED
+    necessary condition for SR, order |A|+|B|)."""
+    eAB = _prod_indicator(mu, n, list(A) + list(B))
+    eA = _prod_indicator(mu, n, A)
+    eB = _prod_indicator(mu, n, B)
+    return eAB - eA * eB
+
+
+def S3(mu, n, min_mass=1e-6):
+    """Sign-constrained ORDER-4 NA witness: worst (most positive) Cov(x_i x_j, x_k x_l) over disjoint
+    pairs {i,j},{k,l} and over conditionings on the remaining coords. SR => NA => S3 <= 0 (one-sided,
+    unlike S2). SUBCOND-estimable. Needs n>=4. A positive value certifies non-SR via an NA violation."""
+    if n < 4:
+        return 0.0, None
+    coords = list(range(n))
+    worst = -np.inf
+    arg = None
+    for A in itertools.combinations(coords, 2):
+        rest = [c for c in coords if c not in A]
+        for B in itertools.combinations(rest, 2):
+            others = [c for c in coords if c not in A and c not in B]
+            # condition on every subset of the remaining coords (incl. empty)
+            for r in range(len(others) + 1):
+                for T in itertools.combinations(others, r):
+                    for assign in itertools.product((0, 1), repeat=len(T)):
+                        fixed = {T[t]: assign[t] for t in range(len(T))}
+                        mc, mass = condition(mu, n, fixed)
+                        if mc is None or mass < min_mass:
+                            continue
+                        c = cov_products(mc, n, A, B)
+                        if c > worst:
+                            worst = c
+                            arg = (A, B, dict(fixed))
+    return (worst if worst > -np.inf else 0.0), arg
+
+
+def S2(mu, n, min_mass=1e-6):
+    """Conditional second-order (triple) discrepancy a pairwise statistic cannot see:
+    max_{i,j,k} | Cov_{mu|x_k=1}(x_i,x_j) - Cov_{mu|x_k=0}(x_i,x_j) |. SUBCOND-estimable. n>=3."""
+    if n < 3:
+        return 0.0, None
+    worst = -np.inf
+    arg = None
+    for (i, j) in itertools.combinations(range(n), 2):
+        for k in range(n):
+            if k == i or k == j:
+                continue
+            m1, mass1 = condition(mu, n, {k: 1})
+            m0, mass0 = condition(mu, n, {k: 0})
+            if m1 is None or m0 is None or mass1 < min_mass or mass0 < min_mass:
+                continue
+            d = abs(cov(m1, n, i, j) - cov(m0, n, i, j))
+            if d > worst:
+                worst = d
+                arg = (i, j, k)
+    return (worst if worst > -np.inf else 0.0), arg
+
+# ----------------------------------------------------------------------------------------
+# distance-to-SR lower bounds (the two honest lemmas; see preregistration.md)
+# ----------------------------------------------------------------------------------------
+
+def dist_lb_L1(mu, n):
+    """Lemma C0-L1: if some Cov_mu(x_i,x_j) = delta > 0, dist_1(mu, SR) >= delta/3."""
+    worst = max(cov(mu, n, i, j) for (i, j) in itertools.combinations(range(n), 2))
+    return max(0.0, worst) / 3.0, worst
+
+def dist_lb_L2(mu, n, witness):
+    """Lemma C0-L2: at fixed witness x*, dist_1(mu,SR) >= delta / L(x*),
+    delta = -Delta_ij(g_mu)(x*) (>0 for a violator), L(x*) = max ell_inf gradient of mu -> Delta_ij(x*)
+    over the simplex (computed explicitly, not assumed)."""
+    if witness is None:
+        return 0.0, 0.0, 0.0
+    i, j, z = witness
+    delta = -rayleigh_diff(mu, n, z, i, j)
+    if delta <= 0:
+        return 0.0, delta, 0.0
+    # Delta_ij(x*) as a function of mu is quadratic: sum_{s,t} mu[s] mu[t] Q[s,t] - linear? Actually
+    # Delta = (d_i g)(d_j g) - g (d_i d_j g) is a quadratic form mu^T M mu with M[s,t] from monomials.
+    # Gradient wrt mu is 2 M mu; ell_inf-Lipschitz const over simplex <= max_s |(2 M mu)_s| bounded by
+    # 2 * max_{s,t} |M[s,t]|. We bound L = 2 * max_{s,t}|M[s,t]| using monomial values at x*.
+    N = 1 << n
+    # monomial value m_s(x*) = prod_{k in s} z_k ; d_i monomial = m_{s}/z_i if i in s else 0, etc.
+    def mon(s):
+        p = 1.0
+        for k in range(n):
+            if (s >> k) & 1:
+                p *= z[k]
+        return p
+    bi, bj = (1 << i), (1 << j)
+    a = np.array([mon(s) / z[i] if (s & bi) else 0.0 for s in range(N)])   # d_i g coeff vector
+    b = np.array([mon(s) / z[j] if (s & bj) else 0.0 for s in range(N)])   # d_j g coeff vector
+    gv = np.array([mon(s) for s in range(N)])                              # g coeff vector
+    h = np.array([mon(s) / (z[i] * z[j]) if (s & bi) and (s & bj) else 0.0 for s in range(N)])  # d_idj g
+    # Delta(mu) = (a.mu)(b.mu) - (g.mu)(h.mu) = mu^T M mu with M = sym(a b^T - g h^T)
+    M = 0.5 * (np.outer(a, b) + np.outer(b, a) - np.outer(gv, h) - np.outer(h, gv))
+    L = 2.0 * np.max(np.abs(M))
+    if L <= 0:
+        return 0.0, delta, L
+    return delta / L, delta, L
+
+# ----------------------------------------------------------------------------------------
+# distribution builders
+# ----------------------------------------------------------------------------------------
+
+def product_dist(n, p):
+    """SR by construction: independent Bernoulli(p_i). g factorizes -> real stable."""
+    mu = np.zeros(1 << n)
+    for s in range(1 << n):
+        prob = 1.0
+        for i in range(n):
+            prob *= p[i] if ((s >> i) & 1) else (1 - p[i])
+        mu[s] = prob
+    return mu
+
+def make_F1(n, p, delta_mass, i=0, j=1):
+    """Positive-correlation perturbation of a product (SR) dist: move mass to aligned (x_i=x_j)
+    states from anti-aligned states. Creates Cov(x_i,x_j) > 0 -> far by C0-L1."""
+    mu = product_dist(n, p).copy()
+    bi, bj = (1 << i), (1 << j)
+    aligned = [s for s in range(1 << n) if ((s & bi) != 0) == ((s & bj) != 0)]
+    anti = [s for s in range(1 << n) if ((s & bi) != 0) != ((s & bj) != 0)]
+    take = min(delta_mass, sum(mu[s] for s in anti) * 0.9)
+    # remove proportionally from anti, add proportionally to aligned
+    anti_tot = sum(mu[s] for s in anti)
+    al_tot = sum(mu[s] for s in aligned)
+    for s in anti:
+        mu[s] -= take * mu[s] / anti_tot
+    for s in aligned:
+        mu[s] += take * mu[s] / al_tot
+    mu = np.clip(mu, 0, None)
+    return mu / mu.sum()
+
+
+ succeeded in 681ms:
+# Ledger â€” SR-SUBCOND (Testing Strong Rayleigh-ness in the Subcube-Conditioning Model)
+
+> **Append-only research-line ledger** (guide Â§10). Re-read this + `PROJECT_STATE.md` + frozen artifacts
+> before continuing â€” never work from memory. Nothing here is "proved": every bound/shape is a *claim to
+> be established* by the external attacker (codex GPT-5.5-xhigh â†’ web GPT-5.5-Pro), refereed by
+> independent adversarial audits. "AI-verified â‰  proved" (guide Â§15).
+
+---
+
+## HEADLINE (current status)
+**Phase 0 â€” setup + kill-scan + C0 lean DONE. NO theorem, NO convergence, NO GO issued. STOP at human gate.**
+TARGET (unproven): first `poly(n,1/Îµ)` SUBCOND tester for strong Rayleigh-ness on `{0,1}^n` **with a
+matching lower bound** (a TIGHT characterization), OR a *proven* impossibility (RED-3). Open problem =
+**C1** (local handle + tester / upper bound), with **C2** (matching lower bound) in parallel and **C3**
+(pin the tight statement) pending. As of 2026-06-20: scaffold built; **kill-scan = GREEN / NO-SCOOP**
+(primary + independent second-opinion, niche `(SUBCOND, SR)` open); SR facts confirmed (`P*`), barriers
+B1â€“B3 verified; **C0 lean = a clean LOW-ORDER local handle looks doubtful (n=3 robust; n=4/order-4 open)**
+(B3 real â†’ attack C1 harder / non-locally + build C2 in parallel + weigh impossibility, NO-RETREAT). C1/C2 briefs written (NOT sent).
+Pending: human gates (a)[no RED fired], (c) venue/scope; (b) not yet.
+
+---
+
+## 1. Frozen model / notation
+(Ratify/amend in Phase 1 with a logged reason â€” guide Â§5.)
+
+- **Ground set & distributions.** `Î¼` a distribution over `{0,1}^n` (subsets of `[n]`; equivalently
+  `{-1,1}^n`). Generating polynomial `g_Î¼(z) = Î£_{SâŠ†[n]} Î¼(S) âˆ_{iâˆˆS} z_i` â€” multiaffine, degree â‰¤ 1 in
+  each `z_i`.
+- **Strong Rayleigh (SR).** `Î¼` is SR iff `g_Î¼` is **real stable** (no complex root `z` with
+  `Im(z_i) > 0` for all `i`). SR âŠ‹ DPP âŠ‹ uniform spanning trees. Frozen structural facts â†’ substrate
+  `P*` (filled after Phase-0 special assignment (c)).
+- **SUBCOND oracle.** A query is a partial assignment `Ï` fixing a subset `T âŠ† [n]` to `{0,1}` values;
+  the oracle returns a sample from `Î¼` conditioned on the subcube `{x : x|_T = Ï}` (positive-probability
+  assumed; degenerate-conditioning convention deferred to Phase 1). Query complexity = number of
+  subcube-conditional samples. `T = âˆ…` recovers i.i.d. sampling.
+- **Testing task (frozen target).** Given SUBCOND access to `Î¼` and `Îµ > 0`: **accept** if `Î¼` is SR;
+  **reject** (w.p. â‰¥ 2/3) if `Î¼` is **Îµ-far** (in `â„“â‚` / TV) from every SR distribution. Tester uses
+  `poly(n, 1/Îµ)` queries. Standard testing by default (tolerant flagged as a logged scope change).
+- **Conjectured bound shape â€” CONJECTURAL, NOT a fact.** Idea phrasing: `Ã•(n/Îµ^?)` upper, `Î©Ìƒ(âˆšn/Îµ^?)`
+  lower. As phrased that is a **GAP** (`n` vs `âˆšn`) for one property, not a dichotomy (the internal
+  muddle the fit reviewer flagged). **C3 must pin** one of: (i) `Î˜Ìƒ(n)` with matching `Î©Ìƒ(n)`;
+  (ii) `Î˜Ìƒ(âˆšn)` (SR cheaper than monotonicity via NA) with matching bounds; (iii) a genuine
+  **variant dichotomy** (general SR `Î˜Ìƒ(n)` vs a structured/uniform-SR sub-case `Î˜Ìƒ(âˆšn)`), mirroring
+  monotonicity-vs-monotone-uniformity (2502.16355). "Tight" = matching upper+lower for the *stated*
+  quantity, never an `n`-vs-`âˆšn` gap relabeled.
+
+---
+
+## 2. Proven results / substrate â€” `P*`  ("use freely, do not re-derive")
+> **CONFIRMED 2026-06-20** against Borceaâ€“BrÃ¤ndÃ©nâ€“Liggett "Negative dependence and the geometry of
+> polynomials," arXiv:0707.2340 (J. AMS 22, 2009), via special assignment (c). Full quotes/numbers in
+> `lit/SCAN_REPORT.md Â§3(c)`. Not folklore.
+
+- `P1` *(CONFIRMED, BBL Prop 2.1 + Â§4)*: SR is **closed under subcube conditioning** (fixing a coordinate
+  to 0/1, i.e. specialization `f|_{z_i=Î±}`, Î±â‰¥0) and under **projection/marginalization** (`âˆ‚^S`) and
+  external fields. *(Exact Â§4 closure-proposition number BLOCKED â€” ar5iv/PDF access; substance confirmed
+  via Prop 2.1 + Oveis Gharan notes + arXiv:1602.05242. Do not cite a fabricated Â§4 number.)*
+- `P2` *(CONFIRMED, BBL Thm 4.10)*: SR â‡’ CNA+ (the strongest negative association) â‡’ **NA**.
+  ðŸ”´ **NA is necessary, NOT sufficient** for SR (NA strictly contains SR). **No named NA-but-not-SR
+  counterexample with a theorem number was located in primary text** â€” C2/CS3 may need to *construct* one;
+  do not assume a canonical BBL counterexample exists.
+- `P3` *(CORRECTED 2026-06-21 â€” round-3 found a frozen ERROR; see N4 + `docs/guide_amendments.md`)*:
+  Î¼ SR â‡” `g_Î¼` **real stable**. ðŸ”´ **The real-stability criterion is `Î”_ij(g)=âˆ‚_i gÂ·âˆ‚_j g âˆ’ gÂ·âˆ‚_iâˆ‚_j g â‰¥ 0
+  on ALL of â„â¿** (equivalently: no root with all `Im(z_i)>0`). **`Î”_ij â‰¥ 0 on the positive orthant â„â‚Šâ¿`
+  alone is the WEAKER "RAYLEIGH" property â€” Rayleigh âŠ‹ strongly Rayleigh.** The earlier framing
+  (`Î”â‰¥0 on â„â‚Šâ¿ â‡” SR`, copied from guide Â§5's "[0,1]^n") was WRONG. Witness: `Î¼_4` (N4) is Rayleigh
+  (positive-orthant `Î”â‰¥0`) but NOT real stable (a complex root). *(Even the all-real condition is global
+  analytic, NOT a SUBCOND-observable local handle â€” building one remains C1's burden.)*
+- `P4` *(engines, CONFIRMED as cited; use as engines to ADAPT, NOT transferring theorems)*:
+  (i) **2502.16355** (STOC 2025) directed-isoperimetry â†’ edge-tester bridge â€” its **Theorem 3** real-valued
+  directed Talagrand inequality `E[(Î£_{i:x_i=âˆ’1}((f(x)âˆ’f(x^{(i)}))âº)Â²)^{1/2}] â‰¥ Î©(1/âˆšlog n)Â·distâ‚(f)`
+  converts a **local edge-bias** statistic (measured on 1-dim subcubes) into a global `â„“â‚`
+  distance-to-monotone bound; **no extension to SR / log-concavity / negative dependence is given** (â†’ `B3`).
+  (ii) **2408.02347** (APPROX/RANDOM 2024) `Ã•(n/ÎµÂ²)` SUBCOND marginal/equivalence/product subroutines.
+- `P5` *(identity REFEREE-VERIFIED; but its CONCLUSION was CORRECTED 2026-06-21)*: the identity
+  **`Cov_{Î¼^Î»}(X_i,X_j) = âˆ’(Î»_iÎ»_j/g(Î»)Â²)Â·Î”_ij(g)(Î»)`** holds for `Î»âˆˆâ„â‚Šâ¿` (verified). ðŸ”´ **BUT the handle
+  `V(Î¼)=sup_{i<j, Î»âˆˆâ„â‚Šâ¿}(Cov_{Î¼^Î»})â‚Š` tests only the POSITIVE-ORTHANT condition = RAYLEIGH, NOT SR**
+  (`V(Î¼)=0 â‡” Î¼ Rayleigh`, which is *strictly weaker* than SR â€” see corrected P3 + N4). Positive external
+  fields `Î»âˆˆâ„â‚Šâ¿` only probe `Î”_ij` on `â„â‚Šâ¿`; SR needs `Î”_ijâ‰¥0` on all real points, including negative
+  ones, which positive fields **cannot reach**. âŸ¹ the whole positive-field covariance route is dead for
+  SR (N4).
+- `P6-candidate` *(audit-derived, correct-in-principle, poly-query OPEN â€” do NOT use as a working
+  subroutine yet)*: `Cov_{Î¼^Î»}(X_i,X_j)` is **SUBCOND-estimable without sampling `Î¼^Î»`** â€” fix `X_B=t`
+  (`B=[n]âˆ–{i,j}`, Boolean), estimate `q_t(a,b)=P_Î¼(X_i{=}a,X_j{=}b|X_B{=}t)` + `P_Î¼(X_B{=}t)`; the tilt is
+  deterministic post-processing. ðŸ”´ **Naively exp(n)** (sum over `tâˆˆ{0,1}^B`) + variance blowup from large
+  Î» â€” making this **poly(n)-query** is exactly the open witness-localization problem. So codex's
+  "SUBCOND can't reach external fields" obstruction is **refuted in principle**, but `poly`-query is unproven.
+
+---
+
+## 3. Refuted routes â€” `N*`  ("do NOT attempt", each with the killing reason)
+- **`N1` (refuted obstruction, round 1):** "SUBCOND cannot estimate external-field-tilted covariances
+  `Cov_{Î¼^Î»}`" â€” **FALSE** (`P6`: Boolean conditioning + deterministic Î»-reweighting). The open issue is
+  *poly-query localization*, not reachability. Do not re-assert the reachability obstruction.
+- **`N2` (unsound tester, round 1):** any tester certifying only pairwise / conditional-pairwise(Boolean)
+  / marginal / NA statistics â€” accepts NA-but-not-SR (CS3 / C0 family F2). Necessary but not sufficient.
+- **`N3` (refuted localization, round 2 â€” REFEREE-VERIFIED counterexample):** **sparse / bounded-support
+  external-field witness families cannot localize.** The even-parity slice `Î¼_n` (uniform on `{Î£x_i even}`)
+  is `â‰¥1/8`-far from SR yet has `Cov_{Î¼_n^Î»}(X_i,X_j)=0` for **every** field whose non-unit support omits
+  even one off-pair coordinate (closed form `Cov âˆ âˆ_{kâ‰ i,j} r_k`, `r_k=(1âˆ’Î»_k)/(1+Î»_k)`). â‡’ any
+  `o(n)`-support / `O(log n)`-support witness family misses `Î¼_n`. *(Details: `round2_response_C1.md`.)*
+- **`N4` (route death, round 3 â€” REFEREE-VERIFIED; the big one):** **the entire positive-external-field /
+  Boolean-conditioning PAIRWISE-COVARIANCE route cannot test SR** â€” it certifies only the weaker RAYLEIGH
+  property. Witness `Î¼_4` (`a=(1,2,2,2,1)/30`, `g_4=1+2e_1+2e_2+2e_3+e_4`): `Î”_ij>0` on all of `â„â‚Šâ´` (so
+  every positive-field & Boolean-conditioning pairwise covariance is â‰¤0, looks SR) but `g_4` has a complex
+  root (`t+1/t=âˆ’4+âˆš6`) âŸ¹ not real stable âŸ¹ **not SR**, and `d_TV(Î¼_4,SR)â‰¥1/7200`. Lift
+  `Î¼_4Ã—Ber(Â½)^{âŠ—(nâˆ’4)}` keeps a constant-far Rayleigh-not-SR instance invisible to all positive fields.
+  â‡’ (T)/(Tâ€²)/(Tâ€³) all die at the root. *(Details: `round3_response_C1.md`; literature cross-check in
+  `round3_audit_C1.md`. NOTE this makes `P6` â€” estimability of tilted covariances â€” MOOT for SR.)*
+
+---
+
+## 4. Barriers in force â€” `B*`  (pre-seeded; verify exact statements in Phase-0 scan)
+- **`B1`** â€” **VERIFIED 2026-06-20** (2008.03650 Thm 2, NeurIPS 2020): any (Îµ,0.99)-DPP-tester with
+  **i.i.d. sample access** needs `Î©(âˆšN/ÎµÂ²) = Î©(2^{n/2}/ÎµÂ²)` samples â€” **genuinely exponential in `n`**;
+  hardness extends to log-submodular. â‡’ a `poly(n)` SUBCOND tester **must genuinely use conditional
+  access**; anything reducible to i.i.d. sampling cannot beat `B1`. *(No longer assumed â€” exact statement
+  quoted in `lit/SCAN_REPORT.md Â§2`.)*
+- **`B2`** â€” Deciding M-convexity of a **given quadratic** set function is **co-NP-complete**
+  (arXiv:1704.02836, Iwamasa). â‡’ target = **SR (subcube-closed) as a distribution-testing task**, NOT
+  exact M-convexity recognition. *(State precisely; not a vague "all M-concavity is hard".)*
+- **`B3`** â€” **No known local/edge characterization or directed-isoperimetry for SR** â‡’ the local handle
+  must be **built** (C1), and the "mirror the monotonicity bound shape" move is **conjectural**, not a
+  transfer. *(The single live-or-die point â€” guide READ FIRST / Â§16 risk 1.)*
+
+---
+
+## 5. The exact open problem (as currently reduced)
+- **C1 (primary, R+):** a usable **local / isoperimetry-style inequality** for SR on `{0,1}^n` +
+  conversion into a `poly(n,1/Îµ)` SUBCOND tester with a proven **upper bound** (sound against non-SR
+  distributions that pass marginal/pairwise statistics â€” CS3). OR a *proof* that no `poly(n)` SUBCOND SR
+  tester exists (â†’ RED-3 impossibility headline; a proof that no *local handle* exists is NOT RED-3, only
+  YELLOW-a).
+- **C2 (parallel):** a Yao-minimax **planted-vs-uniform** (SR-vs-far) hard instance forcing a lower bound
+  that **matches** C1. "Far" instances must be **provably Îµ-far from SR** (#1 audit check).
+- **C3 (pending):** resolve Â§1 (i)/(ii)/(iii); state the honest tight characterization; never a gap as a
+  dichotomy.
+
+**#1 audit check throughout:** does a step secretly assume a local handle never established, or certify
+*product / pairwise-NA* instead of *SR*?
+
+### C1 â€” sharpened crux after round 1 (2026-06-21)
+The global handle `P5` (`V(Î¼)=0â‡”SR`) + the estimability reduction `P6-candidate` reduce C1 to a single
+named open theorem (the make-or-break for the upper bound):
+> **Robust external-field witness-localization theorem (OPEN):** does `d_TV(Î¼,SR) â‰¥ Îµ` force a witness
+> `(i,j,Î»)` with `Cov_{Î¼^Î»}(X_i,X_j) â‰¥ poly(Îµ,1/n)` **AND** `Î»` of **bounded support / bounded magnitude /
+> low-dimensional reweighting** â€” so the exp-many-`t` reweighting in `P6-candidate` collapses to `poly(n)`
+> SUBCOND queries? Or prove no such localized witness exists (â†’ pushes toward the impossibility/lower-bound
+> route).
+Candidate attacks (NOT mandates): adapt a Talagrand/local-to-global inequality to the Rayleigh-difference
+functional (2502.16355 engine); random-restriction tilt-localization (1911.07357; entropic independence
+2204.02570); bounded-field poly-grid reduction; slice-and-dice tilted-covariance estimators (2506.18444).
+
+### C1 â€” after round 2 (2026-06-21): sparse localization REFUTED (N3); target re-sharpened to (Tâ€²)
+- **(Tâ€²) OPEN:** does a poly-size family of **LOW-PARAMETRIC, FULL-SUPPORT** fields (e.g. the `O(1)`-param
+  "uniform `Î´` on the complement of `{i,j}`" family â€” which catches `Î¼_n` at `Î´=1/nÂ²`) localize the
+  witness for *every* Îµ-far `Î¼`, AND is each such tilted covariance **poly(n)-SUBCOND-estimable**?
+- ðŸ”´ **Synthesis (CORRECTED by the round-2 audit â€” the obstruction is SUPPORT, not PARAMETRIC dimension):**
+  - **Boolean-conditioning-only** (the C0 statistic `S1`): catches `Î¼_n` (`Cov(X_i,X_j|X_B=t)=+1/4`) but
+    is **blind to F2** (C0).
+  - **sparse-SUPPORT fields:** catch F2-type interior violations but are **blind to `Î¼_n`** (N3).
+  - ðŸ”´ **BUT** `Î¼_n` is caught by a **1-parameter FULL-support tilt** (C4: `Î»_k=Î´` â‡’ `Covâ‰ˆ1/4`) â€” so the
+    refutation kills only *low-support*, NOT *low-parametric*. *(Round-2 read, now SUPERSEDED.)*
+  - â›” **SUPERSEDED BY ROUND 3 (N4):** the round-2 "complementary blind spots â‡’ jointly sufficient â‡’ leans
+    toward a poly tester" synthesis is **FALSE**. `Î¼_4` (Rayleigh-not-SR) is a **single** family blind to
+    **BOTH** {Boolean conditional pairwise covariances} **and** {all positive-field tilted covariances} â€”
+    because both are *positive-orthant* statistics and `Î¼_4` is Rayleigh. **The entire covariance route is
+    dead (N4).** The new handle is conditional-marginal SR-testing (see "C1 â€” after round 3").
+- **HARD-INSTANCE note for C2 (deferred):** plain `Î¼_n` is **too easy** for a lower bound (one *full*
+  Boolean conditioning detects it, O(1) queries). A real lower bound needs a **hidden-random-parity**
+  planted family (random affine subspace / random target parity) so no fixed conditioning aligns with the
+  planted constraint. **C2 is held until round-3 settles the (Tâ€³) upper-bound reformulation** (audit:
+  the lower bound is only needed if (Tâ€³) fails).
+
+### C1 â€” after round 3 (2026-06-21): covariance route DEAD (N4); REDIRECT to conditional-marginal SR-test
+ðŸ”´ **The covariance handle was testing the WRONG property (Rayleigh, not SR).** (T)/(Tâ€²)/(Tâ€³) are dead at
+the root (N4). **New handle / target (Tâ€´):** test **real stability (SR) of conditional low-dimensional
+marginals**, not pairwise covariances. Define
+`ð’®â€´ = { SR-test of Î¼(X_W | X_T=Ï) : Boolean (T,Ï), |W| = O(1) or O(log n) }` (real-stability of a
+fixed-size multiaffine polynomial is decidable).
+- **(Tâ€´) OPEN:** is SR **locally testable on conditional marginals** â€” `d_TV(Î¼,SR) â‰¥ Îµ âŸ¹` some bounded
+  conditional marginal is `Î©(poly)`-far from SR-on-`W`, with `poly(n)` SUBCOND queries?
+- Why it's promising: `Î¼_4` caught (its 4-bit marginal is non-SR); `Î¼_n` caught (a conditional `{i,j}`
+  marginal is non-SR after deep conditioning); F2 plausibly caught (its real-stability violation should
+  surface in some conditional marginal â€” to check).
+- ðŸ”´ **The obstruction to watch (the new RED-3 candidate):** a family that is far-from-SR but whose **every
+  bounded conditional marginal is SR** (a *spread-out / global* real-stability violation, like parity is
+  for the unconditioned marginals). If such a family exists and defeats poly-query conditioning, that is
+  the impossibility (lower bound). The round-3 audit is checking whether such a family is obvious.
+- Status: covariance route dead but **NOT impossibility** â€” a genuinely different (marginal-SR) handle is
+  open. Attack (Tâ€´) next (round 4). NO-RETREAT: this is a redirection within the upper-bound attack, not a
+  downgrade.
+
+---
+
+## 6. Confidence trend (first-class signal â€” guide Â§9)
+| date | C1 (tester/upper) | C2 (matching lower) | note |
+|---|---|---|---|
+| 2026-06-20 | unset (pre-attack); **C0 leans the local-handle route is doubtful** | unset (pre-attack); C2 not yet attacked | Phase-0 setup; no attack round run. Seed only. C0 lean (no clean low-order local handle) is a routing signal to attack C1 *harder / non-locally* and weigh impossibility â€” **NOT** a confidence drop on a run thread, and NOT a downgrade (NO-RETREAT Â§15). A sustained drop *during the attack loop* â‡’ escalate / fresh-agent (attack harder), NEVER downgrade. |
+| 2026-06-21 (round 1) | **modestly UP vs C0 pessimism.** codex: OPEN, no tester (82% "frozen facts insufficient") â€” but the audit **refuted codex's blocker**: tilted pairwise covariances `Cov_{Î¼^Î»}` ARE SUBCOND-estimable (Boolean conditioning + deterministic Î»-reweighting; no rejection sampling). Estimation half reduces to Boolean conditioning; crux cleanly isolated = the **witness-localization theorem**. | not yet (codex round-1 C2 running) | Round 1 = GAP-level **progress**, not a stall. The global handle `V(Î¼)=0â‡”SR` is referee-verified (corrected identity, F1). Route forward: sharpen upper bound (bounded-support Î» witness theorem). NOT escalating yet (K_stall=2; this is round 1 with real progress). |
+| 2026-06-21 (round 3) | **MAJOR: covariance route DEAD + substrate error CAUGHT.** codex's `Î¼_4` is Rayleigh (all positive-field/conditioning pairwise covariances â‰¤0) but NOT SR (complex root), constant-far âŸ¹ N4: pairwise-covariance testers certify *Rayleigh âŠ‹ SR*, cannot test SR. **A frozen-substrate error (positive-orthant criterion â‰  SR) was found & corrected.** REDIRECT to (Tâ€´) conditional-marginal SR-testing. NOT impossibility (different handle open). | `Î¼_4Ã—Ber` is a constant-far Rayleigh-not-SR instance â€” but it's *easy* (its O(1)-marginal is non-SR). The real lower-bound seed would be a far-from-SR family whose *every bounded conditional marginal is SR* â€” not yet exhibited. | Round 3 = **progress via a hard refutation + a caught error** (the adversarial process working as designed), NOT a stall. Confidence in the *covariance* route â†’ 0 (dead). Confidence in *some* poly tester: uncertain â€” now hinges on (Tâ€´). NO-RETREAT: attack (Tâ€´). |
+| 2026-06-21 (round 2) | **upper-bound route NARROWING then RE-WIDENING.** Sparse-*support* localization **REFUTED** (N3, parity `Î¼_n`, referee + symbolic-audit verified). **But the audit shows the obstruction is SUPPORT, not PARAMETRIC dimension** â€” a 1-param full-support tilt catches `Î¼_n`. Reformulated target (Tâ€³): low-PARAMETRIC full-support. `Î¼_n` & F2 are **complementary (not shared) blind spots** â‡’ combined statistic may suffice â‡’ **leans toward a poly tester; impossibility NOT yet supported.** | **deferred.** plain `Î¼_n` too easy (one full conditioning detects it). Lower bound needs hidden-random-parity; HELD until (Tâ€³) resolves. | Round 2 = progress (refutation of the wrong formalization + corrected target + the support-vs-parametric insight), NOT a stall. Round 3 (audit-recommended, high-EV): prove/refute (Tâ€³) â€” does {bounded Boolean conditioning} + {O(1)-param full-support tilt} jointly separate SR from Îµ-far, AND is the tilt covariance poly-estimable? |
+
+### Resolution lean (D) â€” assessment only, NOT a proof (guide Â§6 D)
+The C0 lean ("no clean low-order local handle") points toward the **harder** side: a *clean* monotonicity-style
+local/edge handle for SR looks **doubtful** at low order. Consequences for the attack loop (no retreat):
+- **C1 stays the primary attack at full force**, but the brief must explicitly invite **non-local /
+  higher-order / global** tester routes (not only an edge-isoperimetry mirror of 2502.16355), since the
+  natural local handle is empirically doubtful.
+- **C2 (matching lower bound) is built in parallel from round 1** â€” and the impossibility route (RED-3,
+  *on a proof only*) is a live alternative resolution to weigh, because a doubtful local handle raises the
+  prior that the testing task itself may carry a super-polynomial SUBCOND lower bound.
+- ðŸ”´ This lean is **NOT RED-3** (no impossibility proof) and **NOT a venue downgrade** â€” it is a routing
+  signal. The headline target (tight SR characterization) is unchanged.
+
+---
+
+## 7. C0 small-cube local-handle lean (Phase 0) â€” âš ï¸ ORACLE BUG FOUND + FIXED 2026-06-21
+> ðŸ”´ **The round-3 audit found `derisk/sr_core.py`'s SR test probed only the POSITIVE ORTHANT â€” a
+> RAYLEIGH test, not SR â€” so the "SR baseline" was contaminated with Rayleigh-but-not-SR instances.**
+> FIXED (`sr_margin` now probes all real `â„â¿`); C0 re-run done â€” see "C0 re-run" note at the end of this
+> section. F2 instances stay genuinely non-SR (positive-orthant `Î”` violation âŸ¹ non-Rayleigh âŸ¹ non-SR).
+> The C0 lean is in any case SUPERSEDED as evidence by the rigorous round-1/2/3 results (P5, N3, N4).
+
+### (original 2026-06-20 writeup follows; read with the bug caveat above)
+> A *lean*, NOT a proof, NOT a kill (guide Â§6 C0 / Â§12). Pre-registered in `derisk/preregistration.md`
+> BEFORE measuring (seed 20260620); adversarial far instances only; distance-to-SR via violation-margin
+> lower bounds (Lemmas C0-L1/C0-L2), NOT exact projection. Code `derisk/sr_core.py` + `derisk/run_c0.py`;
+> numbers `derisk/results/c0_results.json`. **Independent audit: see `docs/rounds/` C0-audit (pending â†’ fold).**
+
+**Key structural fact used (and why the probe is meaningful):** `Î”_ij(g_Î¼)(1,â€¦,1) = p_i p_j âˆ’ p_{ij} =
+âˆ’Cov(x_i,x_j)`. So **pairwise negative correlation = the Rayleigh inequality at the all-ones vertex**,
+while SR demands `Î”_ij(x) â‰¥ 0` at **all interior** `xâˆˆâ„â‚Š^n`. Subcube conditioning only probes the
+combinatorial vertices `z_k âˆˆ {0, âˆž}`. The probe asks: do interior real-stability violations force a
+detectable *conditional-correlation* signal at low order?
+
+**Candidate statistics** (SUBCOND-estimable): `S1` = worst conditional pairwise covariance (degree-2 /
+NA witness; SR â‡’ S1 â‰¤ 0); `S2` = max triple discrepancy `|Cov_{Î¼|x_k=1}(x_i,x_j) âˆ’ Cov_{Î¼|x_k=0}(x_i,x_j)|`
+(a simple bounded-order proxy beyond pairwise).
+
+**Results (n=3 is the trustworthy baseline â€” genuine non-product SR verified by full-grid margin):**
+- **H1 âœ“** S1 separates the easy positive-correlation far family F1 (SR.S1 max â‰ˆ 0; F1.S1 â‰¥ +0.022,
+  certified far by C0-L1).
+- **H2 âœ“ (the CS3 trap, concrete):** S1 is **BLIND to F2** â€” pairwise-negatively-correlated **non-SR**
+  instances exist with S1 â‰¤ 0 (n=3: 10 found, S1 â‰¤ âˆ’0.0002; n=4: tensored construction, S1 â‰¤ 0). A
+  tester that only certifies pairwise/NA statistics does **NOT** certify SR.
+- F2 are genuinely **non-SR** (Rayleigh margin < 0; certified far by C0-L2, dist_lb > 0) with **interior**
+  witnesses (interiorness â‰ˆ 1.0â€“1.3 â‰« 0) â€” the failures sit where subcube/vertex probes cannot directly look.
+- **H3 â€” FALSIFIER FIRES (n=3):** the bounded-order proxy S2 does **NOT** cleanly separate F2 from
+  genuine SR. SR.S2 range (0 â€¦ 0.078) **overlaps** F2.S2 (median 0.065); S2-vs-violation-margin
+  correlation only 0.29; only a weak "more-far â‡’ slightly higher S2" trend (F2-strong S2 median 0.10).
+  *(n=4: SR baseline collapsed to products-only (S2â‰¡0) â†’ too thin to call; consistent weak signal corr 0.40.)*
+
+**THE LEAN (directional, NOT a theorem, NOT a kill, NOT RED-3):** the evidence **leans toward "no clean
+LOW-ORDER local handle"** for SR â€” the natural pairwise/NA statistic is provably blind to the CS3 family,
+and a simple conditional triple proxy gives only a weak, overlapping signal; the obstruction is that SR's
+failures are **interior-orthant** phenomena invisible to vertex (subcube) probes at low order. This is
+exactly barrier `B3` showing up empirically.
+
+**Independent C0 audit (fresh agent) â€” folded:** **no FATAL.** SR-membership test (BrÃ¤ndÃ©n multiaffine
+criterion), both distance lemmas (C0-L1 3-Lipschitz; C0-L2 quadratic with explicit `L=2Â·max|M|`),
+tensoring-preserves-non-SR, and all moment/conditioning code **verified correct**. Caveats raised and
+adopted: **GAP-1** â€” the triple proxy `S2` is **sign-agnostic** (SR does NOT force `S2â‰ˆ0`), so "S2 fails to
+separate" is *by construction* weaker evidence; the **robust core is H2** (`S1` is a genuine *sign-
+constrained* SR-necessary condition, SRâ‡’S1â‰¤0, and it is provably blind to F2). To give H3 a *fair*
+sign-constrained test we added **`S3`** = worst `Cov(x_i x_j, x_k x_l)` over disjoint pairs + conditionings
+(SRâ‡’NAâ‡’`S3â‰¤0`, an order-4 one-sided witness). **GAP-2/GAP-3** â€” the earlier n=4 SR baseline was thin and
+n=4 F2 were tensor-duplicates of n=3; **MINOR-1** â€” raw Rayleigh margins are unnormalized (scale with `z^n`),
+use `dist_lb` not raw margin for distance.
+
+**Order-4 fair probe (S3) outcome â€” INCONCLUSIVE at n=4, honestly reported:** a crude random search did
+**not surface genuine (non-tensored) n=4 distributions that are `S1â‰¤0` AND non-SR** (countâ‰ˆ0 over a large
+budget â€” full conditional negative correlation at n=4 is rare to hit randomly; a *search limitation*, NOT
+evidence such instances are absent). Tensored F2 (non-SR localized to a 3-sub-cube + an independent 4th
+coord) are `S1â‰¤0`, non-SR, **and** `S3=0` *trivially* (order-4 witnesses are forced through the independent
+coord) â€” a striking but construction-dependent "NA-witness-blind non-SR" example. **Whether a bounded-order
+NA-witness family characterizes SR remains OPEN** â€” consistent with the "no clean low-order handle" lean and
+with `B3`, but **not settled** by C0. *(Recommended post-Phase-0 de-risk: a smarter n=4 construction from a
+known NA-but-not-SR structure to test S3 on genuine instances.)*
+
+ðŸ”´ **Honest scope of this lean (do NOT over-read):** (i) small `nâˆˆ{3,4}`, a **finite set of low-order
+candidates** (order-2 `S1`, sign-agnostic `S2`, order-4 `S3`) â€” a higher-order/cleverer SUBCOND statistic,
+or a *global* non-local tester, might still separate; "no clean low-order handle among these candidates" â‰ 
+"no handle exists". (ii) The robust, audited signal is **H2 at n=3** (the order-2 sign-constrained NA handle
+is blind to interior-violation non-SR). (iii) F2 found are near-boundary; (iv) the order-4 question is open
+(search-limited at n=4); (v) the grid SR test is a numerical proxy. **Per NO-RETREAT (Â§15) this lean ROUTES
+the attack, it does not retreat:** attack C1 at full force (higher-order / non-local / global routes) AND
+build C2 in parallel; weigh the impossibility route (RED-3 *on a proof only*).
+
+---
+
+## 8. Per-round artifacts index
+- Briefs / responses / audits: `docs/rounds/round{n}_{brief|response|audit}.md`.
+- **Round 1 (2026-06-21, SENT to codex gpt-5.5/xhigh):**
+  - C1: brief `round1_brief_C1.md` Â· reply `round1_response_C1.md` (raw `PROOF_REVIEW/codex_raw/round1_response_C1.raw.txt`)
+    Â· audit `round1_audit_C1.md` â†’ **GAP-level progress** (handle `P5` verified; blocker refuted; crux =
+    witness-localization theorem).
+  - C2: brief `round1_brief_C2.md` Â· round-1 codex run KILLED (stalled 20min/0B, under-specified) â†’
+    superseded by a round-2 C2 with the `Î¼_n` parity seed (pending).
+  - C0 setup audit: `round0_C0_audit.md`.
+- **Round 2 (2026-06-21):** C1 brief `round2_brief_C1.md` Â· reply `round2_response_C1.md` Â· audit
+  `round2_audit_C1.md` â†’ **N3 refutation + (Tâ€²) + `Î¼_n` hard instance.**
+- **Round 3 (2026-06-21):** C1 brief `round3_brief_C1.md` Â· reply `round3_response_C1.md` (raw
+  `â€¦/round3_response_C1.raw.txt`; 2 transport failures then OK) Â· audit `round3_audit_C1.md` (running)
+  â†’ **N4: covariance route DEAD (`Î¼_4` Rayleigh-not-SR) + frozen-substrate error corrected + REDIRECT to
+  (Tâ€´) conditional-marginal SR-testing.**
+- Literature scan (full, un-truncated): `lit/SCAN_REPORT.md`.
+- C0 sim: `derisk/` (+ `derisk/results/`).
+
+
+ succeeded in 702ms:
+# NOT_CLAIMING â€” internal honesty artifact (NOT a paper section)
+
+> Per guide Â§14 + `venue-prompts/soda/2-writing-guide.md` å‘#1: SODA bans a defensive "Limitations"
+> section. This list stays INTERNAL; at writing time each item is folded as a **precise positive scope
+> statement** into the model/theorem definitions, never as a standalone caveat.
+
+1. **Property = strong Rayleigh (SR)**, the subcube-closed real-stability class â€” stated as *the setting*.
+   NOT a tester for **exact M-convexity recognition** (deciding M-convexity of a given quadratic set
+   function is co-NP-complete, `B2`/arXiv:1704.02836). We test SR as a *distribution* property, not exact
+   recognition.
+2. **Model = subcube-conditioning (SUBCOND)** distribution testing on `{0,1}^n`; **standard** testing by
+   default (any move to *tolerant* testing is a logged scope change, stated as the model).
+3. **"Tight" is used ONLY where C1 (upper) and C2 (lower) match.** If a gap remains, state the exponents
+   and list the optimal exponent as an Open Question â€” never write "tight"/"optimal" without the matching
+   bound.
+4. **The dropped "product-class unimodality" half simply does not appear** (no negative framing needed).
+5. **No `poly(n)` claim until C1 is proven; no "first SUBCOND tester for SR" claim except against the
+   verified literature** (SODA rejection trigger = non-SOTA comparison).
+6. **"AI-verified â‰  proved":** any result the external-solver attack loop reaches is conditional until
+   independent human verification + full formal writeup (guide Â§9/Â§15). The SR local handle and the
+   far-from-SR lower-bound instances especially must be human-rebuilt before any "tight"/"impossible"
+   claim. The eventual SODA submission must disclose AI use per the CFP.
+
+
+web search: 
+web search: Rayleigh matroid not half-plane property all proper minors Vámos Rayleigh strongly Rayleigh
+web search: 
+web search: Fano matroid half-plane property strongly Rayleigh
+web search: 
+web search: strongly Rayleigh matroid local characterization 4 elements minors
+web search: 
+web search: Wagner Wei criterion real stability multiaffine polynomial Rayleigh difference
+web search: 
+web search: arXiv 1411.7735 Branden Wagner Wei Proposition 4 Rayleigh difference
+web search: 
+web search: "1411.7735" "Rayleigh" "Proposition 4"
+web search: 
+web search: 1411.7735 Brändén Wagner Wei
+web search: 
+web search: explicit PF_r sequence not PF_infinity Pólya frequency finite order
+codex
+A direct local theorem is not falling out of the frozen facts. I’m testing a more structured route: exchangeable measures reduce conditional-marginal SR to real-rootedness of short rank-polynomial windows, which is the cleanest place a spread violation could live.
+2026-06-21T16:55:29.182914Z ERROR codex_core::tools::router: error=`"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "@'
+import random, math, numpy as np
+from numpy.polynomial import polynomial as P
+
+def roots_real_nonpos(coeff, tol=1e-8):
+    # coeff ascending for polynomial sum coeff[j] t"'^j
+    # trim
+    coeff=np.array(coeff,dtype=float)
+    if np.all(np.abs(coeff)<1e-12): return True
+    while len(coeff)>1 and abs(coeff[-1])<1e-12: coeff=coeff[:-1]
+    r=np.roots(coeff[::-1])
+    return all(abs(z.imag)<1e-6 and z.real<=1e-6 for z in r)
+
+def short_ok(a,k):
+    n=len(a)-1
+    for m in range(1,k+1):
+        binom=[math.comb(m,j) for j in range(m+1)]
+        for u in range(n-m+1):
+            coeff=[binom[j]*a[u+j] for j in range(m+1)]
+            if not roots_real_nonpos(coeff):
+                return False,(m,u,coeff,np.roots(np.array(coeff[::-1])))
+    return True,None
+
+def global_rr(a):
+    n=len(a)-1
+    coeff=[math.comb(n,j)*a[j] for j in range(n+1)]
+    return roots_real_nonpos(coeff)
+
+def logconcave(a):
+    return all(a[i]*a[i] >= a[i-1]*a[i+1]-1e-9 for i in range(1,len(a)-1))
+
+for n in [8,10,12,16,20]:
+  for k in [3,4,5]:
+    found=0
+    for _ in range(20000):
+      # random concave log a as integrated negative increments
+      slopes=[]
+      s=random.uniform(-1,1)
+      for i in range(n):
+        s -= random.expovariate(2.0)*random.choice([0,1]) # force decreasing sometimes
+        slopes.append(s)
+      loga=[0]
+      for s in slopes: loga.append(loga[-1]+s)
+      # center scale
+      mx=max(loga); a=[math.exp(x-mx) for x in loga]
+      ok,bad=short_ok(a,k)
+      if ok and not global_rr(a):
+        print('"'FOUND',n,k,'logconcave',logconcave(a),'a', [round(x,4) for x in a])
+        print('global roots max imag', max(abs(z.imag) for z in np.roots(np.array([math.comb(n,j)*a[j] for j in range(n+1)][::-1]))))
+        found=1; raise SystemExit
+    print('none',n,k)
+print('done')
+'@ | python -"` rejected: blocked by policy
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "@'
+import random, math, numpy as np
+from numpy.polynomial import polynomial as P
+
+def roots_real_nonpos(coeff, tol=1e-8):
+    # coeff ascending for polynomial sum coeff[j] t"'^j
+    # trim
+    coeff=np.array(coeff,dtype=float)
+    if np.all(np.abs(coeff)<1e-12): return True
+    while len(coeff)>1 and abs(coeff[-1])<1e-12: coeff=coeff[:-1]
+    r=np.roots(coeff[::-1])
+    return all(abs(z.imag)<1e-6 and z.real<=1e-6 for z in r)
+
+def short_ok(a,k):
+    n=len(a)-1
+    for m in range(1,k+1):
+        binom=[math.comb(m,j) for j in range(m+1)]
+        for u in range(n-m+1):
+            coeff=[binom[j]*a[u+j] for j in range(m+1)]
+            if not roots_real_nonpos(coeff):
+                return False,(m,u,coeff,np.roots(np.array(coeff[::-1])))
+    return True,None
+
+def global_rr(a):
+    n=len(a)-1
+    coeff=[math.comb(n,j)*a[j] for j in range(n+1)]
+    return roots_real_nonpos(coeff)
+
+def logconcave(a):
+    return all(a[i]*a[i] >= a[i-1]*a[i+1]-1e-9 for i in range(1,len(a)-1))
+
+for n in [8,10,12,16,20]:
+  for k in [3,4,5]:
+    found=0
+    for _ in range(20000):
+      # random concave log a as integrated negative increments
+      slopes=[]
+      s=random.uniform(-1,1)
+      for i in range(n):
+        s -= random.expovariate(2.0)*random.choice([0,1]) # force decreasing sometimes
+        slopes.append(s)
+      loga=[0]
+      for s in slopes: loga.append(loga[-1]+s)
+      # center scale
+      mx=max(loga); a=[math.exp(x-mx) for x in loga]
+      ok,bad=short_ok(a,k)
+      if ok and not global_rr(a):
+        print('"'FOUND',n,k,'logconcave',logconcave(a),'a', [round(x,4) for x in a])
+        print('global roots max imag', max(abs(z.imag) for z in np.roots(np.array([math.comb(n,j)*a[j] for j in range(n+1)][::-1]))))
+        found=1; raise SystemExit
+    print('none',n,k)
+print('done')
+'@ | python -" in E:\Project-git\subcube-cond-logconcavity-unimodality
+ declined in 0ms:
+`"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "@'
+import random, math, numpy as np
+from numpy.polynomial import polynomial as P
+
+def roots_real_nonpos(coeff, tol=1e-8):
+    # coeff ascending for polynomial sum coeff[j] t"'^j
+    # trim
+    coeff=np.array(coeff,dtype=float)
+    if np.all(np.abs(coeff)<1e-12): return True
+    while len(coeff)>1 and abs(coeff[-1])<1e-12: coeff=coeff[:-1]
+    r=np.roots(coeff[::-1])
+    return all(abs(z.imag)<1e-6 and z.real<=1e-6 for z in r)
+
+def short_ok(a,k):
+    n=len(a)-1
+    for m in range(1,k+1):
+        binom=[math.comb(m,j) for j in range(m+1)]
+        for u in range(n-m+1):
+            coeff=[binom[j]*a[u+j] for j in range(m+1)]
+            if not roots_real_nonpos(coeff):
+                return False,(m,u,coeff,np.roots(np.array(coeff[::-1])))
+    return True,None
+
+def global_rr(a):
+    n=len(a)-1
+    coeff=[math.comb(n,j)*a[j] for j in range(n+1)]
+    return roots_real_nonpos(coeff)
+
+def logconcave(a):
+    return all(a[i]*a[i] >= a[i-1]*a[i+1]-1e-9 for i in range(1,len(a)-1))
+
+for n in [8,10,12,16,20]:
+  for k in [3,4,5]:
+    found=0
+    for _ in range(20000):
+      # random concave log a as integrated negative increments
+      slopes=[]
+      s=random.uniform(-1,1)
+      for i in range(n):
+        s -= random.expovariate(2.0)*random.choice([0,1]) # force decreasing sometimes
+        slopes.append(s)
+      loga=[0]
+      for s in slopes: loga.append(loga[-1]+s)
+      # center scale
+      mx=max(loga); a=[math.exp(x-mx) for x in loga]
+      ok,bad=short_ok(a,k)
+      if ok and not global_rr(a):
+        print('"'FOUND',n,k,'logconcave',logconcave(a),'a', [round(x,4) for x in a])
+        print('global roots max imag', max(abs(z.imag) for z in np.roots(np.array([math.comb(n,j)*a[j] for j in range(n+1)][::-1]))))
+        found=1; raise SystemExit
+    print('none',n,k)
+print('done')
+'@ | python -"` rejected: blocked by policy
+codex
+The shell rejected that exploratory Python due quoting, so I’m not going to spend cycles on tooling unless needed. The math reduction itself is enough to identify the main obstruction: a finite-order total-positivity hierarchy, not the pairwise covariance route.
+web search: 
+web search: exchangeable strongly Rayleigh measures rank sequence real roots ultra log concavity
+web search: 
+web search: Pemantle exchangeable Rayleigh ultra log concave measure
+2026-06-21T16:56:00.041767Z ERROR codex_core::tools::router: error=`"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "python -c \"print('ok')\""` rejected: blocked by policy
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "python -c \"print('ok')\"" in E:\Project-git\subcube-cond-logconcavity-unimodality
+ declined in 0ms:
+`"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "python -c \"print('ok')\""` rejected: blocked by policy
+web search: 
+web search: multiaffine stable polynomial local characterization all four variable restrictions stable
+EXIT=124

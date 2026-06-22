@@ -1,0 +1,65 @@
+# Round-4 Brief — C1/RED-3 (the make-or-break dichotomy)
+
+> For codex GPT-5.5-xhigh. Builds on rounds 1–3 (`round{1,2,3}_response_C1.md`, `round3_audit_C1.md`).
+> Skeleton = guide §8. Method-agnostic. This brief asks you to resolve a DICHOTOMY — either an upper bound
+> or an impossibility; both are first-rate results.
+
+## 0. Role note
+You originate the math; we referee. Mark proved vs assumed; flag every asserted step; confidence + verdict.
+
+## 1. Verified state (FROZEN — corrected substrate)
+- **SR (strongly Rayleigh) ⇔ `g_μ` real stable ⇔ `Δ_ij(g)=∂_ig∂_jg − g∂_i∂_jg ≥ 0 for ALL real `x∈ℝⁿ`**
+  (NOT just the positive orthant). `Δ_ij≥0` on `ℝ₊ⁿ` only is the WEAKER **Rayleigh** property;
+  **Rayleigh ⊋ SR** (Choe–Wagner math/0307096; Brändén–Wagner–Wei 1411.7735 Prop 4). SR closed under
+  conditioning + marginalization (P1).
+- **N4 (route death — VERIFIED).** Every positive-external-field / Boolean-conditioning **pairwise
+  covariance** statistic certifies only Rayleigh, NOT SR. Witness `μ_4` (`g_4=1+2e_1+2e_2+2e_3+e_4`,
+  symmetric, `a=(1,2,2,2,1)/30`): `Δ_ij>0` on all `ℝ₊⁴` (looks SR to all positive fields & conditionings)
+  but has a complex root ⟹ not real stable ⟹ **not SR**, `d_TV(μ_4,SR)=Ω(1)`. Lift
+  `μ_4×Ber(½)^{⊗(n−4)}` is constant-far and invisible to all positive-field covariances.
+- **N3 (VERIFIED).** Parity `μ_n`=uniform even slice is `Ω(1)`-far from SR, **all proper marginals are
+  uniform-product (SR)** — so any *fixed unconditioned* low-dim marginal-SR test misses it (it is caught
+  only after a *deep* Boolean conditioning, which exposes a non-SR conditional `{i,j}`-marginal).
+- **The new handle (T‴):** test **real-stability of conditional low-dimensional marginals**:
+  `𝒮‴ = { SR-test of μ(X_W | X_T=ρ) : Boolean (T,ρ), |W| ≤ k }` (real-stability of a fixed-size multiaffine
+  polynomial is decidable). `μ_4` is caught by `𝒮‴` (its `O(1)`-bit marginal is non-SR); `μ_n` is caught
+  by `𝒮‴` with deep conditioning (conditional `{i,j}`-marginal non-SR).
+
+## 2. The exact target — RESOLVE THE DICHOTOMY (prove A or construct B)
+**(A) UPPER BOUND — SR is locally testable on conditional marginals.** Prove: there exist `k=O(1)` (or
+`O(log n)`) and `poly(n,1/ε)` such that
+`d_TV(μ, SR) ≥ ε ⟹ ∃ Boolean (T,ρ) and W (|W|≤k) with μ(X_W|X_T=ρ) being Ω(poly(ε,1/n))-far from SR-on-W`,
+where the conditioning event has `≥ 1/poly` probability (so it is SUBCOND-estimable). Then assemble the
+tester (sample conditionings/coordinates, estimate the bounded conditional marginal, run the decidable
+SR-test) + the `poly(n,1/ε)` query bound + CS3 (automatic — it tests SR directly). Give the exponent.
+
+**(B) IMPOSSIBILITY — a family defeating BOTH primitives (RED-3).** Construct an explicit `μ*` that is
+1. **`Ω(1)`- (or `ε`-) far from SR**, AND
+2. **Rayleigh on `ℝ₊ⁿ`** (so invisible to ALL positive-field / Boolean-conditioning pairwise covariances —
+   like `μ_4`), AND
+3. **every `O(1)`- (better `O(log n)`-) dimensional conditional marginal `μ*(X_W|X_T=ρ)` is SR** (so
+   invisible to `𝒮‴` — the real-stability violation is genuinely high-dimensional / "spread", à la `μ_n`).
+Then prove the matching **Yao-minimax indistinguishability**: planted (an SR/near-SR distribution) vs `μ*`
+need `n^{ω(1)}` SUBCOND queries to distinguish. This is the impossibility / super-poly SUBCOND lower bound
+(RED-3). 🔴 A heuristic "such a family should exist" is NOT enough — give the construction and prove 1–3.
+
+**The crux to decide:** can a μ_4-style **off-orthant real-stability violation** be **spread over `Ω(n)`
+coordinates** so NO bounded conditional marginal exposes it? (The `μ_n` parity shows spreading is possible
+for an *on-orthant* violation; (B) asks for the off-orthant analogue.) If YES → (B)/RED-3. If you can prove
+spreading is IMPOSSIBLE (every off-orthant `Δ`-violation forces a bounded-dimensional conditional-marginal
+violation) → (A)/upper bound.
+
+## 3. Candidate routes (inspiration, not mandates)
+(a) For (A): a **local-to-global inequality for real stability** — does an `ℝⁿ`-point `Δ_ij`-violation of
+margin `δ` force a bounded set of coordinates whose conditional marginal is `poly(δ)`-non-SR? (Adapt the
+2502.16355 local-to-global architecture, but to the real-stability functional, not edges.) (b) For (B):
+**parity/affine ⊗ μ_4 hybrids** — plant a `μ_4`-type off-orthant violation in a high-dimensional Fourier
+mode (a random affine subspace) so it is Rayleigh + all small conditional marginals are SR; spectral /
+HDX (entropic independence 2204.02570) to argue indistinguishability. (c) Symmetric/exchangeable families
+(like `μ_4`) lifted by a hidden random subspace.
+
+## 4. What we need back
+(1) a proof of (A) — the local-testability inequality + the tester + exponent + CS3; OR (2) the explicit
+(B) family with proofs of 1–3 + the indistinguishability/lower bound; (3) if neither closes, the sharpest
+partial (e.g. (A) for `k=O(1)` failing but `O(log n)` open, or a near-(B) family missing one property),
+with the exact obstruction; (4) updated confidence + verdict.

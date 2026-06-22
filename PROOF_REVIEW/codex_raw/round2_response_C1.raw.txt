@@ -1,0 +1,325 @@
+Reading additional input from stdin...
+OpenAI Codex v0.141.0
+--------
+workdir: E:\Project-git\subcube-cond-logconcavity-unimodality
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: xhigh
+reasoning summaries: none
+session id: 019eead4-944e-7db1-a68c-cc242dca7272
+--------
+user
+You are an expert in sublinear distribution testing, real-stable / strongly Rayleigh polynomials, isoperimetric (Talagrand/local-to-global) inequalities, and high-dimensional expanders. Solve the research problem in the brief on stdin. PURE MATH: do NOT read files or run shell commands. First sanity-check the two given facts P5 (the corrected external-field identity) and P6 (SUBCOND estimability of tilted covariances) by re-deriving them; then attack the main target (T) the robust external-field witness-localization theorem: either PROVE it (and assemble the poly(n,1/eps) SUBCOND SR tester + upper bound + CS3 soundness) or REFUTE it with an explicit non-localizable eps-far family. Mark proved vs assumed; flag every asserted step; give the exponent in n and 1/eps if you get a tester; honest confidence % and verdict.
+
+<stdin>
+# Round-2 Brief — C1 (the external-field witness-localization theorem)
+
+> **STATUS: DRAFT, to send to codex GPT-5.5-xhigh after round-1 C2 is logged.** Builds on round 1
+> (`round1_response_C1.md` + `round1_audit_C1.md`). Skeleton = guide §8 (freeze FACTS, free METHODS).
+> Method-agnostic: routes below are *candidate inspiration*, not mandates.
+
+## 0. Role note
+You originate the math; we referee via independent audits. Mark proved vs assumed; flag every asserted
+step; give an updated confidence. "AI-verified ≠ proved."
+
+## 1. Round-1 recap (what is now FROZEN, and the one corrected fact)
+- **Handle `P5` (REFEREE-VERIFIED — use freely).** For the external-field tilt `μ^λ`
+  (`μ^λ(S) ∝ μ(S)∏_{i∈S}λ_i`, `λ∈ℝ₊ⁿ`):
+  **`Cov_{μ^λ}(X_i,X_j) = −(λ_iλ_j / g(λ)²)·Δ_{ij}(g)(λ)`**, where `Δ_{ij}(g)=∂_i g·∂_j g − g·∂_i∂_j g`.
+  Hence `Δ_{ij}(g)(λ)≥0 ⇔ Cov_{μ^λ}(X_i,X_j)≤0`, and `V(μ)=sup_{i<j,λ∈ℝ₊ⁿ}(Cov_{μ^λ}(X_i,X_j))₊` obeys
+  **`V(μ)=0 ⇔ μ SR`**. 🔴 NOTE the `1/(λ_iλ_j)` factor (your round-1 reply dropped it); it is harmless to
+  the *sign* but **load-bearing for any quantitative `poly(ε,1/n)` bound**.
+- **Estimability `P6` (correct in principle; the poly-query realization is the open problem).** A round-1
+  audit refuted the claim that SUBCOND can't reach external-field tilts. In fact `Cov_{μ^λ}(X_i,X_j)` is
+  computable **without sampling `μ^λ`**: with `B=[n]∖{i,j}`, SUBCOND fixes `X_B=t` (Boolean) and estimates
+  `q_t(a,b)=P_μ(X_i{=}a,X_j{=}b|X_B{=}t)` and `P_μ(X_B{=}t)`; the tilt is **deterministic post-processing**
+  (`P_{μ^λ}(X_i{=}a,X_j{=}b,X_B{=}t) ∝ λ_i^aλ_j^bλ_B(t)P_μ(X_B{=}t)q_t(a,b)`). **No rejection sampling.**
+  🔴 BUT naively this sums over **exp-many** `t∈{0,1}^B` and the λ-multipliers cause variance blowup — so a
+  *naive* estimator is `exp(n)`-query. Making it `poly(n)` is exactly the crux below.
+
+## 2. The exact target (the make-or-break theorem)
+Prove or refute, and if proved assemble the tester:
+> **(T) Robust external-field witness-localization.** There is a `poly(ε,1/n)` function `ρ` and a
+> `poly(n,1/ε)`-size, efficiently-enumerable family `Λ ⊆ ℝ₊ⁿ` of **bounded-support / bounded-magnitude /
+> low-dimensional** external fields such that:
+> `d_TV(μ, SR) ≥ ε ⟹ ∃ i≠j, ∃ λ∈Λ with Cov_{μ^λ}(X_i,X_j) ≥ ρ(ε,1/n)`,
+> and for every such `λ∈Λ`, `Cov_{μ^λ}(X_i,X_j)` is **`poly(n,1/ε)`-SUBCOND-estimable to additive
+> error ≪ ρ** (the `t`-reweighting collapses to poly — e.g. because `λ` has `O(1)`/`O(log n)` non-unit
+> coordinates, or because random restriction makes the conditional near-product).
+- **If (T) holds:** assemble Theorem A.2 — the tester estimates `max_{i,j,λ∈Λ} Cov_{μ^λ}(X_i,X_j)` and
+  rejects iff it exceeds `~ρ/2`; prove completeness (SR ⇒ all ≤0) + soundness (ε-far ⇒ some ≥ρ) + the
+  `poly(n,1/ε)` query bound. **CS3 is automatic**: the handle certifies *SR*, not pairwise/NA, because a
+  non-SR but NA distribution still has some `Δ_{ij}(λ)<0`, i.e. some tilted positive covariance in `Λ`.
+- **If (T) is FALSE** (no poly-size localized witness family can exist): that is itself decisive — it
+  pushes toward the impossibility / lower-bound resolution. **Prove the non-localizability** (e.g. a family
+  of ε-far-from-SR `μ` whose only witnesses require `λ` with `ω(log n)` non-unit coordinates / exp-small
+  estimable signal). 🔴 A heuristic "seems hard to localize" is NOT a refutation — give a construction.
+
+## 3. Frozen substrate `P*`
+P-SR, P1, P2, P3, P-Oracle (as round 1); **P5** (above, verified); **P6** (above, in-principle, poly-query
+OPEN); engines 2502.16355 / 2408.02347 (adapt, do not transfer). C0 lean (low-order pairwise/triple
+statistics do NOT separate — consistent with needing genuine interior fields, not just Boolean vertices).
+
+## 4. Refuted routes `N*`
+- **N1 (refuted obstruction):** "SUBCOND cannot estimate external-field-tilted covariances" — FALSE (P6).
+  Do not re-assert it; the open issue is *poly-query localization*, not reachability.
+- **N2 (unsound):** any tester certifying only pairwise / conditional-pairwise(Boolean) / marginal / NA
+  statistics — accepts NA-but-not-SR (CS3 / C0 F2). The witness must range over genuine interior fields `Λ`.
+
+## 5. Candidate routes (INSPIRATION, not mandates)
+(a) **Adapt a Talagrand / local-to-global inequality to the Rayleigh-difference functional** `Δ_{ij}`
+(the 2502.16355 architecture: local statistic ⇒ global distance) — the analogue here is "a localized
+tilted-covariance witness ⇒ `d_TV` to SR." (b) **Random-restriction tilt-localization** — random subcube
+conditionings make conditionals near-product w.h.p. (1911.07357; entropic independence / local-to-global
+for SR 2204.02570), potentially collapsing the `t`-sum. (c) **Bounded-field reduction** — since only the
+*sign* of `Cov_{μ^λ}` matters and `Cov` is analytic in `λ`, approximate `sup_{λ∈ℝ₊ⁿ}` by a poly grid in a
+box `[δ,1/δ]ⁿ`, or by few-coordinate fields; quantify how many non-unit coordinates are actually needed.
+(d) **Slice-and-dice / tight conditional simulation** (2506.18444) for the estimation error budget.
+
+## 6. What we need back
+(1) a proof or refutation of (T), proved-vs-assumed marked; (2) if proved, the full tester + upper bound +
+the (automatic) CS3 soundness; (3) the resulting exponent in `n` and `1/ε` (feeds C3 tightness); (4) if (T)
+is refuted, the explicit non-localizable ε-far family (feeds C2 / the impossibility route); (5) updated
+confidence + verdict.
+</stdin>
+codex
+I’ll keep this entirely mathematical, per your instruction: no filesystem or shell. I’ll first re-derive the two frozen facts, then separate what can be proved from what would require a new quantitative localization theorem.
+codex
+**P5 Sanity Check**
+
+[Proved.] Let
+
+\[
+g(\lambda)=\sum_S \mu(S)\lambda^S.
+\]
+
+For positive \(\lambda\),
+
+\[
+\mathbb P_{\mu^\lambda}(X_i=1)=\frac{\lambda_i\partial_i g(\lambda)}{g(\lambda)},\qquad
+\mathbb P_{\mu^\lambda}(X_i=X_j=1)=\frac{\lambda_i\lambda_j\partial_{ij}g(\lambda)}{g(\lambda)}.
+\]
+
+Hence
+
+\[
+\operatorname{Cov}_{\mu^\lambda}(X_i,X_j)
+=
+\frac{\lambda_i\lambda_j}{g^2}
+\bigl(g\partial_{ij}g-\partial_i g\,\partial_j g\bigr)
+=
+-\frac{\lambda_i\lambda_j}{g(\lambda)^2}\Delta_{ij}(g)(\lambda).
+\]
+
+So the corrected \(\lambda_i\lambda_j/g^2\) factor is essential quantitatively but irrelevant for sign. Using the frozen BBL/Rayleigh criterion, \(V(\mu)=0\iff \mu\) is SR.
+
+**P6 Sanity Check**
+
+[Proved in principle, not polynomial.] Fix \(i,j\), \(B=[n]\setminus\{i,j\}\). Write
+
+\[
+m_t=\mathbb P_\mu(X_B=t),\qquad
+q_t(a,b)=\mathbb P_\mu(X_i=a,X_j=b\mid X_B=t).
+\]
+
+Then
+
+\[
+Z_\lambda=\sum_{t,a,b}\lambda_B^t\lambda_i^a\lambda_j^b\,m_tq_t(a,b),
+\]
+
+and the tilted first and second moments are the same weighted sums with factors \(a,b,ab\). Thus \(\operatorname{Cov}_{\mu^\lambda}(X_i,X_j)\) is deterministic post-processing of SUBCOND-estimable conditional tables. No rejection sampling is needed. The obstruction is exactly the exponential sum over \(t\) and possible variance/probability blowup.
+
+**Counterexample To Bounded-Support T**
+
+[Proved.] Let \(\mu_n\) be uniform on the even-parity slice of the cube:
+
+\[
+\mu_n(x)=2^{-(n-1)}\mathbf 1\{\sum_i x_i\equiv 0\pmod 2\}.
+\]
+
+Its generating polynomial is
+
+\[
+g_n(z)=2^{-n}\left(\prod_i(1+z_i)+\prod_i(1-z_i)\right).
+\]
+
+Key facts:
+
+[Proved.] Every proper marginal of \(\mu_n\) is uniform product. Any assignment on \(C\subsetneq[n]\) has exactly \(2^{n-|C|-1}\) even-parity extensions.
+
+[Proved.] Therefore if \(\lambda\) has non-unit support \(A=\{k:\lambda_k\neq 1\}\), then for pair \(i,j\), if
+
+\[
+A\cup\{i,j\}\neq[n],
+\]
+
+the tilted marginal on \(A\cup\{i,j\}\) is still product after reweighting. Hence
+
+\[
+\operatorname{Cov}_{\mu_n^\lambda}(X_i,X_j)=0.
+\]
+
+In particular, every external field with \(|A|\le n-3\) gives zero covariance for every pair. Thus any \(O(1)\), \(O(\log n)\), or generally \(o(n)\)-support witness family misses \(\mu_n\) completely.
+
+[Proved.] \(\mu_n\) is nevertheless constant-far from SR. Fix pair \(1,2\), condition on \(B=\{3,\dots,n\}\). For every even-parity \(t\), \(\mu_n\) puts mass \(a=2^{-(n-1)}\) on each of \((00,t)\), \((11,t)\), and zero on \((01,t),(10,t)\). For any SR \(\nu\), closure under conditioning and negative correlation imply, on each such face,
+
+\[
+\nu(00,t)\nu(11,t)\le \nu(01,t)\nu(10,t).
+\]
+
+The \(L_1\) distance from \((a,0,0,a)\) to any nonnegative table satisfying \(uz\le vw\) is at least \(a\). There are \(2^{n-3}\) such even \(t\), so
+
+\[
+\|\mu_n-\nu\|_1\ge 2^{n-3}2^{-(n-1)}=\frac14,
+\qquad
+d_{\mathrm{TV}}(\mu_n,\nu)\ge \frac18.
+\]
+
+Thus \(\mu_n\) is \(1/8\)-far from SR.
+
+The full-support witness exists, as P5 requires. If
+
+\[
+r_k=\frac{1-\lambda_k}{1+\lambda_k},\qquad R=\prod_k r_k,
+\]
+
+then for even parity,
+
+\[
+\operatorname{Cov}_{\mu_n^\lambda}(X_i,X_j)
+=
+\frac{(1-r_i^2)(1-r_j^2)}{4(1+R)^2}
+\prod_{k\ne i,j}r_k.
+\]
+
+Taking \(\lambda_i=\lambda_j=1\) and \(\lambda_k=\delta=1/n^2\) for \(k\ne i,j\) gives covariance \(\approx 1/4\), but it uses exactly \(n-2\) non-unit coordinates.
+
+**Verdict**
+
+(T) is false under the intended bounded-support/localized interpretation. The explicit family \(\mu_n\) is \(1/8\)-far from SR, yet every field with fewer than \(n-2\) non-unit coordinates has zero tilted pair covariance. So no poly-size \(O(\log n)\)-support localized family can satisfy the claimed robust witness theorem.
+
+This does not refute a different theorem allowing full-support but low-parametric fields; parity is actually caught by a one-parameter full-support tilt. I do not have a proof or refutation of that broader variant here.
+
+No tester/exponent follows from (T), because the stated localization route fails. Confidence: 95% in the derivations and counterexample; 85% that this refutes the intended target as written.
+tokens used
+15,942
+**P5 Sanity Check**
+
+[Proved.] Let
+
+\[
+g(\lambda)=\sum_S \mu(S)\lambda^S.
+\]
+
+For positive \(\lambda\),
+
+\[
+\mathbb P_{\mu^\lambda}(X_i=1)=\frac{\lambda_i\partial_i g(\lambda)}{g(\lambda)},\qquad
+\mathbb P_{\mu^\lambda}(X_i=X_j=1)=\frac{\lambda_i\lambda_j\partial_{ij}g(\lambda)}{g(\lambda)}.
+\]
+
+Hence
+
+\[
+\operatorname{Cov}_{\mu^\lambda}(X_i,X_j)
+=
+\frac{\lambda_i\lambda_j}{g^2}
+\bigl(g\partial_{ij}g-\partial_i g\,\partial_j g\bigr)
+=
+-\frac{\lambda_i\lambda_j}{g(\lambda)^2}\Delta_{ij}(g)(\lambda).
+\]
+
+So the corrected \(\lambda_i\lambda_j/g^2\) factor is essential quantitatively but irrelevant for sign. Using the frozen BBL/Rayleigh criterion, \(V(\mu)=0\iff \mu\) is SR.
+
+**P6 Sanity Check**
+
+[Proved in principle, not polynomial.] Fix \(i,j\), \(B=[n]\setminus\{i,j\}\). Write
+
+\[
+m_t=\mathbb P_\mu(X_B=t),\qquad
+q_t(a,b)=\mathbb P_\mu(X_i=a,X_j=b\mid X_B=t).
+\]
+
+Then
+
+\[
+Z_\lambda=\sum_{t,a,b}\lambda_B^t\lambda_i^a\lambda_j^b\,m_tq_t(a,b),
+\]
+
+and the tilted first and second moments are the same weighted sums with factors \(a,b,ab\). Thus \(\operatorname{Cov}_{\mu^\lambda}(X_i,X_j)\) is deterministic post-processing of SUBCOND-estimable conditional tables. No rejection sampling is needed. The obstruction is exactly the exponential sum over \(t\) and possible variance/probability blowup.
+
+**Counterexample To Bounded-Support T**
+
+[Proved.] Let \(\mu_n\) be uniform on the even-parity slice of the cube:
+
+\[
+\mu_n(x)=2^{-(n-1)}\mathbf 1\{\sum_i x_i\equiv 0\pmod 2\}.
+\]
+
+Its generating polynomial is
+
+\[
+g_n(z)=2^{-n}\left(\prod_i(1+z_i)+\prod_i(1-z_i)\right).
+\]
+
+Key facts:
+
+[Proved.] Every proper marginal of \(\mu_n\) is uniform product. Any assignment on \(C\subsetneq[n]\) has exactly \(2^{n-|C|-1}\) even-parity extensions.
+
+[Proved.] Therefore if \(\lambda\) has non-unit support \(A=\{k:\lambda_k\neq 1\}\), then for pair \(i,j\), if
+
+\[
+A\cup\{i,j\}\neq[n],
+\]
+
+the tilted marginal on \(A\cup\{i,j\}\) is still product after reweighting. Hence
+
+\[
+\operatorname{Cov}_{\mu_n^\lambda}(X_i,X_j)=0.
+\]
+
+In particular, every external field with \(|A|\le n-3\) gives zero covariance for every pair. Thus any \(O(1)\), \(O(\log n)\), or generally \(o(n)\)-support witness family misses \(\mu_n\) completely.
+
+[Proved.] \(\mu_n\) is nevertheless constant-far from SR. Fix pair \(1,2\), condition on \(B=\{3,\dots,n\}\). For every even-parity \(t\), \(\mu_n\) puts mass \(a=2^{-(n-1)}\) on each of \((00,t)\), \((11,t)\), and zero on \((01,t),(10,t)\). For any SR \(\nu\), closure under conditioning and negative correlation imply, on each such face,
+
+\[
+\nu(00,t)\nu(11,t)\le \nu(01,t)\nu(10,t).
+\]
+
+The \(L_1\) distance from \((a,0,0,a)\) to any nonnegative table satisfying \(uz\le vw\) is at least \(a\). There are \(2^{n-3}\) such even \(t\), so
+
+\[
+\|\mu_n-\nu\|_1\ge 2^{n-3}2^{-(n-1)}=\frac14,
+\qquad
+d_{\mathrm{TV}}(\mu_n,\nu)\ge \frac18.
+\]
+
+Thus \(\mu_n\) is \(1/8\)-far from SR.
+
+The full-support witness exists, as P5 requires. If
+
+\[
+r_k=\frac{1-\lambda_k}{1+\lambda_k},\qquad R=\prod_k r_k,
+\]
+
+then for even parity,
+
+\[
+\operatorname{Cov}_{\mu_n^\lambda}(X_i,X_j)
+=
+\frac{(1-r_i^2)(1-r_j^2)}{4(1+R)^2}
+\prod_{k\ne i,j}r_k.
+\]
+
+Taking \(\lambda_i=\lambda_j=1\) and \(\lambda_k=\delta=1/n^2\) for \(k\ne i,j\) gives covariance \(\approx 1/4\), but it uses exactly \(n-2\) non-unit coordinates.
+
+**Verdict**
+
+(T) is false under the intended bounded-support/localized interpretation. The explicit family \(\mu_n\) is \(1/8\)-far from SR, yet every field with fewer than \(n-2\) non-unit coordinates has zero tilted pair covariance. So no poly-size \(O(\log n)\)-support localized family can satisfy the claimed robust witness theorem.
+
+This does not refute a different theorem allowing full-support but low-parametric fields; parity is actually caught by a one-parameter full-support tilt. I do not have a proof or refutation of that broader variant here.
+
+No tester/exponent follows from (T), because the stated localization route fails. Confidence: 95% in the derivations and counterexample; 85% that this refutes the intended target as written.

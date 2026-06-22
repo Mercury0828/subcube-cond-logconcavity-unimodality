@@ -1,0 +1,299 @@
+Reading additional input from stdin...
+OpenAI Codex v0.141.0
+--------
+workdir: E:\Project-git\subcube-cond-logconcavity-unimodality
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: xhigh
+reasoning summaries: none
+session id: 019eeaca-deae-79b3-84f9-ffdf4ae7d964
+--------
+user
+You are an expert in sublinear distribution testing, communication/query lower bounds, Yao's minimax, and the theory of real-stable / strongly Rayleigh (SR) polynomials. Solve the research problem in the brief provided on stdin. PURE MATHEMATICS task: do NOT read files or run shell commands — reason and write your result directly. Deliverables: (1) a planted (SR/near-SR) vs far ensemble pair with every 'far' instance PROVABLY ε-far from SR (state which distance certificate: pairwise-positive-correlation margin via Lipschitz, or a Rayleigh-difference violation margin), (2) an indistinguishability proof under ADAPTIVE subcube-conditional queries giving the Ω̃(·) lower bound, (3) the resulting exponent and whether it matches a plausible Õ upper bound (tight) or leaves a gap — label honestly, (4) confirm the hardness comes from SR-membership, NOT from merely re-deriving the known product/equivalence Ω(√n/ε²) bound, (5) honest confidence % and verdict. Flag every step asserted but not proved.
+
+<stdin>
+# Round-1 Brief — C2 (the matching lower bound; Yao-minimax planted-vs-uniform)
+
+> **STATUS: WRITTEN, NOT SENT.** For codex GPT-5.5-xhigh → web GPT-5.5-Pro. Run in the NEXT session after
+> the human gate. C2 runs **in parallel** with C1 (guide §7): the hard instances reveal what a tester must
+> detect and often inform the upper bound. Skeleton = guide §8. Method-agnostic.
+
+## 0. Role note
+You originate the construction + the indistinguishability proof; we referee via independent audits. State
+proved vs assumed; "AI-verified ≠ proved."
+
+## 1. The exact target
+Produce a **lower bound** on the SUBCOND query complexity of testing strong Rayleigh-ness on `{0,1}^n`
+that, ideally, **matches** the C1 upper bound (making the characterization TIGHT). Concretely (Yao's
+minimax): two distributions over instances,
+- a **planted/SR ensemble** `D_yes` supported on (or close to) SR distributions, and
+- a **far ensemble** `D_no` supported on distributions **provably ε-far from SR** (ℓ₁/TV),
+
+such that **every** (possibly adaptive) SUBCOND tester making `q` queries has
+`|Pr[accept | D_yes] − Pr[accept | D_no]| < 1/3` unless `q = Ω̃(·)`. **Done =** the construction + the
+indistinguishability argument under *subcube-conditional* (not merely i.i.d.) queries + the matching-
+exponent confirmation against C1, audited clean.
+
+🔴 **Rigor bar (pre-committed, guide §6 C2):** a **matching** lower bound is the contribution. A **loose**
+lower bound (exponent below C1's upper bound) is a strictly weaker result and must be **labeled a gap, NOT
+"tight"** (§4 YELLOW-b, §5 C3) — never relabel an `n`-vs-`√n` gap as a dichotomy.
+
+## 2. The #1 audit check this construction must survive (state your defense up front)
+**Every instance in `D_no` must be PROVABLY ε-far from the SR set.** A planted "far" instance that is
+secretly near-SR proves nothing (guide §9). Distance-to-SR is **not** obviously tractable (do NOT claim
+exact projection). Acceptable certifications of ε-far (use one, state which):
+- **(margin via a necessary condition)** exhibit a *necessary* SR condition violated by margin `δ` and a
+  Lipschitz bound giving `dist₁(·,SR) ≥ δ/c` — e.g. **pairwise positive correlation** `Cov(x_i,x_j)=δ>0`
+  ⇒ `dist₁ ≥ δ/3` (since SR⇒NA⇒Cov≤0, and Cov is 3-Lipschitz in ℓ₁; this project's Lemma C0-L1), or a
+  **Rayleigh-difference violation** `Δ_{ij}(x*)=−δ<0` at a fixed `x*` ⇒ `dist₁ ≥ δ/L(x*)` (Lemma C0-L2,
+  `L(x*)` explicit). These are confirmed-substrate routes.
+- Any other *proven* ℓ₁-distance lower bound to SR.
+
+## 3. Frozen substrate — `P*` (same as the C1 brief; abbreviated)
+- **P-SR / P1 / P2 / P3** as in `round1_brief_C1.md` (SR ⇔ `g_μ` real stable; closure under subcube
+  conditioning; SR⇒NA, NA necessary-not-sufficient; Rayleigh-difference is global-analytic not local).
+- **P-Oracle (SUBCOND)** as in the C1 brief.
+- **P-Engine (lower-bound toolkit to ADAPT).** 2502.16355 proves SUBCOND **lower bounds** for
+  monotonicity (`Ω̃(n/ε²)`) and monotone-uniformity (`Ω̃(√n/ε²)`) — study its planted-vs-uniform /
+  indistinguishability machinery under subcube conditioning as a *template*, not a transferring theorem.
+  2008.03650 gives the i.i.d. DPP lower bound `Ω(2^{n/2}/ε²)` (B1) — note SUBCOND **escapes** it, so the
+  i.i.d. construction does NOT transfer; the hard SUBCOND instances must defeat *conditional* access.
+- **P-C0 (hard family seed).** This project's C0 surfaced **F2** = pairwise-negatively-correlated **non-SR**
+  distributions whose real-stability failures are **interior** to `ℝ₊^n` and are **invisible to low-order
+  conditional pairwise statistics** (see `docs/ledger_sr_subcond.md §7`). 🔴 **This is a natural seed for
+  `D_no`:** instances that look SR to every low-order SUBCOND statistic but are certifiably ε-far. Use /
+  scale up this family (it is a *lean*, not a theorem — re-derive any property you rely on).
+
+## 4. Barriers / cautions
+- **B1**: do not reuse the i.i.d. DPP lower bound — SUBCOND defeats it; you must force queries to be
+  *conditional* and still fail.
+- 🔴 **Scoop-overlap caution (from the literature scan):** ensure the lower bound is genuinely for **SR
+  testing**, not merely re-deriving the known product/equivalence SUBCOND lower bound `Ω(√n/ε²)`
+  (2408.02347) on a sub-instance — a referee will reject "you only re-proved the product bound." The
+  hard instances must be hard **because of SR-membership**, not because of a coarser property.
+
+## 5. The open question (method-agnostic)
+**Construct planted (SR/near-SR) vs far-from-SR ensembles, indistinguishable to any `poly`-query SUBCOND
+tester below the target exponent, with every `D_no` instance PROVABLY ε-far from SR; match the C1 upper
+bound to make the characterization tight. If the true complexity is `Θ̃(√n)` (SR cheaper than monotonicity
+via NA) or a genuine variant dichotomy, pin which (feeds C3).** Any route.
+
+## 6. What we need back
+(1) the two ensembles + the ε-far certification for `D_no` (which Lemma/route, with the margin); (2) the
+indistinguishability proof under adaptive *subcube-conditional* queries; (3) the resulting exponent and
+whether it matches C1 (tight) or leaves a gap (label honestly); (4) updated confidence + verdict.
+</stdin>
+codex
+I’ll reason directly from the brief and keep the line between proved statements and proposed-but-unproved steps explicit. Since this is a pure math request, I’m not touching the workspace or running commands.
+ERROR: Reconnecting... 2/5
+ERROR: Reconnecting... 3/5
+ERROR: Reconnecting... 4/5
+ERROR: Reconnecting... 5/5
+warning: Falling back from WebSockets to HTTPS transport. stream disconnected before completion: idle timeout waiting for websocket
+codex
+I cannot honestly claim the matching C2 lower bound from the brief. The clean construction I can certify gives only a logarithmic-in-`n` lower bound, not the desired `n` or `√n` exponent. So the verdict is: **valid weak SR-membership lower bound; not a solution to the matching problem.**
+
+**Certified Ensemble**
+
+Work with `s_i = 2x_i - 1 ∈ {±1}`.
+
+`D_yes`: the uniform product distribution `U_n`. This is SR.
+
+`D_no`: choose a hidden unordered pair `e={a,b}` uniformly from `binom(n,2)`. Define
+
+\[
+\mu_e(s)=2^{-n}(1+\rho s_a s_b),
+\]
+
+with `0 < ρ ≤ 1/2`. Equivalently, on the hidden pair,
+
+\[
+P(00)=P(11)=\frac{1+\rho}{4},\qquad
+P(01)=P(10)=\frac{1-\rho}{4},
+\]
+
+and all other coordinates are independent fair bits.
+
+For every fixed `e`,
+
+\[
+\operatorname{Cov}_{\mu_e}(X_a,X_b)=\frac{\rho}{4}>0.
+\]
+
+Since SR implies negative association, hence all pairwise covariances are `≤0`, Lemma C0-L1 gives
+
+\[
+\operatorname{dist}_1(\mu_e,\mathrm{SR}) \ge \frac{1}{3}\cdot \frac{\rho}{4}=\frac{\rho}{12}.
+\]
+
+Set `ρ = 12ε` for small enough `ε`, say `ε ≤ 1/24`. Then every `D_no` instance is **ε-far from SR in ℓ₁**, certified by the **pairwise-positive-correlation Lipschitz margin**.
+
+**Adaptive SUBCOND Indistinguishability**
+
+For a subcube query with free set `R` and fixed set `F`, under hidden edge `e={a,b}`:
+
+- if `e ⊆ F`, the conditional sample over `R` is uniform;
+- if exactly one endpoint is free, the free endpoint has a `±ρ` bias;
+- if both endpoints are free, the two free endpoints have correlation `ρ`.
+
+Thus each query exposes at most one character of the hidden edge: a singleton character or a pair character.
+
+For a deterministic adaptive tester, compare transcript laws under `U_n` and the mixture over hidden `e`. Under the null transcript measure, each query induces a partition of the `N=binom(n,2)` possible hidden edges into character classes. Every non-null class has size at most `n`: crossing edges sharing the same free endpoint are the largest classes.
+
+A standard adaptive collision/χ² argument gives
+
+\[
+\chi^2(\mathsf{Trans}_{D_no},\mathsf{Trans}_{D_yes})
+\le
+\frac{2}{n-1}\bigl((1+\rho^2)^q-1\bigr).
+\]
+
+Sketch of the proof: for two independent hidden edges `e,e'`, the likelihood-ratio second moment only grows on queries where `e` and `e'` induce the same non-null character. For any nonempty set of query times, conditioned on the null transcript, the probability of simultaneous collision is at most `n / binom(n,2) ≤ 2/(n-1)`. Expanding the product yields the displayed bound. This handles adaptivity because the query partitions are fixed after conditioning on the null transcript.
+
+Therefore, if
+
+\[
+q \le c \frac{\log n}{\rho^2},
+\]
+
+the transcript total variation is `<1/3`. With `ρ=Θ(ε)`, this gives
+
+\[
+q = \Omega\!\left(\frac{\log n}{\epsilon^2}\right).
+\]
+
+**Exponent / Tightness**
+
+The certified exponent is only
+
+\[
+\widetilde{\Omega}(n^0/\epsilon^2)
+\]
+
+with a `log n` factor. This **does not match** any plausible `\widetilde O(\sqrt n/\epsilon^2)` or `\widetilde O(n/\epsilon^2)` C1-style upper bound. It leaves a polynomial gap and must not be called tight.
+
+**Not Just Product/Equivalence**
+
+This is not a re-derivation of the known product/equivalence `Ω(√n/ε²)` lower bound. The no-instances are rejected specifically because they violate a necessary SR condition: a hidden pair has positive covariance. The distance certificate is distance to SR, not distance to product. That said, the construction is too simple to prove the desired matching SR-membership hardness.
+
+**What Remains Unproved**
+
+A matching construction would need either:
+
+1. many weak SR violations whose aggregate distance to SR is provably `Ω(ε)`, or  
+2. an interior Rayleigh-difference violation hidden from low-dimensional subcube conditionals.
+
+I do not have a proved far-from-SR tensorization lemma for such candidates. That is the main missing step.
+
+**Confidence / Verdict**
+
+Confidence in the weak construction and `Ω(log n/ε²)` lower bound: **85%**.
+
+Confidence that this solves the C2 matching problem: **0%**.
+
+Verdict: **valid audited lower-bound seed, but not the requested matching result.**
+tokens used
+27,389
+I cannot honestly claim the matching C2 lower bound from the brief. The clean construction I can certify gives only a logarithmic-in-`n` lower bound, not the desired `n` or `√n` exponent. So the verdict is: **valid weak SR-membership lower bound; not a solution to the matching problem.**
+
+**Certified Ensemble**
+
+Work with `s_i = 2x_i - 1 ∈ {±1}`.
+
+`D_yes`: the uniform product distribution `U_n`. This is SR.
+
+`D_no`: choose a hidden unordered pair `e={a,b}` uniformly from `binom(n,2)`. Define
+
+\[
+\mu_e(s)=2^{-n}(1+\rho s_a s_b),
+\]
+
+with `0 < ρ ≤ 1/2`. Equivalently, on the hidden pair,
+
+\[
+P(00)=P(11)=\frac{1+\rho}{4},\qquad
+P(01)=P(10)=\frac{1-\rho}{4},
+\]
+
+and all other coordinates are independent fair bits.
+
+For every fixed `e`,
+
+\[
+\operatorname{Cov}_{\mu_e}(X_a,X_b)=\frac{\rho}{4}>0.
+\]
+
+Since SR implies negative association, hence all pairwise covariances are `≤0`, Lemma C0-L1 gives
+
+\[
+\operatorname{dist}_1(\mu_e,\mathrm{SR}) \ge \frac{1}{3}\cdot \frac{\rho}{4}=\frac{\rho}{12}.
+\]
+
+Set `ρ = 12ε` for small enough `ε`, say `ε ≤ 1/24`. Then every `D_no` instance is **ε-far from SR in ℓ₁**, certified by the **pairwise-positive-correlation Lipschitz margin**.
+
+**Adaptive SUBCOND Indistinguishability**
+
+For a subcube query with free set `R` and fixed set `F`, under hidden edge `e={a,b}`:
+
+- if `e ⊆ F`, the conditional sample over `R` is uniform;
+- if exactly one endpoint is free, the free endpoint has a `±ρ` bias;
+- if both endpoints are free, the two free endpoints have correlation `ρ`.
+
+Thus each query exposes at most one character of the hidden edge: a singleton character or a pair character.
+
+For a deterministic adaptive tester, compare transcript laws under `U_n` and the mixture over hidden `e`. Under the null transcript measure, each query induces a partition of the `N=binom(n,2)` possible hidden edges into character classes. Every non-null class has size at most `n`: crossing edges sharing the same free endpoint are the largest classes.
+
+A standard adaptive collision/χ² argument gives
+
+\[
+\chi^2(\mathsf{Trans}_{D_no},\mathsf{Trans}_{D_yes})
+\le
+\frac{2}{n-1}\bigl((1+\rho^2)^q-1\bigr).
+\]
+
+Sketch of the proof: for two independent hidden edges `e,e'`, the likelihood-ratio second moment only grows on queries where `e` and `e'` induce the same non-null character. For any nonempty set of query times, conditioned on the null transcript, the probability of simultaneous collision is at most `n / binom(n,2) ≤ 2/(n-1)`. Expanding the product yields the displayed bound. This handles adaptivity because the query partitions are fixed after conditioning on the null transcript.
+
+Therefore, if
+
+\[
+q \le c \frac{\log n}{\rho^2},
+\]
+
+the transcript total variation is `<1/3`. With `ρ=Θ(ε)`, this gives
+
+\[
+q = \Omega\!\left(\frac{\log n}{\epsilon^2}\right).
+\]
+
+**Exponent / Tightness**
+
+The certified exponent is only
+
+\[
+\widetilde{\Omega}(n^0/\epsilon^2)
+\]
+
+with a `log n` factor. This **does not match** any plausible `\widetilde O(\sqrt n/\epsilon^2)` or `\widetilde O(n/\epsilon^2)` C1-style upper bound. It leaves a polynomial gap and must not be called tight.
+
+**Not Just Product/Equivalence**
+
+This is not a re-derivation of the known product/equivalence `Ω(√n/ε²)` lower bound. The no-instances are rejected specifically because they violate a necessary SR condition: a hidden pair has positive covariance. The distance certificate is distance to SR, not distance to product. That said, the construction is too simple to prove the desired matching SR-membership hardness.
+
+**What Remains Unproved**
+
+A matching construction would need either:
+
+1. many weak SR violations whose aggregate distance to SR is provably `Ω(ε)`, or  
+2. an interior Rayleigh-difference violation hidden from low-dimensional subcube conditionals.
+
+I do not have a proved far-from-SR tensorization lemma for such candidates. That is the main missing step.
+
+**Confidence / Verdict**
+
+Confidence in the weak construction and `Ω(log n/ε²)` lower bound: **85%**.
+
+Confidence that this solves the C2 matching problem: **0%**.
+
+Verdict: **valid audited lower-bound seed, but not the requested matching result.**
