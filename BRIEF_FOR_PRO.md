@@ -1,82 +1,80 @@
-# Brief for web GPT-5.5-Pro — ROUND 14: the general higher-order noise-rank rate (34)
+# Brief for web GPT-5.5-Pro — ROUND 15: compatibility-aware total-positivity localization
 ### (copy everything below the line and send as-is)
 
 ---
 
-> Round-14, on your round-13 results. We **independently audited everything** (symbolic + 300k-sample
-> numeric + literature): channel regularization (Thm 1.1), the **sharp** PB separation (Thm 2.1, exponent
-> 3/2 confirmed sharp), the covariance witness (Thm 3.1), the **product-children NR-rate** (Thm 4.1), and
-> the homogeneous-selector **search** theorem (Thm 5.1, your search-vs-bound downgrade is correct) — **all
-> correct.** Two big things are now closed: **channel degeneracy** (regularization) and the **degree-2 PB
-> obstruction** (Thm 2.1, sharp). The whole problem rests on extending this to higher order. We also bring
-> one decisive new data point. **Full method freedom.**
+> Round-15, on your round-14 results. We **independently audited everything** (symbolic + numeric +
+> literature) and **you are right**: we verified your exponentially-PB-close root family (`Q_d(−1+i/2)=0`
+> with `d_TV(q^(d),Bin(d,½))≤(3/2)4^{−d}`, valid PGF, **and the same through the fixed bounded channel
+> `(0.1,0.9)`** — confirmed at `d=4,8,16`). So our proposed "root-depth ⟹ poly PB-distance" route is dead;
+> our `μ_4` optimism was an artifact of fixed degree. Your reframing to **normalized PF minors** and your
+> identification that the obstruction is a **compatibility gap, not Hellinger** (Thm 5.1 §5) are the right
+> diagnosis. We accept the corrected target. **Full method freedom — go wherever the math leads.**
 
-## 1. 🔎 Decisive new evidence — the hardest known obstruction IS bounded-channel-visible
+## 1. The corrected target (your §6)
 
-We ran the computation your §6 said was decisive, on **`μ_4`** (the round-3 Rayleigh-but-not-SR example,
-symmetric on 4 bits, `g_4=1+2e_1+2e_2+2e_3+e_4`, `a=(1,2,2,2,1)/30` — it defeats the *entire* covariance /
-`V` / interlacer route):
-- **`μ_4`'s worst Boolean conditional pairwise covariance `= 0`** (it evades Thm 3.1 / the §3 covariance
-  route, exactly as a Rayleigh measure should), **YET**
-- a **bounded** monotone channel `(s,r)=(0.1, 0.55)` (both well inside `(0,1)`) gives noisy-rank PGF
-  `(complex roots −1.90 ± 0.72 i)` → **not Poisson-binomial** → **`μ_4` is caught**, with a **constant**
-  margin (not degenerate).
+> **(35) compatibility-aware PF/covariance localization.** `∃ C`: for every `d`-bit selector `h` and coord
+> `i`, `I_i(h) ≥ η ⟹` a poly-samplable descendant `F` (found w.p. `≥(η/d)^C`) such that EITHER
+> (1) some Boolean conditional covariance is `≥(η/d)^C`, OR (2) for some **bounded** monotone channel `K`,
+> `q=π_K^{h|F}` has a Toeplitz minor `M` (`T(q)_{ab}=q_{b−a}`) with `[−det M(q)]_+ / k(M)^{k/2+1} ≥ (η/d)^C`
+> — whence `d_TV(q,PB) ≥ (η/d)^C` by your Thm 3.1.
 
-So the canonical *higher-order* (degree-≥3 PF) obstruction — invisible to all covariances — **is** exposed
-by a bounded channel via the second branch of your (34). This is strong evidence the general (34) holds.
+Prove (35) ⟹ **R+** (tester `Õ(n^{2+2a+2b}/ε^{2+4a})`). Refute it (an `I_i=Ω(1/poly)` family with no
+poly-discoverable positive-covariance descendant AND all bounded-channel PF minors `(η/d)^{ω(1)}`-small) ⟹
+**R−** + a hard instance. The **poly regime is `k=O(log d/loglog d)`** (`k^{k/2+1}=poly(d)`): an
+inverse-poly RAW negative minor of that order suffices.
 
-## 2. The exact target — prove the general (34)
+## 2. The crux you isolated — localize *failure of compatibility*, not Hellinger
 
-> **(34) higher-order noise-rank rate.** `∃ α>0, poly P`: for every `d`-bit `h` and coordinate `i`,
-> `I_i(h) ≥ η ⟹` EITHER a poly-likely sample-guided descendant has a positive Boolean conditional
-> covariance `≥ poly(η/d)`, OR some **bounded** monotone channel `K` produces a noisy rank with
-> `d_TV(π^h_K, PB) ≥ poly(η/d)` (a poly-large higher Toeplitz/Pólya-frequency minor).
+`I_i(h)` = affinity loss from forcing the two `X_i`-conditionals' best stable approximations to be
+*compatible* (interlacing). Your Thm 5.1 (flip-swap, Hermon–Salez SCP Poincaré `≥1/m`) localizes ordinary
+Hellinger `1−ρ(a,b)²` — which can be large even on SR parents (compatible children can be far apart). The
+**consistency problem**: local affinity-optimal comparators need not be restrictions of *one* global
+optimizer. So the missing theorem must localize the compatibility defect itself. **Two ways this could go:**
 
-Equivalently (cleanest sufficient form): **`I_i(h) ≥ η ⟹ NR(h) ≥ poly(η, 1/d)`** for arbitrary
-(nonproduct, nonhomogeneous) stable children — the remaining case after Thms 3.1/4.1/5.1.
+- **(R+) a single global compatible comparator that localizes.** The variational formula gives an
+  affinity-optimal global compatible pair `(r,s)`; at least one of `a↔r`, `b↔s` has Hellinger `≥poly(η)`.
+  Localize *that fixed* discrepancy by Thm 5.1 — the question is whether the local faces stay aligned with
+  the *same* `(r,s)` (a covering/consistency bound over the compatible-pair polytope), or whether a second
+  moment / overlap argument forces a poly-normalized covariance or PF minor on a poly-likely face.
+- **(R−) the compatibility gap genuinely delocalizes.** A family where every proper face is compatible
+  (covariance ≤0, PF minors PB) yet the parent is `η`-incompatible — the obstruction living *only* globally,
+  below every bounded channel's resolution.
 
-Prove (34) ⟹ **R+** with tester `Õ(n^{2+2a+2b}/ε^{2+4a})` (localize T4 → estimate `NR` over the regularized
-bounded-channel box, Thm 3.1). Refute it (a *spread* nonproduct family whose higher-PF defect evades ALL
-bounded channels — `NR = d^{−ω(1)}` while `I_i = Ω(1/poly)`, all projected ranks PB, evading Thms 6.1/7.2)
-⟹ **R−** + a hard instance.
+## 3. 🎯 The candidate hard core — `g_s` (please attack it directly)
 
-## 3. Audited assets (use freely)
+You flagged `g_s`: a **non-SR parent every one of whose proper Boolean conditionals is exactly SR** (the
+minor-minimal obstruction). This is the sharpest test of (35):
+- **The decisive question:** is `g_s`'s global obstruction visible to a **bounded-channel noisy-rank PF
+  minor** (a channel *mixes* coordinates, unlike a conditioning — that is exactly how `μ_4` was caught
+  without any revealing conditional), and with a margin that is **inverse-poly in the dimension** as `g_s`
+  is lifted/spread? Or does the channel margin decay `2^{−Ω(d)}` (like your §2 family), making a spread
+  `g_s`-family the R− instance?
+- A clean `NR(g_s)` rate (poly lower bound, uniform in the lift), or a proof it decays super-poly, likely
+  **settles the whole problem.** `g_s` is small/explicit — give an exact `NR` (or PF-minor) computation and
+  its asymptotics under the natural lift.
+- **Sharp R− constraint (our audit):** an R− instance needs THREE ingredients — `I_i=Ω(1/poly)`, no
+  poly-discoverable positive-covariance descendant, AND all bounded-channel PF minors super-poly-small.
+  `g_s`/the minor-minimal family already supply the first two. The **missing ingredient is a NON-SYMMETRIC
+  lift that hides the rank statistic** — because *symmetric* far-from-SR families with all bounded-coord
+  conditionals SR are poly-testable via the global rank sequence. So: either (R+) prove every such
+  obstruction still leaks an inv-poly PF minor through a bounded channel, or (R−) build the non-symmetric
+  `g_s`-lift whose rank statistic is SUBCOND-hidden.
 
-- **(B1) Channel = stability-preserving Möbius substitution (Thm 1.1, r12).** The noisy-rank PGF is
-  `g_μ` after coordinatewise UHP-self-maps + a real-stable prefactor, diagonalized. So a complex root of
-  `g_μ` (the obstruction) maps to a complex root of the noisy-rank PGF — **and regularization (r13 Thm 1.1)
-  makes the witnessing channel bounded.** The qualitative `L→∞` is gone.
-- **(B2) Sharp degree-2 conversion (Thm 2.1).** `Φ(q)=4q_0q_2−q_1²>0 ⟹ d_TV(q,PB)≥(Φ/15)^{3/2}`. The needed
-  higher-order analogue: **a complex root of the noisy-rank PGF at distance `δ` from ℝ ⟹ `d_TV(·,PB) ≥
-  poly(δ)`** (a quantitative "real-rootedness vs Poisson-binomial" stability; `μ_4` shows `δ=Ω(1)` there).
-- **(B3) Variational formula (T5).** `I_i(h)` = affinity loss from forcing the children's best stable
-  approximations to be compatible — a *real* incompatibility. Connect it to the *complex root* the channel
-  must expose (B1): the conflict between the two children's stable approximations should produce a
-  bounded-channel restriction that is non-real-rooted with poly margin.
-- **(B4) Spectral independence / local-to-global.** SR measures have spectral independence (not only
-  homogeneous ones); the down-up / up-down machinery (your Thm 5.1 engine, ALOV) may localize a general
-  global incompatibility to a low-dimensional link/conditional carrying a bounded-channel defect — the
-  nonhomogeneous generalization of Thm 5.1.
+## 4. Audited assets (use freely)
 
-## 4. Concrete angles (signposts — invent your own)
-
-- **(R+) quantitative root→PB-defect:** prove B2's higher-order form — a degree-`d` PGF with a root at
-  imaginary distance `δ` is `≥poly(δ)`-far from `PB` in TV (a Pólya-frequency / total-positivity stability
-  bound) — then combine with B1 (regularized channel exposing the root) + B3 (the incompatibility forces a
-  root at distance `poly(η)`).
-- **(R+) general local-to-global for `NR`:** extend Thm 5.1 beyond homogeneous via spectral independence:
-  `I_i(h)≥η ⟹` a poly-likely conditional/link has `NR ≥ poly(η/d)`.
-- **(R+) channel from the incompatibility direction:** use the variational formula's two conflicting stable
-  approximations to *construct* the bounded channel directly (as `μ_4`'s `(0.1,0.55)` was found), and bound
-  the resulting noisy-rank defect below by `poly(η)`.
-- **(R−)** a spread nonproduct stable-children family (evading 6.1/7.2, all projected ranks PB) whose every
-  bounded-channel noisy rank is `d^{−ω(1)}`-close to PB — if the higher-PF defect can be "diluted" below
-  any bounded channel's resolution.
+- **(A1) PF-minor bound (Thm 3.1).** `det M(q)=−v<0 ⟹ d_TV(q,PB)≥v/k^{k/2+1}`; poly regime `k=O(log d/loglog d)`.
+- **(A2) Channel regularization (r13 Thm 1.1, one-way).** Any defect `τ` has a bounded (`τ/d`-interior)
+  channel witness keeping `Ω(τ)` — so WLOG work with bounded channels; but existence of a root ≠ a τ bound.
+- **(A3) Covariance witness (r13 Thm 3.1).** Positive Boolean covariance `κ ⟹ NR≥(κ/15)^{3/2}` — the
+  first alternative of (35).
+- **(A4) Localization (T4).** `d_TV(μ,SR)≥ε ⟹ I_i(h)≥ε²/2n` on a poly-likely sample-guided face.
+- **(A5) `g_s` proper-conditional SR-ness + Borcea–Brändén–Liggett** proper-position/domination structure.
 
 ## 5. Deliverable
 
-Settle (34): a proof ⟹ R+ (tester complexity + best lower bound), or a bounded-channel-blind spread family
-⟹ R−, or the furthest rigorous progress + the exact remaining gap. The `μ_4` data point suggests R+ is
-within reach via a quantitative real-rootedness↔Poisson-binomial stability theorem — but go wherever the
-math leads. Mark proved vs assumed; flag assumptions; honest confidence. (Human-verified later — keep
-proofs explicit and checkable.)
+Settle (35) — or `g_s` as its decisive special case. A proof ⟹ R+ (tester + best lower bound). A spread
+`g_s`-type family evading all poly-discoverable covariance/PF descendants ⟹ R− + the hard instance. Or the
+furthest rigorous progress + the exact remaining gap. If a different invariant settles SR-SUBCOND testing
+more cleanly, take it. Mark proved vs assumed; flag assumptions; honest confidence. (Human-verified later —
+keep proofs explicit and checkable; we will re-verify every construction numerically.)

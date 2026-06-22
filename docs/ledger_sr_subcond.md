@@ -7,14 +7,17 @@
 
 ---
 
-## HEADLINE (current status — FROZEN 2026-06-22; cold-start: read `RESEARCH_SUMMARY.md` first)
-**14 attack rounds done (codex 1–7, web GPT-5.5-Pro 8–14). NO theorem yet; lean R+ ~70/30.** Bounds:
-`Ω(max{√n/ε,1/ε²}) ≤ Q ≤ O(2^n/ε²)`. Current route = **noisy-rank** (SR ⟺ every monotone-channel rank is
-Poisson-binomial; `NR` estimable; channel degeneracy + degree-2 case closed; product/covariance/homogeneous
-rates proven; `μ_4` caught by a bounded channel). **The ONE open residual = the general higher-order rate
-(34)** (`I_i≥η ⟹ NR≥poly(η,1/d)` for arbitrary children ≡ a quantitative real-rootedness↔Poisson-binomial
-stability theorem). **Round 14 (attacking (34)) SENT, awaiting Pro reply** = resume point. 🔴 AI-disclosure
-red line unresolved with owner.
+## HEADLINE (current status — updated 2026-06-22 round 14; cold-start: read `RESEARCH_SUMMARY.md` first)
+**14 attack rounds done (codex 1–7, web GPT-5.5-Pro 8–14). NO theorem yet; lean MARGINAL R+ ~52–58/42–48
+— GENUINELY OPEN (DOWN from 70/30; Pro says 55–60, independent audit says ~52/48).** Bounds: `Ω(max{√n/ε,1/ε²}) ≤ Q ≤ O(2^n/ε²)`. Current route =
+**noisy-rank** (SR ⟺ every monotone-channel rank is Poisson-binomial). 🔴 **Round 14: Pro REFUTED the
+orchestrator's proposed R+ route** ("root depth ⟹ poly PB-distance" is FALSE — a constant-depth complex root
+can be `2^{−Ω(d)}`-close to PB, even through a fixed bounded channel; `μ_4` worked only at fixed degree 4).
+**Target CORRECTED** to a normalized **Pólya-frequency (PF) minor** formulation: `I_i≥η ⟹` a poly-discoverable
+descendant has covariance `≥(η/d)^C` OR a Toeplitz minor with `[−det]_+/k^{k/2+1} ≥(η/d)^C` (poly regime
+`k=O(log d/loglog d)`). The needed theorem is a **compatibility-aware total-positivity localization** (NOT a
+generic real-rootedness theorem; spectral independence localizes Hellinger, the WRONG quantity — §5).
+**Round 15 (attacking the corrected PF-minor target) = resume point.** 🔴 AI-disclosure red line unresolved.
 
 ### (historical) Phase 0 line
 **Phase 0 — setup + kill-scan + C0 lean DONE. NO theorem, NO convergence, NO GO issued. STOP at human gate.**
@@ -303,6 +306,7 @@ marginals. **Refined dichotomy (the real frontier):**
 |---|---|---|---|
 | 2026-06-20 | unset (pre-attack); **C0 leans the local-handle route is doubtful** | unset (pre-attack); C2 not yet attacked | Phase-0 setup; no attack round run. Seed only. C0 lean (no clean low-order local handle) is a routing signal to attack C1 *harder / non-locally* and weigh impossibility — **NOT** a confidence drop on a run thread, and NOT a downgrade (NO-RETREAT §15). A sustained drop *during the attack loop* ⇒ escalate / fresh-agent (attack harder), NEVER downgrade. |
 | 2026-06-21 (round 1) | **modestly UP vs C0 pessimism.** codex: OPEN, no tester (82% "frozen facts insufficient") — but the audit **refuted codex's blocker**: tilted pairwise covariances `Cov_{μ^λ}` ARE SUBCOND-estimable (Boolean conditioning + deterministic λ-reweighting; no rejection sampling). Estimation half reduces to Boolean conditioning; crux cleanly isolated = the **witness-localization theorem**. | not yet (codex round-1 C2 running) | Round 1 = GAP-level **progress**, not a stall. The global handle `V(μ)=0⇔SR` is referee-verified (corrected identity, F1). Route forward: sharpen upper bound (bounded-support λ witness theorem). NOT escalating yet (K_stall=2; this is round 1 with real progress). |
+| 2026-06-22 (round 14, web GPT-5.5-Pro) | 🔴 **CORRECTION — the orchestrator's proposed R+ route is REFUTED ⟹ lean DOWN to ~55–60/40.** Pro proves a constant-depth complex root can be `2^{−Ω(d)}`-close to PB (Thm 2.1 + an explicit `Bin(d,½)`-perturbation family with root at `−1+i/2`), **even through a fixed bounded channel `(0.1,0.9)`** (referee-verified d=4,8,16). So "root depth ⟹ poly PB-distance" is FALSE; `μ_4` worked only at fixed degree 4. Also: PF-minor bound `d_TV(q,PB)≥v/k^{k/2+1}` (Thm 3.1); an Ω(1)-far family with `NR=2^{−Ω(d)}` (Thm 4.1, but NOT R− — 2-faces show positive covariance ⟹ localization catches it); flip-swap localizes Hellinger, not the compatibility gap `I_i` (Thm 5.1, §5). | bounds unchanged. | **Target CORRECTED (root → normalized PF minor):** `I_i≥η ⟹` a poly-discoverable descendant has covariance `≥(η/d)^C` OR a Toeplitz minor `[−det]_+/k^{k/2+1}≥(η/d)^C`. Needs a **compatibility-aware total-positivity localization** theorem (spectral independence alone insufficient). `g_s` (non-SR parent, SR proper conditionals) = the candidate hard core. **Honest:** my round-13 μ_4→R+ extrapolation was too optimistic. Still moderate R+. Not closed. |
 | 2026-06-21 (round 13, web GPT-5.5-Pro) | **Channel-degeneracy doubt SOLVED + class rates proven ⟹ stronger R+ lean.** Thm 1.1 (regularization): a defect-`τ` channel ⟹ a BOUNDED channel (params `Ω(τ/d)` from 0/1) keeps `Ω(τ)` defect — kills the audit's main doubt. Thm 2.1: sharp PB separation `d_TV(q,PB)≥(Φ/15)^{3/2}` (referee-verified). Thm 3.1: positive covariance `κ ⟹ NR≥(κ/15)^{3/2}`. **Thm 4.1: full NR-rate for PRODUCT children** (`NR≥I₀³/poly(d)`, α=1/3). Thm 5.1: homogeneous children — a SUBCOND-*search* witness (honestly downgraded). | bounds unchanged. residual = arbitrary nonproduct nonhomogeneous incompatibility. | **The precise residual (34):** `I_i≥η ⟹` EITHER a poly-likely descendant has positive covariance `poly(η/d)`, OR a bounded channel sees a **negative higher Toeplitz/PF minor** poly-large. (Thm 2.1 = the quadratic case; missing = higher-order.) 🔎 **REFEREE TEST:** `μ_4` (Rayleigh-not-SR) has worst cond. covariance `=0` (evades §3) **but IS caught by a BOUNDED channel** `(0.1,0.55)` (noisy-rank roots `−1.90±0.72j`, non-PB) — the higher-order (34) obstruction exposed with constant margin ⟹ **strong concrete evidence for R+.** **AUDIT DONE (`round13_audit.md`): ALL proofs CORRECT** (regularization, sharp PB sep, product/homogeneous rates); the audit's own "decisive test" = the μ_4 finding (it converged) ⟹ μ_4 NOT an R− instance. **Leans R+ ~70/30.** Residual = the GENERAL (34). Not closed. |
 | 2026-06-21 (round 12, web GPT-5.5-Pro — OPENNESS RESET) | **A cleaner R+ ROUTE that abandons V/QHB/interlacer entirely.** **Thm 1.1:** `μ` SR ⟺ for EVERY monotone product channel `K`, the noisy rank `\|Y\|` is Poisson-binomial (Möbius UHP-self-maps preserve stability). `NR(μ)=sup_K d_TV(L\|Y\|,PB_n) ≤ d_TV(μ,SR)`, **estimable in `Õ(n/τ²)` samples over ALL channels**, **strictly stronger than projected ranks** (referee-verified 3-bit example). + **two NEW R− obstructions:** Thm 6.1 product tangent rigidity (kills the Paninski high-degree-perturbation route — SR tangent at a product has Fourier degree ≤2); Thm 7.2 homogeneous-selector localization (down-up spectral gap ≥1/k exposes the link discrepancy). | bounds unchanged `Ω(max{√n/ε,1/ε²}) ≤ Q ≤ O(2^n)`. | **NEW R+ bottleneck (44): `I_i(h) ≤ poly(d)·NR(h)^α`** — every rejecting statistic is now a 1-D rank-vs-Poisson-binomial distance (no `V`, no interlacer cone). Cleaner + more probabilistic than UQHB. **AUDIT DONE (`round12_audit.md`): Thms 1.1/3.1/6.1/7.2 ALL CORRECT (sympy + literature); both new R− routes validly killed.** Claim 6 = GAP: (44) **partially escapes** the wall (channel-optimization ≠ worst-case cone) but NOT proven full — the root→channel construction is qualitative (`L→∞` degenerate); **the precise remaining crux = the `η→NR` rate independent of channel degeneracy** (does a localized `I_i≥η` give a BOUNDED channel `L=poly` with `NR≥poly(η)`?). **Cautiously R+.** Not closed. |
 | 2026-06-21 (round 11, web GPT-5.5-Pro) | **UQHB PROVED for the product-children class + easy refuters ELIMINATED ⟹ leans more firmly R+.** Thm 2.1: `Gap_λ(a_p,b_q) ≤ 2(d−1)√(Ξ_λ)` (α=1/2, witnesses `Δ_{0k}=sδ_k`, `Δ_{rk}=−stδ_rδ_k`, explicit compatible repair). Thm 1.1: exact common-factor invariance (`Gap,Ξ` unchanged by independent SR factors). Lem 4.1: perturbation continuity. | conditional tester (if α=1/2 global): `Õ(n^{10}/ε^{10})`, LB `Ω(max{√n/ε,1/ε²})`. **Refuter spec sharpened:** stable irreducible `(a_d,b_d)` with `Gap≥d^{−O(1)}`, `Ξ=d^{−ω(1)}`, not near a compatible tensor model — the ONLY surviving R− route. | **Tensor-padding & small-perturbation refuters are DEAD** (Thm 1.1 + Lem 4.1). Residual = a single named real-AG question: **degree-uniform Hellinger/metric-regularity error bound for the Wronskian map on irreducible interlacer cones** — literature (KPV, Saunderson, amenability) is SILENT. **AUDIT DONE (`round11_audit.md`): ALL CORRECT** — witnesses numeric-verified; repair SR-ness + δ_k>0 cost confirmed; the V-normalization doubt RESOLVED (V is the raw cube-max, no denominator). Hyperbolicity cones ARE amenable but κ not poly-in-`d` (the exact gap). **Lean: cautiously R+.** Not closed. |
@@ -447,10 +451,15 @@ build C2 in parallel; weigh the impossibility route (RED-3 *on a proof only*).
   `round13_pro_response.md` (+ referee μ_4 finding) · audit `round13_audit.md` (ALL CORRECT) →
   **channel degeneracy SOLVED (regularization); sharp degree-2 PB sep; product/covariance/homogeneous
   NR-rates; μ_4 caught by a bounded channel ⟹ R+ ~70/30.**
-- **Round 14 (2026-06-21) — web GPT-5.5-Pro [SENT, owner-relayed]:** brief = root `BRIEF_FOR_PRO.md`
-  (pointer `round14_pro_request.md`). Target = **the GENERAL higher-order rate (34)** (`I_i≥η ⟹
-  NR≥poly(η,1/d)` for arbitrary nonproduct nonhomogeneous children) — via a quantitative
-  real-rootedness↔Poisson-binomial stability theorem + general local-to-global. Prove ⟹ R+; spread
-  bounded-channel-blind family ⟹ R−. Awaiting Pro reply → audit + record.
+- **Round 14 (2026-06-22) — web GPT-5.5-Pro:** brief `round14_pro_request.md` · reply
+  `round14_pro_response.md` (REFUTES the root-depth route; referee-verified the counterexample) · audit
+  `round14_audit.md` (DONE, ALL CORRECT, lean ~52/48) → **root formulation DEAD; target corrected to
+  normalized PF minors; spectral independence localizes the WRONG quantity (Hellinger, not the compatibility
+  gap); route RENAMED not reduced; lean DOWN to ~52–58, genuinely open.**
+- **Round 15 (2026-06-22) — web GPT-5.5-Pro [SENT, owner-relayed]:** brief = root `BRIEF_FOR_PRO.md`
+  (pointer `round15_pro_request.md`). Target = **(35) compatibility-aware total-positivity localization**
+  (`I_i≥η ⟹` poly-discoverable descendant with covariance `≥(η/d)^C` OR a poly-normalized negative PF
+  minor); **`g_s` named as the candidate hard core** (decisive: bounded-channel PF margin under the lift —
+  inverse-poly ⟹ R+, `2^{−Ω(d)}` ⟹ R−). Awaiting Pro reply → audit + record.
 - Literature scan (full, un-truncated): `lit/SCAN_REPORT.md`.
 - C0 sim: `derisk/` (+ `derisk/results/`).
