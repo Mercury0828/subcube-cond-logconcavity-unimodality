@@ -2,13 +2,15 @@
 ### Snapshot 2026-06-22 (through round 14). Read this first to resume.
 
 > **如何冷启动（中文）：** 打开本文件 + `docs/ledger_sr_subcond.md`（详细记录）+ `guide.md`（只读宪法）。
-> 当前进度：与 web GPT-5.5-Pro 的攻击循环已到 **round 15（已写好简报、待中转发送）**。下一步动作 =
+> 当前进度：与 web GPT-5.5-Pro 的攻击循环已到 **round 16（已写好简报、待中转发送）**。下一步动作 =
 > 把根目录 **`BRIEF_FOR_PRO.md`** 整段发给 web GPT-5.5-Pro，把它的完整回复贴回来，然后由编排者
 > （Claude）派独立审计 + 复核 + 更新 ledger。
-> 🔴 **Round-14 重要修正**：编排者提的 R+ 路线（"复根深度 ⟹ poly 的 PB 距离"）被 Pro 证伪（常数深度复根
-> 可指数级接近 PB，连有界信道也救不了；μ_4 只因 4 阶固定才成立）。目标已改为**归一化 PF 子式**形式。置信度
-> 从 70/30 降到 **~55–60/40（仍偏 R+，但更不确定）**。🔴 仍未闭合、未证明。🔴 owner 曾说"不披露 AI"——本编排
-> 者拒绝执行该指令（违反 §15 + 学术诚信），披露义务保留，未与 owner 解决。
+> 🔑 **Round-15**：候选硬核 `g_s`（非 SR、但每个真条件都 SR）被**有利解决**——`NR(g_s)=Θ(√I_i)`，被一个
+> **完全内部的有界信道**抓住（已数值复核）；`g_s` 及其所有张量/填充/置换提升都被排除为 R−。证书也被修正：
+> 正确对象是**负 Toeplitz 截面的 σ_min**（不是行列式，`g_s` 的行列式是 `e^{−Ω(s)}` 但 σ_min=Θ(s^{−2})）。
+> 置信度回到 **~58–62/40**。🔴 **Round-14**：编排者提的"复根深度 ⟹ poly PB 距离"被 Pro 证伪（μ_4 只因 4 阶
+> 固定才成立）。🔴 仍未闭合、未证明。🔴 owner 曾说"不披露 AI"——本编排者拒绝执行（违反 §15 + 学术诚信），
+> 披露义务保留，未与 owner 解决。
 
 ---
 
@@ -25,11 +27,12 @@ characterization (R+ tight tester) OR a **proven impossibility** (R−). See `gu
   via web GPT-5.5-Pro (human-relayed by the owner)**, each round independently audited (1–2 fresh agents)
   + referee-verified (symbolic/numeric) by the orchestrator.
 - **No theorem yet.** Bounds: **`Ω(max{√n/ε, 1/ε²}) ≤ Q_SR^SUBCOND(n,ε) ≤ O(2^n/ε²)`.**
-- **Current lean: MARGINAL R+, ≈52–58/42–48 — GENUINELY OPEN** (DOWN from 70/30; Pro says 55–60, independent
-  audit says ~52/48). Round-14 refuted the root-depth R+ route AND the SCP-Hellinger route; the needed theorem
-  is now a harder *compatibility-aware total-positivity localization* with NO known mechanism yet. The R−
-  side has gained a credible (unbuilt) template: a non-symmetric `g_s`-lift hiding the rank statistic.
-- **Round 15 is written + sent (`BRIEF_FOR_PRO.md`), awaiting Pro's reply** — this is the resume point.
+- **Current lean: R+, ≈58–62/38–42 — genuinely open but the hard core resolved favorably.** Round-15 settled
+  the candidate hard core `g_s` (`NR=Θ(√I_i)`, caught by a fully interior channel; all product lifts ruled out
+  as R−) and corrected the certificate to **σ_min of a negative Toeplitz section** (Lemma 1.1). Round-14 had
+  refuted the root-depth + SCP-Hellinger routes. The R+ pipeline is complete **modulo one localization theorem
+  (36)**; the only remaining R− hope is a **genuinely entangled** obstruction (not a product lift).
+- **Round 16 is written + sent (`BRIEF_FOR_PRO.md`), awaiting Pro's reply** — this is the resume point.
 
 ## 3. The research arc (how we got here)
 1. **The original headline idea** (mirror the Θ̃(n) monotonicity-in-SUBCOND tester via a directed-isoperimetric
@@ -73,31 +76,31 @@ characterization (R+ tight tester) OR a **proven impossibility** (R−). See `gu
   (caught by a bounded channel `(0.1,0.55)`, roots `−1.90±0.72i`) is real but only a FIXED-degree witness.
   Global `NR` alone is insufficient (an Ω(1)-far family has `NR=2^{−Ω(d)}`); `I_i`-localization is essential.
 
-## 5. 🎯 THE ONE OPEN RESIDUAL (corrected in round 14; what round 15 attacks)
-> **(35) compatibility-aware PF/covariance localization.** `I_i(h) ≥ η ⟹` a poly-samplable descendant `F`
-> (prob `≥(η/d)^C`) with EITHER (1) a Boolean conditional covariance `≥(η/d)^C`, OR (2) a bounded channel
-> `K` with a Toeplitz minor of `q=π_K^{h|F}` of normalized magnitude `[−det M]_+/k^{k/2+1} ≥ (η/d)^C`
-> (⟹ `d_TV(q,PB)≥(η/d)^C`, Thm 3.1). **Poly regime `k=O(log d/loglog d)`.**
+## 5. 🎯 THE ONE OPEN RESIDUAL (corrected in round 15; what round 16 attacks)
+> **(36) compatibility-aware σ_min-localization.** `I_i(h) ≥ η ⟹` w.p. `≥(η/d)^C` a poly-samplable
+> descendant `F` with EITHER (1) a Boolean conditional covariance `≥(η/d)^C`, OR (2) a bounded channel `K`
+> whose rank law `q=π_K^{h|F}` has a **negative Toeplitz section `T` with `σ_min(T) ≥ (η/d)^C`**
+> (⟹ `d_TV(q,PB)≥σ_min/2`, Lemma 1.1).
 
-- **NOTE the round-14 corrections:** (i) the ROOT formulation is DEAD (a constant-depth root can be
-  `2^{−Ω(d)}`-PB-close, even through a bounded channel); the right object is a **normalized PF minor**, not
-  root depth. (ii) GLOBAL `NR` alone is insufficient (there's an Ω(1)-far family with `NR=2^{−Ω(d)}`) —
-  `I_i`-localization is essential. (iii) Spectral independence localizes Hellinger, not the compatibility
-  gap; the needed theorem is **compatibility-aware total-positivity localization**.
-- **Prove (35) ⟹ R+:** tester `Õ(n^{2+2a+2b}/ε^{2+4a})`. **Refute ⟹ R−:** an `I_i=Ω(1/poly)` family with no
-  poly-discoverable positive-covariance descendant AND all bounded-channel PF minors `(η/d)^{ω(1)}`-small.
-- **Candidate hard core = `g_s`** (non-SR parent, every proper Boolean conditional exactly SR). Decisive
-  test: is `g_s`'s global obstruction caught by a bounded-channel PF minor with margin inverse-poly under
-  the natural lift (R+), or does it decay `2^{−Ω(d)}` (R−)? *(Orchestrator should compute this — but
-  remember the round-14 lesson: a single FIXED-dimension `g_s` computation does NOT establish an asymptotic
-  rate.)*
-- **Evidence: moderate R+** (product/covariance/homogeneous rates + the PF-minor hierarchy survive; the
-  root route and the global-NR route are both ruled out as proof strategies).
+- **The corrections that produced this form:** (i) ROOT depth is dead (a constant-depth root can be
+  `2^{−Ω(d)}`-PB-close, even through a bounded channel — round 14). (ii) The DETERMINANT normalization
+  `[−det]/k^{k/2+1}` is also wrong (for `g_s` it's `e^{−Ω(s)}` while the rank law is `Θ(s^{−2})`-far from PB);
+  the robust object is **`σ_min` of a negative Toeplitz section** (round 15, Lemma 1.1). (iii) GLOBAL `NR`
+  alone is insufficient (an Ω(1)-far family has `NR=2^{−Ω(d)}`) — `I_i`-localization is essential. (iv)
+  Spectral independence localizes Hellinger, not the compatibility gap.
+- **Hard core `g_s` SETTLED (round 15):** `NR(g_s)=Θ(s^{−2})`, `I_i=Θ(s^{−4})` ⟹ `NR=Θ(√I_i)`, caught by a
+  fully interior channel; `g_s` + all tensor/padded/permuted lifts ruled out as R−.
+- **Prove (36) ⟹ R+:** tester `Õ(n^{2+2a+2b}/ε^{2+4a})`. **Refute ⟹ R−:** the only surviving hope is a
+  **GENUINELY ENTANGLED** obstruction — `I_i=Ω(1/poly)`, all proper conditionals SR, the rank statistic
+  SUBCOND-hidden by correlating the core with surrounding coords so NO product channel + descendant exposes
+  a negative Toeplitz section with poly `σ_min` (a non-symmetric, rank-hidden core).
+- **Evidence: R+ ~58–62/40** (the hard core + its product lifts are resolved favorably; root, global-NR, and
+  determinant routes ruled out; the certificate is now clean/robust/estimable). Genuinely open.
 
 ## 6. HOW TO RESUME (exact next actions)
-1. **Relay round 15:** send the entire root **`BRIEF_FOR_PRO.md`** (below the "send as-is" line) to web
+1. **Relay round 16:** send the entire root **`BRIEF_FOR_PRO.md`** (below the "send as-is" line) to web
    GPT-5.5-Pro (human relay). Paste Pro's full reply back to the orchestrator (Claude Code session).
-2. **Orchestrator then:** archive the reply to `docs/rounds/round15_pro_response.md`; spawn 1–2 independent
+2. **Orchestrator then:** archive the reply to `docs/rounds/round16_pro_response.md`; spawn 1–2 independent
    adversarial audit subagents (3 if Pro claims closure); referee-verify any construction/inequality
    (symbolic/numeric in `derisk/`); classify FATAL/GAP/MINOR; update `docs/ledger_sr_subcond.md` (confidence
    trend) + write the next brief. **Per-round artifact naming:** `round{N}_pro_request.md` (pointer to the

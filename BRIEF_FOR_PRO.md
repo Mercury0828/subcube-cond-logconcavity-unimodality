@@ -1,80 +1,77 @@
-# Brief for web GPT-5.5-Pro — ROUND 15: compatibility-aware total-positivity localization
+# Brief for web GPT-5.5-Pro — ROUND 16: the general compatibility-aware σ_min-localization (or an entangled R−)
 ### (copy everything below the line and send as-is)
 
 ---
 
-> Round-15, on your round-14 results. We **independently audited everything** (symbolic + numeric +
-> literature) and **you are right**: we verified your exponentially-PB-close root family (`Q_d(−1+i/2)=0`
-> with `d_TV(q^(d),Bin(d,½))≤(3/2)4^{−d}`, valid PGF, **and the same through the fixed bounded channel
-> `(0.1,0.9)`** — confirmed at `d=4,8,16`). So our proposed "root-depth ⟹ poly PB-distance" route is dead;
-> our `μ_4` optimism was an artifact of fixed degree. Your reframing to **normalized PF minors** and your
-> identification that the obstruction is a **compatibility gap, not Hellinger** (Thm 5.1 §5) are the right
-> diagnosis. We accept the corrected target. **Full method freedom — go wherever the math leads.**
+> Round-16, on your round-15 results. We **independently audited + numerically verified** the decisive
+> `g_s` computation: the centered Toeplitz eigenvalue formula `λ_j=2a_s(cosθ_s+cos(jπ/(L+1)))` is exact,
+> there is **exactly one negative eigenvalue** with `σ_min≥θ_s²/20`, and at `k*=⌊π/θ_s⌋` the determinant is
+> `e^{−Ω(s)}` (`−4e-8…−9e-122` for `s=4..64`) while `σ_min=Θ(s^{−2})` — so your **σ_min correction is
+> decisively right** and `NR(g_s)=Θ(√I_i(g_s))` with a fully interior channel. The hard core is **not**
+> bounded-channel-blind, and its product lifts are not R−. We accept the corrected certificate and target.
+> Two big shortcuts (root-depth, SCP-Hellinger) and one big candidate (`g_s`+lifts) are now closed. **Full
+> method freedom — settle it.**
 
-## 1. The corrected target (your §6)
+## 1. The state in one line
 
-> **(35) compatibility-aware PF/covariance localization.** `∃ C`: for every `d`-bit selector `h` and coord
-> `i`, `I_i(h) ≥ η ⟹` a poly-samplable descendant `F` (found w.p. `≥(η/d)^C`) such that EITHER
-> (1) some Boolean conditional covariance is `≥(η/d)^C`, OR (2) for some **bounded** monotone channel `K`,
-> `q=π_K^{h|F}` has a Toeplitz minor `M` (`T(q)_{ab}=q_{b−a}`) with `[−det M(q)]_+ / k(M)^{k/2+1} ≥ (η/d)^C`
-> — whence `d_TV(q,PB) ≥ (η/d)^C` by your Thm 3.1.
+The R+ pipeline is complete **modulo one localization theorem**, now correctly normalized:
 
-Prove (35) ⟹ **R+** (tester `Õ(n^{2+2a+2b}/ε^{2+4a})`). Refute it (an `I_i=Ω(1/poly)` family with no
-poly-discoverable positive-covariance descendant AND all bounded-channel PF minors `(η/d)^{ω(1)}`-small) ⟹
-**R−** + a hard instance. The **poly regime is `k=O(log d/loglog d)`** (`k^{k/2+1}=poly(d)`): an
-inverse-poly RAW negative minor of that order suffices.
+> **(36) compatibility-aware σ_min-localization.** `∃ C`: `I_i(h) ≥ η ⟹` w.p. `≥(η/d)^C` a poly-samplable
+> descendant `F` has EITHER (1) a positive Boolean conditional covariance `≥(η/d)^C` (→ R13 covariance→NR),
+> OR (2) a **bounded** monotone channel `K` whose noisy-rank law `q=π_K^{h|F}` has a **negative Toeplitz
+> section `T` with `σ_min(T) ≥ (η/d)^C`** (→ Lemma 1.1: `d_TV(q,PB)≥σ_min/2`).
 
-## 2. The crux you isolated — localize *failure of compatibility*, not Hellinger
+Prove (36) ⟹ **R+**, tester `Õ(n^{2+2a+2b}/ε^{2+4a})` (T4 localizes `I_i≥ε²/2n`; estimate covariance / learn
+the rank law to `τ=(η/d)^C` and test the section's `σ_min`). Refute (36) ⟹ **R−** + a hard instance.
 
-`I_i(h)` = affinity loss from forcing the two `X_i`-conditionals' best stable approximations to be
-*compatible* (interlacing). Your Thm 5.1 (flip-swap, Hermon–Salez SCP Poincaré `≥1/m`) localizes ordinary
-Hellinger `1−ρ(a,b)²` — which can be large even on SR parents (compatible children can be far apart). The
-**consistency problem**: local affinity-optimal comparators need not be restrictions of *one* global
-optimizer. So the missing theorem must localize the compatibility defect itself. **Two ways this could go:**
+## 2. The two honest directions — please push BOTH
 
-- **(R+) a single global compatible comparator that localizes.** The variational formula gives an
-  affinity-optimal global compatible pair `(r,s)`; at least one of `a↔r`, `b↔s` has Hellinger `≥poly(η)`.
-  Localize *that fixed* discrepancy by Thm 5.1 — the question is whether the local faces stay aligned with
-  the *same* `(r,s)` (a covering/consistency bound over the compatible-pair polytope), or whether a second
-  moment / overlap argument forces a poly-normalized covariance or PF minor on a poly-likely face.
-- **(R−) the compatibility gap genuinely delocalizes.** A family where every proper face is compatible
-  (covariance ≤0, PF minors PB) yet the parent is `η`-incompatible — the obstruction living *only* globally,
-  below every bounded channel's resolution.
+### (R+) prove (36). The structure you built points here:
+- **(A) the affinity-optimal global comparator + a σ_min second-moment bound.** The variational formula
+  gives a global compatible pair `(r,s)` with `1−ρ(h,·)²≥I_i`; at least one child-vs-comparator Hellinger
+  is `≥poly(η)`. Flip-swap (Thm 5.1) localizes *that fixed* discrepancy — the open step is to convert a
+  localized Hellinger/covariance signal into a **negative Toeplitz section with poly σ_min** on a
+  poly-likely descendant (Lemma 1.1 is the bridge; `g_s` is the worked example where the bump
+  `(a, 2a cosθ, a)` becomes a poly-σ_min tridiagonal section). Does a localized incompatibility always
+  imprint a **near-singular-but-sign-flipped** consecutive Toeplitz window on some bounded-channel rank law?
+- **(B) a structure theorem for minor-minimal obstructions.** `g_s` is THE minor-minimal obstruction (all
+  proper conditionals SR). If every minor-minimal SR obstruction has, like `g_s`, a 3-term (or `O(1)`-band)
+  rank bump under some bounded channel — giving a banded Toeplitz section with `σ_min=poly` — then (36)
+  follows by reduction to the minor-minimal core. **Is the minor-minimal obstruction essentially unique /
+  `g_s`-like (a localized near-singular Toeplitz band), or is there a genuinely different one?**
 
-## 3. 🎯 The candidate hard core — `g_s` (please attack it directly)
+### (R−) the only surviving hope — a GENUINELY ENTANGLED obstruction:
+Build (or rule out) an `h` with `I_i=Ω(1/poly)`, every proper Boolean conditional SR, and the rank
+statistic **SUBCOND-hidden**: the obstruction core is *correlated* with the surrounding coordinates so that
+**no product channel** (and no poly-discoverable descendant) leaves a negative Toeplitz section with poly
+`σ_min`. Your §6 shows product lifts of `g_s` fail (a fixed product channel recovers `q_s`); the question is
+whether **entangling** the core with its environment can suppress every product-channel rank law to within
+`(η/d)^{ω(1)}` of PB while keeping all proper conditionals SR. The audit's sharpest framing: a *non-symmetric*
+core whose `|Y|`-statistic is blind to all coordinate-independent channels. **Does the all-channel +
+descendant machinery provably prevent this (⟹ R+), or is there an adaptivity/correlation gadget that defeats
+every fixed product channel (⟹ R−)?**
 
-You flagged `g_s`: a **non-SR parent every one of whose proper Boolean conditionals is exactly SR** (the
-minor-minimal obstruction). This is the sharpest test of (35):
-- **The decisive question:** is `g_s`'s global obstruction visible to a **bounded-channel noisy-rank PF
-  minor** (a channel *mixes* coordinates, unlike a conditioning — that is exactly how `μ_4` was caught
-  without any revealing conditional), and with a margin that is **inverse-poly in the dimension** as `g_s`
-  is lifted/spread? Or does the channel margin decay `2^{−Ω(d)}` (like your §2 family), making a spread
-  `g_s`-family the R− instance?
-- A clean `NR(g_s)` rate (poly lower bound, uniform in the lift), or a proof it decays super-poly, likely
-  **settles the whole problem.** `g_s` is small/explicit — give an exact `NR` (or PF-minor) computation and
-  its asymptotics under the natural lift.
-- **Sharp R− constraint (our audit):** an R− instance needs THREE ingredients — `I_i=Ω(1/poly)`, no
-  poly-discoverable positive-covariance descendant, AND all bounded-channel PF minors super-poly-small.
-  `g_s`/the minor-minimal family already supply the first two. The **missing ingredient is a NON-SYMMETRIC
-  lift that hides the rank statistic** — because *symmetric* far-from-SR families with all bounded-coord
-  conditionals SR are poly-testable via the global rank sequence. So: either (R+) prove every such
-  obstruction still leaks an inv-poly PF minor through a bounded channel, or (R−) build the non-symmetric
-  `g_s`-lift whose rank statistic is SUBCOND-hidden.
+## 3. Audited assets (use freely)
 
-## 4. Audited assets (use freely)
+- **(A1) Lemma 1.1 (σ_min spectral PF separation, r15).** `det T<0 ∧ σ_min(T)≥τ ⟹ d_TV(q,PB)≥τ/2`;
+  dimension-independent, robust to `‖q̂−q‖_1<τ`. **This replaces the (mis-normalized) determinant clause.**
+- **(A2) `g_s` solved (r15).** `NR=Θ(s^{−2})`, `I_i=Θ(s^{−4})`, `NR=Θ(√I_i)`; interior channel margin
+  `Θ(s^{−3})`; the rank bump `(a_s, 2a_s cosθ_s, a_s)` → tridiagonal Toeplitz, one negative eigenvalue.
+- **(A3) Covariance→NR (r13).** positive covariance `κ ⟹ NR≥(κ/15)^{3/2}` — alternative (1) of (36).
+- **(A4) Localization T4 + flip-swap Thm 5.1** (Hermon–Salez SCP Poincaré `≥1/m`) localizes Hellinger — the
+  engine to upgrade into σ_min/covariance.
+- **(A5) product lifts of `g_s` are NOT R−** (r15 §6); the all-channel NR estimator's cost is `log`(channel net).
+- **(A6) one verification-debt item to nail rigorously:** the identity `I_i(g_s)=𝔇(g_s)=1−sup_{ν SR}ρ(g_s,ν)²`
+  for every `i` (the bridge from `NR`/`d_TV` to the affinity quantity, underlying the headline `NR=Θ(√I_i)`).
+  Our audit flagged this as the one load-bearing step not yet re-derived from first principles — please give
+  an explicit derivation (or correct it: if `I_i` only *bounds* `𝔇`, state the exact relation and how it
+  changes the exponent). The unconditional `NR(g_s)=Θ(s^{−2})` is not in question; only the `I_i` linkage.
 
-- **(A1) PF-minor bound (Thm 3.1).** `det M(q)=−v<0 ⟹ d_TV(q,PB)≥v/k^{k/2+1}`; poly regime `k=O(log d/loglog d)`.
-- **(A2) Channel regularization (r13 Thm 1.1, one-way).** Any defect `τ` has a bounded (`τ/d`-interior)
-  channel witness keeping `Ω(τ)` — so WLOG work with bounded channels; but existence of a root ≠ a τ bound.
-- **(A3) Covariance witness (r13 Thm 3.1).** Positive Boolean covariance `κ ⟹ NR≥(κ/15)^{3/2}` — the
-  first alternative of (35).
-- **(A4) Localization (T4).** `d_TV(μ,SR)≥ε ⟹ I_i(h)≥ε²/2n` on a poly-likely sample-guided face.
-- **(A5) `g_s` proper-conditional SR-ness + Borcea–Brändén–Liggett** proper-position/domination structure.
+## 4. Deliverable
 
-## 5. Deliverable
-
-Settle (35) — or `g_s` as its decisive special case. A proof ⟹ R+ (tester + best lower bound). A spread
-`g_s`-type family evading all poly-discoverable covariance/PF descendants ⟹ R− + the hard instance. Or the
-furthest rigorous progress + the exact remaining gap. If a different invariant settles SR-SUBCOND testing
-more cleanly, take it. Mark proved vs assumed; flag assumptions; honest confidence. (Human-verified later —
-keep proofs explicit and checkable; we will re-verify every construction numerically.)
+Settle (36): a proof ⟹ **R+** (tester complexity + the best lower bound, ideally tightening `Ω(√n/ε)`), or a
+genuinely entangled `η`-incompatible family with all proper conditionals SR and every bounded-channel rank
+law `(η/d)^{ω(1)}`-close to PB ⟹ **R−** + the hard instance + its query lower bound. Or the furthest rigorous
+progress + the exact remaining gap. If a cleaner invariant settles SR-SUBCOND testing, take it. Mark proved
+vs assumed; flag assumptions; honest confidence. (Human-verified later — keep proofs explicit and checkable;
+we re-verify every construction numerically.)
